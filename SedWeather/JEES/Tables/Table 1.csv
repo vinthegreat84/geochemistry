@@ -1,0 +1,174 @@
+sample,category,subcategory,subsubcategory,reference,(CIW),(CPA),(CIA),(PIA),(CIX),(ICV),(WIP),(W)
+UCC-1,composite,upper_continental_crust,UCC,"Shaw et al., 1967, 1976, 1986",56.23,71.99,49.81,49.75,61.78,0.99,74.46,65.05
+UCC-2,composite,upper_continental_crust,UCC,"Fahrig and Eade, 1968; Eade and Fahrig, 1973",55.35,71.26,49.94,49.93,62.54,0.87,76.38,65.93
+UCC-3,composite,upper_continental_crust,UCC,"Ronov and Yaroshevskiy, 1976",63.14,77.41,55.89,57.64,66.78,0.92,66.25,62.97
+UCC-4,composite,upper_continental_crust,UCC,"Gao et al., 1998",60.09,75.07,53.51,54.49,65.07,0.96,62.94,61.92
+UCC-5,composite,upper_continental_crust,UCC,"Taylor and McLennan, 1985, 1995",54.24,70.33,47.95,47.33,60.11,1.01,79.69,65.32
+UCC-6,composite,upper_continental_crust,UCC,"Wedepohl, 1995",56.23,71.99,49.81,49.75,61.78,0.99,74.46,65.05
+UCC-7,composite,upper_continental_crust,UCC,"Rudnick and Gao, 2003",58.87,74.11,52.76,53.48,64.68,0.9,68.3,63.8
+UCC-8,composite,upper_continental_crust,UCC,"Togashi et al., 2000",62.11,76.63,55.91,57.38,67.4,0.91,58.87,61.87
+Dunite,composite,igneous_composite,ultramafic,"Hyndman, 1985; Le Maitre, 1976",73.45,84.69,70.97,72.48,81.41,23.97,107.58,13.98
+Harzburgite,composite,igneous_composite,ultramafic,"Hyndman, 1985; Le Maitre, 1976",69.73,82.17,66.73,68.31,78.03,18.05,96.23,7.75
+Peridotite,composite,igneous_composite,ultramafic,"Hyndman, 1985; Le Maitre, 1976",72.4,83.99,68.11,70.55,78.27,9.87,94.66,8.24
+Lherzolite,composite,igneous_composite,ultramafic,"Hyndman, 1985; Le Maitre, 1976",69.43,81.96,66.39,67.97,77.76,9.71,86.67,7.12
+Anorthosite,composite,igneous_composite,mafic,"Hyndman, 1985; Le Maitre, 1976",71.39,83.31,70.03,70.82,81.46,0.78,47.67,38.8
+Gabbro,composite,igneous_composite,mafic,"Hyndman, 1985; Le Maitre, 1976",66.31,79.75,63.57,64.8,75.81,1.6,56.37,17.57
+Basalt,composite,igneous_composite,mafic,"Hyndman, 1985; Le Maitre, 1976",62.18,76.68,59.38,60.31,72.47,1.65,61.43,16.07
+Tholeiite,composite,igneous_composite,mafic,"Hyndman, 1985; Le Maitre, 1976",65.48,79.14,64.16,64.75,77.21,1.76,51.09,9.9
+Andesite,composite,igneous_composite,intermediate,"Hyndman, 1985; Le Maitre, 1976",59.78,74.83,56.31,57.14,69.47,1.15,63.04,36.64
+Dacite,composite,igneous_composite,felsic,"Hyndman, 1985; Le Maitre, 1976",56.06,71.84,51.78,52.1,64.96,0.95,67.02,58.06
+Tonalite,composite,igneous_composite,felsic,"Hyndman, 1985; Le Maitre, 1976",58.9,74.13,55.19,55.93,68.35,0.87,61.4,56.8
+Diorite_and_Granodiorite_quartz_diorite,composite,igneous_composite,intermediate,"Hyndman, 1985; Le Maitre, 1976",58.5,73.81,56.37,56.87,70.45,1.16,65.88,28.84
+Granodiorite_and_quartz_monzodiorite,composite,igneous_composite,intermediate,"Hyndman, 1985; Le Maitre, 1976",57.93,73.36,51.96,52.47,64.05,0.83,69.74,66.67
+Rhyolite,composite,igneous_composite,felsic,"Hyndman, 1985; Le Maitre, 1976",63.35,69.44,51.83,52.88,55.84,0.84,72.9,52.73
+Granite,composite,igneous_composite,felsic,"Hyndman, 1985; Le Maitre, 1976",60.89,70.29,51.28,51.88,57.79,0.83,74.86,59.5
+Trachyte,composite,igneous_composite,intermediate,"Hyndman, 1985; Le Maitre, 1976",56.81,65.33,48.12,47.29,54.1,1.04,100.75,68.92
+Syenite,composite,igneous_composite,intermediate,"Hyndman, 1985; Le Maitre, 1976",53.99,65.87,45.99,44.31,54.35,1.18,103.3,63.04
+Nepheline_syenite,composite,igneous_composite,intermediate,"Hyndman, 1985; Le Maitre, 1976",54.28,59.32,46.59,45.24,50.25,1.07,132.49,67.8
+Phonolite,composite,igneous_composite,intermediate,"Hyndman, 1985; Le Maitre, 1976",54.46,58.82,47.08,46,50.31,1,127.3,62.73
+NASC,composite,shale_composite,shale,"McLennan et al., 1983; McLennan, 2009; Gromet et al., 1984",81.84,90.01,67.74,77.06,73.25,0.79,54.74,65.65
+PAAS,composite,shale_composite,shale,"Taylor and McLennan, 1985; Barth et al., 2000; Haskin and Haskin, 1966; McLennan, 2009; Nance and Taylor, 1976; McLennan, 1981, 1989",82.72,90.54,70.38,79.05,75.97,0.55,51.32,73.81
+shale,composite,shale_composite,shale,"Mason, 1982",77.93,87.59,66.11,73.12,72.94,0.81,49.05,62.58
+IAS+sd,composite,shale_composite,shale,"Ray and Paul, 2021",91.06,95.32,77.69,89.2,80.77,0.39,40.42,80.6
+IAS,composite,shale_composite,shale,"Ray and Paul, 2021",91.66,95.65,79.57,90.16,82.55,0.33,33.37,80.46
+IAS-sd,composite,shale_composite,shale,"Ray and Paul, 2021",92.36,96.03,81.84,91.23,84.71,0.26,26.33,78.61
+IPAS+sd,composite,shale_composite,shale,"Ray and Paul, 2021",89.03,94.2,72.55,85.81,75.94,0.6,51.78,73.77
+IPAS,composite,shale_composite,shale,"Ray and Paul, 2021",91.02,95.3,75.31,88.65,78.21,0.51,41.3,77.82
+IPAS-sd,composite,shale_composite,shale,"Ray and Paul, 2021",93.56,96.67,78.98,92.1,81.18,0.39,30.83,83.25
+Amazon,composite,river_sediment,suspended_sediment,"McLennan, 1993",86.25,92.61,78.91,84.84,84.21,0.42,37.56,68.54
+Colora,composite,river_sediment,suspended_sediment,"McLennan, 1993",79.22,88.41,66.54,74.33,72.9,1.28,28.06,58.11
+Columb,composite,river_sediment,suspended_sediment,"McLennan, 1993",63.91,77.99,57.13,59.05,68.12,0.83,64.94,61.94
+Congo,composite,river_sediment,suspended_sediment,"McLennan, 1993",95.97,97.95,89.87,95.68,91.6,0.27,20.62,78.72
+Danube,composite,river_sediment,suspended_sediment,"McLennan, 1993",60.71,75.55,53.43,54.51,64.59,1.45,58.48,46.34
+Gange,composite,river_sediment,suspended_sediment,"McLennan, 1993",75.48,86.02,66.12,71.44,74.08,0.79,47.96,61.33
+Huang,composite,river_sediment,suspended_sediment,"McLennan, 1993",83.35,90.92,71.27,79.96,76.73,,50.73,
+Indus,composite,river_sediment,suspended_sediment,"McLennan, 1993",75.98,86.35,66.31,71.88,74.07,1.51,51.79,40.15
+Macken,composite,river_sediment,suspended_sediment,"McLennan, 1993",93.72,96.76,72.5,91.11,74.3,0.81,44.09,72.51
+Mekong,composite,river_sediment,suspended_sediment,"McLennan, 1993",90.16,94.82,79.57,88.65,83.18,0.37,40.85,77.51
+Mississ.,composite,river_sediment,suspended_sediment,"McLennan, 1993",71.99,83.71,61.52,66.25,69.89,0.81,41.24,68.64
+Niger,composite,river_sediment,suspended_sediment,"McLennan, 1993",98.63,99.31,94.21,98.57,94.83,0.16,16.05,87.95
+Nile,composite,river_sediment,suspended_sediment,"McLennan, 1993",85.11,91.95,76.42,83.2,81.89,,39.83,
+Orinoco,composite,river_sediment,suspended_sediment,"McLennan, 1993",76.45,86.65,69.11,73.65,77.34,0.45,41.05,75.34
+Paran,composite,river_sediment,suspended_sediment,"McLennan, 1993",87.11,93.11,79.02,85.64,83.92,0.39,35.32,76.36
+St._Lawr,composite,river_sediment,suspended_sediment,"McLennan, 1993",57.05,72.65,50.54,50.7,62.41,1.11,84.27,52.72
+Western_Europe,composite,region,denudation,"McLennan, 1993",87.1,93.11,75.8,84.84,80.31,0.81,35.33,56.58
+Alpine_Europe,composite,region,denudation,"McLennan, 1993",74.92,85.66,63.93,69.71,71.59,2.59,40.69,36.04
+Central_America,composite,region,denudation,"McLennan, 1993",66.8,80.1,60.56,62.98,71.28,0.69,62.93,63.85
+Northwest_South_America,composite,region,denudation,"McLennan, 1993",70.15,82.46,61.73,65.44,71.07,0.72,54.43,67.58
+Ocean_Islands_(excl._N.Z.),composite,region,denudation,"McLennan, 1993",55.35,71.26,50.31,50.38,63.11,0.92,69.39,63.27
+New_Zealand_(S._Island),composite,region,denudation,"McLennan, 1993",69.76,82.19,61.16,64.81,70.51,0.7,65.15,67.39
+U.S._Atlantic_Coast,composite,region,denudation,"McLennan, 1993",77.94,87.6,67.12,73.7,74.16,0.74,55.4,64
+MBG1,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",37.05,54.07,35.38,33.94,50.59,7.95,64.78,31.67
+MBG2,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",37.41,54.45,35.57,34,50.64,6.02,71.57,31.95
+MBG3,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",47.52,64.43,43.75,42.57,57.68,7.69,60.7,30.79
+MBG4,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",49.88,66.56,46.42,45.84,60.54,7.72,57.65,31.39
+MBG5,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",46.16,63.17,42.35,40.83,56.23,13.22,80.13,24.49
+MBG6,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",46.31,63.3,43.24,42.2,57.7,5.88,44.64,35.13
+MBG7,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",41.73,58.89,38.2,35.81,52.1,7.54,45.66,34.86
+MBG8,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",40.98,58.14,37.49,34.93,51.36,9.26,49.28,28.41
+MBG9,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",29.73,45.83,28.49,26.55,42.96,16.45,79.6,18.49
+MBG10,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",46.31,63.3,42.76,41.44,56.85,11.86,66.26,23.23
+MBG11,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",43.92,61.04,40.65,39.02,54.9,8.27,62.46,29.74
+MBG12,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",46.57,63.55,43.74,42.88,58.4,7.35,66.65,31.8
+MBG13,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",48.53,65.35,45.15,44.36,59.36,8.1,65.33,31.22
+MBG14,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",32.54,49.1,31.01,29.03,45.69,11.89,64.03,20.1
+MBG15,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",31.86,48.32,30.3,28.18,44.84,11.47,61.08,25.74
+MBG16,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",29.19,45.19,27.78,25.39,41.89,14.29,63.67,22.6
+MBG17,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",29.47,45.53,28.07,25.75,42.26,13.88,63.02,22.09
+MBG18,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",47.28,64.2,44.01,43.04,58.31,7.86,61.16,21.99
+MBG19,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",54.99,70.96,50.37,50.44,63.45,4.51,39.72,37.03
+MBG20,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",34.03,50.78,32.31,30.31,47.03,10.64,65.48,25.74
+MBG21,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",49.85,66.53,46.29,45.67,60.34,7.88,61.72,26.74
+MBG22,sample,Manasbal_Lake,lake_bottom,"Lone et al., 2017",35.05,51.91,33.03,30.83,47.6,10.2,68.5,26.23
+SAR-5,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",33.49,50.18,31.99,30.21,46.88,5.47,48.1,44.52
+SAS-5,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",37.76,54.82,35.71,33.96,50.6,5.42,44.34,37.23
+SAT-2,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",39.47,56.6,37.66,36.42,52.96,4.06,28.91,60.63
+SAZ-3,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",37.68,54.74,35.25,33.06,49.75,4.47,28.62,65.39
+SBD-7,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",42.65,59.79,39.52,37.71,53.82,3.99,23.6,62.46
+SCT-23,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",40.16,57.31,37.63,35.84,52.28,4.87,29.69,49.19
+SCT-57,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",33.43,50.1,31.83,29.91,46.6,5.97,37.22,42.49
+SCT-60,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",36.86,53.87,35.02,33.36,50.03,4.94,37.21,59.32
+SCT-62,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",35.61,52.52,34.12,32.66,49.33,5.33,30.65,60.25
+SVC-7,sample,Surma_Group,sandstone,"Hussain and Bharali, 2019",36.56,53.55,35.09,33.78,50.45,4.29,46.38,58.03
+SCZ-3,sample,Barail_Group,sandstone,"Hussain and Bharali, 2019",54.35,70.42,48.52,48.11,60.93,3.57,22.7,69
+SCZ-4,sample,Barail_Group,sandstone,"Hussain and Bharali, 2019",55.95,71.76,51.66,51.97,64.85,2.88,15.08,69.37
+SCZ-12,sample,Barail_Group,sandstone,"Hussain and Bharali, 2019",38.41,55.5,35.71,33.36,50.03,5.26,28.83,53.04
+SCZ-14,sample,Barail_Group,sandstone,"Hussain and Bharali, 2019",47.04,63.98,43,41.55,56.73,3.59,23.5,66.67
+SCT-7,sample,Barail_Group,sandstone,"Hussain and Bharali, 2019",45.33,62.38,43.29,42.63,58.59,3.75,29.73,49.85
+SCT-8,sample,Barail_Group,sandstone,"Hussain and Bharali, 2019",41.55,58.71,39.34,38.06,54.38,4.34,25.68,58.18
+SCT-11,sample,Barail_Group,sandstone,"Hussain and Bharali, 2019",60.88,75.68,55.86,57.01,68.07,2.94,15.1,66.2
+SCT-12,sample,Barail_Group,sandstone,"Hussain and Bharali, 2019",44.65,61.73,41.54,40.18,55.95,4.17,25.01,63.76
+CCSC,sample,channel_sediments,Chambal,"Maharana et al., 2018",60.71,75.55,52.75,53.73,63.61,1.61,27.65,61.42
+CCSF,sample,channel_sediments,Chambal,"Maharana et al., 2018",61.04,75.8,54.1,55.31,65.39,1.55,28.81,50.92
+BNSCS,sample,channel_sediments,Banas,"Maharana et al., 2018",55.68,71.53,45.87,43.62,56.11,1.08,37.1,49.27
+BCSC,sample,channel_sediments,Betwa,"Maharana et al., 2018",68.03,80.97,49.09,47.95,55.49,3.83,40,43.55
+BCSF,sample,channel_sediments,Betwa,"Maharana et al., 2018",61.25,75.97,48.8,47.98,57.71,1.03,58.23,55.74
+KCS,sample,channel_sediments,Ken,"Maharana et al., 2018",67.68,80.72,55.27,58.32,63.67,0.95,27.91,69.5
+TCS,sample,channel_sediments,Ton,"Maharana et al., 2018",69.97,82.33,61.83,65.42,71.28,1.04,7.32,72.84
+SCSC,sample,channel_sediments,Son,"Maharana et al., 2018",65.81,79.38,51.12,52.02,58.94,0.89,30.73,65.85
+SBSF,sample,channel_sediments,Son,"Maharana et al., 2018",64.23,78.22,51.55,52.56,60.19,1.01,33.53,74.56
+YCS-AG,sample,channel_sediments,Yamuna,"Maharana et al., 2018",65.12,78.88,57.57,59.86,68.06,0.78,32.59,70.75
+YCS-ABD,sample,channel_sediments,Yamuna,"Maharana et al., 2018",61.85,76.43,54.14,55.52,65,1.14,34.01,63.24
+GCS-ABD,sample,channel_sediments,Ganga,"Maharana et al., 2018",60.58,75.45,52.95,53.94,63.97,0.77,40.51,69.29
+GCSS,sample,channel_sediments,Ganga,"Maharana et al., 2018",59.08,74.28,50.93,51.29,61.84,0.76,36.01,51.08
+GCSV,sample,channel_sediments,Ganga,"Maharana et al., 2018",60.31,75.24,53.79,54.84,65.36,1.02,29.44,66.96
+COB,sample,overbank_sediments,Chambal,"Maharana et al., 2018",79.97,88.87,70.06,76.67,76.8,1.2,31.63,47.24
+BNSOB,sample,overbank_sediments,Banas,"Maharana et al., 2018",62.48,76.91,54.68,56.24,65.42,0.95,38.04,67.93
+SINMD,sample,overbank_sediments,Sindh,"Maharana et al., 2018",83.37,90.93,72.05,80.27,77.62,1.1,34.35,51.58
+SINOBO,sample,overbank_sediments,Sindh,"Maharana et al., 2018",85.41,92.13,75.41,83.18,80.6,1.09,31.7,46.97
+BMD1B,sample,overbank_sediments,Betwa,"Maharana et al., 2018",77.53,87.35,64.74,72,71.45,0.87,39.93,66.92
+BOB2A,sample,overbank_sediments,Betwa,"Maharana et al., 2018",68.63,81.39,52.4,54.55,59.53,1.24,50.11,32
+BOB2B,sample,overbank_sediments,Betwa,"Maharana et al., 2018",81.35,89.72,71.01,78.17,77.3,0.74,33.13,63.28
+BOB2C,sample,overbank_sediments,Betwa,"Maharana et al., 2018",90.28,94.89,80.04,88.85,83.64,0.65,29.57,58.91
+BOBO,sample,overbank_sediments,Betwa,"Maharana et al., 2018",83.65,91.1,73.5,81.04,79.19,0.77,31.6,58.75
+KOBA,sample,overbank_sediments,Ken,"Maharana et al., 2018",84.79,91.77,74.18,82.25,79.47,0.95,28.24,53.08
+KOBB,sample,overbank_sediments,Ken,"Maharana et al., 2018",81.79,89.98,69.82,78.02,75.71,1.06,29.23,57.38
+TOB,sample,overbank_sediments,Ton,"Maharana et al., 2018",89.52,94.47,77.79,87.66,81.5,0.52,33.81,72.17
+SMD1B,sample,overbank_sediments,Son,"Maharana et al., 2018",88.33,93.81,77.34,86.4,81.51,0.48,32.86,74.83
+SOB2A,sample,overbank_sediments,Son,"Maharana et al., 2018",78.85,88.17,66.83,74.21,73.41,0.7,34.17,73.85
+SOB2B,sample,overbank_sediments,Son,"Maharana et al., 2018",87.78,93.49,76.75,85.73,81.08,0.48,30.71,77.1
+YOBAG,sample,overbank_sediments,Yamuna,"Maharana et al., 2018",82.43,90.37,69.39,78.36,74.93,0.74,51.13,64.83
+YOBABD,sample,overbank_sediments,Yamuna,"Maharana et al., 2018",81.82,90,73.46,79.48,79.99,1.07,24.39,47.18
+GOBABD,sample,overbank_sediments,Ganga,"Maharana et al., 2018",71.39,83.31,61.3,65.75,69.88,0.74,45.43,70.53
+GOBSA,sample,overbank_sediments,Ganga,"Maharana et al., 2018",81.81,90,70.91,78.51,76.98,0.71,34,65.75
+GOBSB,sample,overbank_sediments,Ganga,"Maharana et al., 2018",86.98,93.04,75.48,84.64,80,0.83,35.14,54.68
+GOBSC,sample,overbank_sediments,Ganga,"Maharana et al., 2018",84.39,91.53,73.08,81.53,78.38,0.65,34.13,66.76
+GOBV,sample,overbank_sediments,Ganga,"Maharana et al., 2018",83.54,91.03,72.39,80.54,77.96,0.92,39.56,52.23
+GOBP,sample,overbank_sediments,Ganga,"Maharana et al., 2018",85.07,91.94,73.53,82.29,78.6,0.76,37.18,59.83
+GMDP,sample,overbank_sediments,Ganga,"Maharana et al., 2018",90.56,95.04,79,88.94,82.4,0.53,35.19,68.04
+GOBBA,sample,overbank_sediments,Ganga,"Maharana et al., 2018",69.29,81.86,59.34,63.1,68.32,1.29,38.1,57.08
+GOBBB,sample,overbank_sediments,Ganga,"Maharana et al., 2018",76.7,86.81,64.36,71.18,71.34,1.15,44.49,56.14
+CSS12,sample,suspended_sediments,Chambal,"Maharana et al., 2018",89.6,94.52,78.44,87.88,82.18,1.09,31.26,42.83
+CSS13,sample,suspended_sediments,Chambal,"Maharana et al., 2018",83.08,90.76,72.89,80.33,78.73,1.25,31.9,40.37
+SINSS12,sample,suspended_sediments,Sindh,"Maharana et al., 2018",83.98,91.29,74.58,81.67,80.29,1.14,31.8,44.9
+BSS12,sample,suspended_sediments,Betwa,"Maharana et al., 2018",94.07,96.95,86.25,93.48,88.66,0.56,23.76,58.68
+BSS13,sample,suspended_sediments,Betwa,"Maharana et al., 2018",88.24,93.75,78.96,86.67,83.35,0.86,25.78,47.96
+KSS12,sample,suspended_sediments,Ken,"Maharana et al., 2018",94.9,97.39,85.66,94.29,87.68,0.39,20.21,77.45
+KSS13,sample,suspended_sediments,Ken,"Maharana et al., 2018",87.87,93.54,78.89,86.31,83.43,0.86,25.65,47.62
+TSS12,sample,suspended_sediments,Ton,"Maharana et al., 2018",94.28,97.05,81.9,93.26,83.98,0.46,32.87,75.9
+SSS13,sample,suspended_sediments,Son,"Maharana et al., 2018",95.13,97.51,86.45,94.59,88.41,0.28,24.28,81.3
+YSSAG13,sample,suspended_sediments,Yamuna,"Maharana et al., 2018",81.59,89.86,68.56,77.27,74.31,0.68,48.13,68.97
+YSSABD13,sample,suspended_sediments,Yamuna,"Maharana et al., 2018",86.87,92.98,75.88,84.65,80.49,1.06,31.95,44.09
+GSSABD12,sample,suspended_sediments,Ganga,"Maharana et al., 2018",81.65,89.9,67.72,76.89,73.29,0.69,54.02,71.09
+GSSABD13,sample,suspended_sediments,Ganga,"Maharana et al., 2018",82.92,90.66,68.97,78.59,74.24,0.73,52.25,66.85
+GSSACY12,sample,suspended_sediments,Ganga,"Maharana et al., 2018",88.08,93.66,76.53,85.96,80.71,1.13,34.27,41.9
+GSSVIN13,sample,suspended_sediments,Ganga,"Maharana et al., 2018",88.33,93.8,75.29,85.88,79.23,0.93,36.03,51.48
+GSSB12,sample,suspended_sediments,Ganga,"Maharana et al., 2018",86.63,92.84,73.09,83.59,77.45,0.76,42.01,60.79
+GSSB13,sample,suspended_sediments,Ganga,"Maharana et al., 2018",87.27,93.2,72.89,84.14,76.98,0.98,43.99,53.89
+S-1,sample,Silty_clay,Meghna,"Hossain, 2019",77.58,87.38,67.98,73.89,75.38,0.66,37.16,68.68
+S-2,sample,Silty_clay,Meghna,"Hossain, 2019",76.15,86.46,66.96,72.36,74.81,0.62,37.41,70.69
+S-3,sample,Sand,Meghna,"Hossain, 2019",68.81,81.52,60.69,63.99,70.37,0.73,38.35,69.79
+S-4,sample,Silty_clay,Meghna,"Hossain, 2019",75.32,85.93,66.04,71.29,74.05,0.69,41.3,67.1
+S-5,sample,Silty_clay,Meghna,"Hossain, 2019",75.04,85.74,65.49,70.78,73.49,0.73,42.84,66.38
+S-6,sample,Sand,Meghna,"Hossain, 2019",66.37,79.79,58.62,61.25,68.84,0.76,38.83,69.7
+S-7,sample,Sand,Meghna,"Hossain, 2019",64.58,78.48,57.08,59.23,67.67,0.77,39.33,69.76
+S-8,sample,Silty_clay,Meghna,"Hossain, 2019",74.83,85.6,65.21,70.47,73.25,0.66,42.61,70.1
+S-9,sample,Sand,Meghna,"Hossain, 2019",66.38,79.79,58.7,61.32,68.94,0.81,34.56,68.99
+S-10,sample,Silty_clay,Meghna,"Hossain, 2019",75.27,85.89,65.69,71.05,73.63,0.66,42.61,69.75
+S-11,sample,Silty_clay,Meghna,"Hossain, 2019",80.2,89.01,70.14,76.88,76.79,0.58,41.71,70.37
+S-12,sample,Sand,Meghna,"Hossain, 2019",66.13,79.61,58.7,61.22,69.09,0.82,39.76,67
+S-13,sample,Silty_clay,Meghna,"Hossain, 2019",74.53,85.41,65.08,70.2,73.22,0.72,45.52,66.41
+S-14,sample,Silty_clay,Meghna,"Hossain, 2019",76.38,86.61,66.74,72.39,74.42,0.67,44.43,67.59
+S-15,sample,Silty_clay,Meghna,"Hossain, 2019",77.68,87.44,67.86,73.9,75.19,0.64,44.25,67.99
+S-16,sample,Sand,Meghna,"Hossain, 2019",66.5,79.88,59.18,61.77,69.55,0.84,39.93,64.91
+S-17,sample,Silty_clay,Meghna,"Hossain, 2019",83.77,91.17,70.04,79.81,75.14,0.75,49.24,64.8
