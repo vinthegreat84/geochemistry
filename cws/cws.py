@@ -339,7 +339,7 @@ if options == 'Home':
 elif options == 'Data Analysis':
     data_analysis()
 
-st.sidebar.write("For source code, check out my [github](https://github.com/vinthegreat84/covitrace1.5)", unsafe_allow_html=True)
+st.sidebar.write("For source code, check out my [github](https://github.com/vinthegreat84/geochemistry/tree/master/cws)", unsafe_allow_html=True)
 st.sidebar.write("If you want to get in touch, you can find me on [linkedin](https://www.linkedin.com/in/vinay-babu-81791015/)", unsafe_allow_html=True)    
 ##############################################################################################################
         
