@@ -9,7 +9,7 @@ CWS is a tool designed using Python and Streamlit to analyze major elemental geo
 * **Compositional space diagram**: Compositional space diagrams including A - CN - K compositional space diagram after *Nesbitt and Young, 1982*; A - CNK - FM compositional space diagram after *Nesbitt and Young, 1989* and M - F - W compositional space diagramm after *Ohta and Arai, 2007*.
 * **Boxplot, Scatter matrix, Correlation matrix and Heatmap**: Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and proxies.
 
-A running version of the app can be accessed at https://tinyurl.com/covitrace-v2. The app may run slowly when accessing it. This is due to the hosting and should not affect functionality.
+A running version of the app can be accessed at https://tinyurl.com/sedweather. The app may run slowly when accessing it. This is due to the hosting and should not affect functionality.
 
 ## Notes on Usage
 The app can be cloned and run locally using streamlit: streamlit run cws.py. When doing this, ensure you have the required modules listed in the requirements file.
