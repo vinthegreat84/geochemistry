@@ -7,6 +7,7 @@ from plotly.subplots import make_subplots
 from plotly import tools
 import seaborn as sns
 import matplotlib.pyplot as plt
+import altair as alt
 # import io
 # import os
 # import base64
@@ -16,6 +17,8 @@ import matplotlib.pyplot as plt
     # Section - home
     # Section - flowchart
 
+# to do
+# spider plot
 ##############################################################################################################
 # home
 def home():
@@ -28,7 +31,7 @@ def home():
     st.write('\n')
     st.write('### Sections')
     st.write('**Data panel:** Selection of the major elemental geochemical dataset.')
-    st.write('**Variation plot:** Variation of major oxides against samples.')
+    st.write('**Variation diagram:** Variation of major oxides against samples.')
     st.write('**Data filter:** Data filter based on sample/category/subcategory/subsubcategory.')
     st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after *Harnois, 1988*; Chemical Proxy of Alteration (CPA) after *Buggle et al., 2011*; Chemical Index of Alteration (CIA) after *Nesbitt and Young, 1982*; Plagioclase Index of Alteration (PIA) after *Fedo et al., 1995*; Modified Chemical Index of Alteration (CIX) after *Garzanti et al., 2014*; Index of Compositional Variability (ICV) after *Cox et al., 1995*; Weathering Index of Parker (WIP) after *Parker, 1970* and and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
     st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after *Nesbitt and Young, 1982*; A - CNK - FM compositional space diagram after *Nesbitt and Young, 1989* and M - F - W compositional space diagramm after *Ohta and Arai, 2007*.')
@@ -79,14 +82,62 @@ def data_analysis():
     sample = convert_df(df)
     st.download_button("Press to download",sample,"sample.csv","csv",key='download-sample-csv')
     
-    # variation plot
-    if st.checkbox('Variation plot'):
-        st.header('Variation plot')
-        y = st.selectbox('Select the y-axis',(list(data)))
-        variation = px.scatter(data, x="sample", y=y, hover_name="sample",color="subcategory", symbol="subsubcategory", render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
-    )
-        st.plotly_chart(variation, use_container_width=True)
+#     # variation plot
+#     if st.checkbox('Variation plot'):
+#         st.header('Variation plot')
+#         y = st.selectbox('Select the y-axis',(list(data)))
+#         variation = px.scatter(data, x="sample", y=y, hover_name="sample",color="subcategory", symbol="subsubcategory", render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
+#     )
+#         st.plotly_chart(variation, use_container_width=True)
+    
+    # normalized spider diagram
+    if st.checkbox('Variation diagram'):
+        st.header('Variation diagram')
+        data_var = data
+
+        if st.checkbox('Categorization'):
+            type = st.radio('Categorization', ['Category','Subcategory','Subsubcategory'])
+            if type=='Category':
+                cat = st.selectbox("Select the Catgory:", data_var['category'].unique())
+                data_var = data_var[data_var['category'].isin([cat])]
+            elif type=='Subcategory':
+                cat = st.selectbox("Select the Subcatgory:", data_var['subcategory'].unique())
+                data_var = data_var[data_var['subcategory'].isin([cat])]
+            else:
+                cat = st.selectbox("Select the Subsubcatgory:", data_var['subsubcategory'].unique())
+                data_var = data_var[data_var['subsubcategory'].isin([cat])]
         
+        st.write(data_var)
+    
+        var = alt.Chart(data_var).transform_fold(
+            ['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'],
+        ).mark_line().encode(
+            x=alt.X('sample:N', axis=alt.Axis(title='Sample'), sort=None),
+            y=alt.Y('value:Q', axis=alt.Axis(title='Variation %')),
+            color=alt.Color('key:N', legend=alt.Legend(title="Oxide"))
+        ).interactive().properties(width='container')        
+        st.altair_chart(var, use_container_width=True)
+
+#         if st.checkbox('Normalization'):
+#             norm = st.selectbox("Select the Sample:", data_var['sample'].unique())         
+#             data_norm = data_var[data_var['sample'].isin([norm])]
+#             st.write(data_norm)
+#             data_norm = data_var.loc[:,"SiO2":].div(data_norm.iloc[0]["SiO2":])
+#             st.write(data_norm)
+        
+#             var = alt.Chart(data_norm).transform_fold(
+#                 ['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'],
+#             ).mark_line().encode(
+#                 x=alt.X('sample:N', axis=alt.Axis(title='Sample'), sort=None),
+#                 y=alt.Y('value:Q', axis=alt.Axis(title='Variation %')),
+#                 color=alt.Color('key:N', legend=alt.Legend(title="Oxide"))
+#             ).interactive().properties(width='container')        
+#             st.altair_chart(var, use_container_width=True)
+
+#         spider = px.line(data, x="sample", y=y, hover_name="sample",color="subcategory", symbol="subsubcategory", render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
+#     )
+#         st.plotly_chart(spider, use_container_width=True)
+    
 #         # plot download
 #         buffer = io.StringIO()
 #         variation.write_html(buffer, include_plotlyjs='cdn')
@@ -169,7 +220,7 @@ def data_analysis():
             subsubcat = st.selectbox("Select the Subsubcatgory:", data['subsubcategory'].unique())
             data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
             data = data_subsubcat              
-    
+             
     if st.checkbox('Weathering proxy'):
         st.header('Weathering proxy')
         proxy =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","Al2O3/TiO2"]
