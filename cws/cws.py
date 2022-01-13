@@ -203,21 +203,21 @@ def data_analysis():
     if st.checkbox('Data filter'):
         st.header('Data filter')
         # selection of country from 'location'
-        filter = st.radio('Select the filter:',['sample', 'category', 'subcategory','subsubcategory'])
+        filter = st.radio('Select the data filter:',['sample', 'category', 'subcategory','subsubcategory'])
         if filter=='sample':
-            sample = st.multiselect("Select the Samples:", data['sample'].unique())
+            sample = st.multiselect("Select the Samples of the data filter:", data['sample'].unique())
             data_sample = data[data['sample'].isin(sample)]
             data = data_sample   
         if filter=='category':
-            cat = st.selectbox("Select the Catgory:", data['category'].unique())
+            cat = st.selectbox("Select the Catgory of the data filter:", data['category'].unique())
             data_cat = data[data['category'].isin([cat])]
             data = data_cat
         if filter=='subcategory':
-            subcat = st.selectbox("Select the Subcatgory:", data['subcategory'].unique())
+            subcat = st.selectbox("Select the Subcatgory of the data filter:", data['subcategory'].unique())
             data_subcat = data[data['subcategory'].isin([subcat])]
             data = data_subcat
         if filter=='subsubcategory':
-            subsubcat = st.selectbox("Select the Subsubcatgory:", data['subsubcategory'].unique())
+            subsubcat = st.selectbox("Select the Subsubcatgory of the data filter:", data['subsubcategory'].unique())
             data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
             data = data_subsubcat              
              
@@ -325,7 +325,7 @@ def data_analysis():
         
         if st.checkbox('Boxplot'):
             st.subheader('Boxplot')
-            type = st.radio('Categorization of boxplot', ['Category','Subcategory','Subsubcategory'])
+            type = st.radio('Categorization of the boxplot', ['Category','Subcategory','Subsubcategory'])
             if type=='Category':
                 color=data_ox_px['category']
             elif type=='Subcategory':
