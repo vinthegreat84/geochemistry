@@ -96,7 +96,7 @@ def data_analysis():
         data_var = data
 
         if st.checkbox('Categorization'):
-            type = st.radio('Categorization', ['Category','Subcategory','Subsubcategory'])
+            type = st.radio('Categorization of variation diagram', ['Category','Subcategory','Subsubcategory'])
             if type=='Category':
                 cat = st.selectbox("Select the Catgory:", data_var['category'].unique())
                 data_var = data_var[data_var['category'].isin([cat])]
@@ -325,7 +325,7 @@ def data_analysis():
         
         if st.checkbox('Boxplot'):
             st.subheader('Boxplot')
-            type = st.radio('Categorization', ['Category','Subcategory','Subsubcategory'])
+            type = st.radio('Categorization of boxplot', ['Category','Subcategory','Subsubcategory'])
             if type=='Category':
                 color=data_ox_px['category']
             elif type=='Subcategory':
