@@ -33,8 +33,8 @@ def home():
     st.write('**Data panel:** Selection of the major elemental geochemical dataset.')
     st.write('**Variation diagram:** Variation of major oxides against samples.')
     st.write('**Data filter:** Data filter based on sample/category/subcategory/subsubcategory.')
-    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after *Harnois, 1988*; Chemical Proxy of Alteration (CPA) after *Buggle et al., 2011*; Chemical Index of Alteration (CIA) after *Nesbitt and Young, 1982*; Plagioclase Index of Alteration (PIA) after *Fedo et al., 1995*; Modified Chemical Index of Alteration (CIX) after *Garzanti et al., 2014*; Index of Compositional Variability (ICV) after *Cox et al., 1995*; Weathering Index of Parker (WIP) after *Parker, 1970* and and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
-    st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after *Nesbitt and Young, 1982*; A - CNK - FM compositional space diagram after *Nesbitt and Young, 1989* and M - F - W compositional space diagramm after *Ohta and Arai, 2007*.')
+    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
+    st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagramm after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
     st.write('**Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and proxies.')
         
 ##############################################################################################################
@@ -89,6 +89,13 @@ def data_analysis():
 #         variation = px.scatter(data, x="sample", y=y, hover_name="sample",color="subcategory", symbol="subsubcategory", render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
 #     )
 #         st.plotly_chart(variation, use_container_width=True)
+
+#         st.download_button(
+#             label='Download HTML',
+#             data=html_bytes,
+#             file_name='variation.html',
+#             mime='text/html'
+#         )
     
     # normalized spider diagram
     if st.checkbox('Variation diagram'):
@@ -143,13 +150,6 @@ def data_analysis():
 #         variation.write_html(buffer, include_plotlyjs='cdn')
 #         html_bytes = buffer.getvalue().encode()
 
-#         st.download_button(
-#             label='Download HTML',
-#             data=html_bytes,
-#             file_name='variation.html',
-#             mime='text/html'
-#         )
-
 # Weathering Indices calculation
     # molar weights calculation
     data['molar_SiO2']  = data['SiO2']/60.08
@@ -179,8 +179,7 @@ def data_analysis():
     data['(CIA)'] = 100 * data['molar_Al2O3'] / (data['molar_Al2O3'] + data['molar_CaO*'] + data['molar_Na2O'] + data['molar_K2O']) 
 
     # Plagioclase Index of Alteration (PIA) after Fedo et al., 1995
-    data['(PIA)'] = 100 * (data['molar_Al2O3'] - data['molar_K2O']) / (data['molar_Al2O3'] + data['molar_CaO*'] + data['molar_Na2O'] 
-                                                                       - data['molar_K2O'])
+    data['(PIA)'] = 100 * (data['molar_Al2O3'] - data['molar_K2O']) / (data['molar_Al2O3'] + data['molar_CaO*'] + data['molar_Na2O'] - data['molar_K2O'])
 
     # Modified Chemical Index of Alteration (CIX) after Garzanti et al., 2014                                                            
     data['(CIX)'] = 100 * data['molar_Al2O3'] / (data['molar_Al2O3'] + data['molar_Na2O'] + data['molar_K2O']) 
