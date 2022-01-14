@@ -5,13 +5,22 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from plotly import tools
+import plotly.io as pio
 import seaborn as sns
 import matplotlib.pyplot as plt
 import altair as alt
 # import io
 # import os
 # import base64
-# from PIL import Image
+# from base64 import b64encode
+# # from PIL import Image
+
+# import os
+
+# if not os.path.exists("images"):
+#     os.mkdir("images")
+    
+
 
 # layout
     # Section - home
@@ -33,7 +42,8 @@ def home():
     st.write('**Data panel:** Selection of the major elemental geochemical dataset.')
     st.write('**Variation diagram:** Variation of major oxides against samples.')
     st.write('**Data filter:** Data filter based on sample/category/subcategory/subsubcategory.')
-    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
+    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
+    st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering index with oxide/weathering based marker size.')
     st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagramm after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
     st.write('**Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and proxies.')
         
@@ -81,14 +91,6 @@ def data_analysis():
         return df.to_csv(index=False).encode('utf-8')
     sample = convert_df(df)
     st.download_button("Press to download",sample,"sample.csv","csv",key='download-sample-csv')
-    
-#     # variation plot
-#     if st.checkbox('Variation plot'):
-#         st.header('Variation plot')
-#         y = st.selectbox('Select the y-axis',(list(data)))
-#         variation = px.scatter(data, x="sample", y=y, hover_name="sample",color="subcategory", symbol="subsubcategory", render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
-#     )
-#         st.plotly_chart(variation, use_container_width=True)
 
 #         st.download_button(
 #             label='Download HTML',
@@ -232,6 +234,30 @@ def data_analysis():
         proxy = convert_df(proxy)
         st.download_button("Press to download",proxy,"proxy.csv","csv",key='download-proxy-csv')
     
+    # bivariate plot
+    if st.checkbox('Bivariate plot'):
+        st.header('Bivariate plot')
+        data_bivar = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
+        x = st.selectbox('Select the x-axis',(list(data_bivar)))
+        y = st.selectbox('Select the y-axis',(list(data_bivar)))
+        size=None
+        
+        if st.checkbox('Set symbol size'):
+            size = st.radio('Select the oxide/weathering index/ratio:',['oxide', 'weathering index', 'ratio'])
+            if size=='oxide':
+                col_first="SiO2"
+                col_last="P2O5"
+            if size=='weathering index':
+                col_first="(CIW)"
+                col_last="(WIP)"            
+            if size=='ratio':
+                col_first="SiO2/Al2O3"
+                col_last="Al2O3/TiO2"
+            size = st.selectbox('Select the oxide/weathering index/ratio',(list(data_bivar.loc[:,col_first:col_last])))
+        
+        bivar = px.scatter(data_bivar, x=x, y=y, hover_name="sample",color="subcategory", symbol="subsubcategory", size=size, render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
+    )
+        st.plotly_chart(bivar, use_container_width=True)    
     # Category plot
     def tern(x,y,z,color,symbol,hover_name):
         tern_plot = px.scatter_ternary(data, a=x, b=y, c=z, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
@@ -347,6 +373,7 @@ def data_analysis():
             st.subheader('Scatter matrix of weathering indices')
             scatter_px = px.scatter_matrix(data_ox_px, dimensions=["(CIW)", "(CPA)", "(CIA)", "(PIA)", "(CIX)", "(ICV)", "(WIP)"], hover_name="sample")
             st.plotly_chart(scatter_px, use_container_width=True)
+            pio.write_image(scatter_px, "op.png")
 
         # correlation matrix
         if st.checkbox('Correlation matrix'):
@@ -376,6 +403,14 @@ def data_analysis():
                 fig, ax = plt.subplots()
                 sns.heatmap(data_ox_px.corr(method=method), ax=ax)
                 st.write(fig)
+
+#                 fig.write_image("images/fig1.svg")
+                
+#                 img_bytes = fig.to_image(format="png")
+#                 encoding = b64encode(img_bytes).decode()
+#                 img_b64 = "data:image/png;base64," + encoding
+#                 return html.Img(src=img_b64, style={'width': '100%'})
+
              ##############################################################################################################
 
 
