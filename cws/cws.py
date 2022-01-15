@@ -43,7 +43,7 @@ def home():
     st.write('**Variation diagram:** Variation of major oxides against samples.')
     st.write('**Data filter:** Data filter based on sample/category/subcategory/subsubcategory.')
     st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
-    st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering index with oxide/weathering index-based marker size.')
+    st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering index with variable-based marker size and linear/non-linear trendline and axes.')
     st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagramm after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
     st.write('**Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and proxies.')
         
@@ -238,11 +238,24 @@ def data_analysis():
     if st.checkbox('Bivariate plot'):
         st.header('Bivariate plot')
         data_bivar = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
-        x = st.selectbox('Select the x-axis',(list(data_bivar)))
-        y = st.selectbox('Select the y-axis',(list(data_bivar)))
+        hover_name="sample"
+        color="subcategory"
+        symbol="subsubcategory"
         size=None
+        trendline=None      
         
-        if st.checkbox('Set symbol size'):
+        if st.checkbox('Linear and Non-Linear Trendline'):
+            data_bivar = data_bivar.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1)
+            hover_name=None
+            color=None
+            symbol=None
+            trendline_type = st.radio('Trendline:',['Linear', 'Non-Linear'])
+            if trendline_type=='Linear':
+                trendline="ols"
+            else:
+                trendline="lowess"    
+        
+        if st.checkbox('Variable-based marker size'):
             size = st.radio('Select the oxide/weathering index/ratio:',['oxide', 'weathering index', 'ratio'])
             if size=='oxide':
                 col_first="SiO2"
@@ -254,8 +267,22 @@ def data_analysis():
                 col_first="SiO2/Al2O3"
                 col_last="Al2O3/TiO2"
             size = st.selectbox('Select the oxide/weathering index/ratio',(list(data_bivar.loc[:,col_first:col_last])))
+                
+        x = st.selectbox('Select the x-axis',(list(data_bivar)))
+        xaxis_type = st.radio('x axis type:',['Linear', 'Logarithmic'])
+        if xaxis_type=='Linear':
+            log_x=False
+        else:
+            log_x=True
         
-        bivar = px.scatter(data_bivar, x=x, y=y, hover_name="sample",color="subcategory", symbol="subsubcategory", size=size, render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
+        y = st.selectbox('Select the y-axis',(list(data_bivar)))
+        yaxis_type = st.radio('y axis type:',['Linear', 'Logarithmic'])
+        if yaxis_type=='Linear':
+            log_y=False
+        else:
+            log_y=True
+            
+        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
     )
         st.plotly_chart(bivar, use_container_width=True)    
     # Category plot
