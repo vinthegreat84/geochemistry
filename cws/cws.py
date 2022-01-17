@@ -91,13 +91,6 @@ def data_analysis():
         return df.to_csv(index=False).encode('utf-8')
     sample = convert_df(df)
     st.download_button("Press to download",sample,"sample.csv","csv",key='download-sample-csv')
-
-#         st.download_button(
-#             label='Download HTML',
-#             data=html_bytes,
-#             file_name='variation.html',
-#             mime='text/html'
-#         )
     
     # normalized spider diagram
     if st.checkbox('Variation diagram'):
@@ -123,6 +116,7 @@ def data_analysis():
         ).mark_line().encode(
             x=alt.X('sample:N', axis=alt.Axis(title='Sample'), sort=None),
             y=alt.Y('value:Q', axis=alt.Axis(title='Variation %')),
+            tooltip=['sample','category','subcategory','subsubcategory','reference'],
             color=alt.Color('key:N', legend=alt.Legend(title="Oxide"))
         ).interactive().properties(width='container')        
         st.altair_chart(var, use_container_width=True)
@@ -131,7 +125,8 @@ def data_analysis():
 #             norm = st.selectbox("Select the Sample:", data_var['sample'].unique())         
 #             data_norm = data_var[data_var['sample'].isin([norm])]
 #             st.write(data_norm)
-#             data_norm = data_var.loc[:,"SiO2":].div(data_norm.iloc[0]["SiO2":])
+# #             data_norm = data_var.loc[:,"SiO2":].div(data_norm.iloc[0]["SiO2":])
+#             data_norm = data_var.loc[:,"SiO2":].div(data_norm.loc[0]["SiO2":])
 #             st.write(data_norm)
         
 #             var = alt.Chart(data_norm).transform_fold(
@@ -151,6 +146,13 @@ def data_analysis():
 #         buffer = io.StringIO()
 #         variation.write_html(buffer, include_plotlyjs='cdn')
 #         html_bytes = buffer.getvalue().encode()
+
+#         st.download_button(
+#             label='Download HTML',
+#             data=html_bytes,
+#             file_name='variation.html',
+#             mime='text/html'
+#         )
 
 # Weathering Indices calculation
     # molar weights calculation
@@ -244,7 +246,7 @@ def data_analysis():
         size=None
         trendline=None      
         
-        if st.checkbox('Linear and Non-Linear Trendline'):
+        if st.checkbox('Trendline'):
             data_bivar = data_bivar.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1)
             hover_name=None
             color=None
@@ -282,7 +284,7 @@ def data_analysis():
         else:
             log_y=True
             
-        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, render_mode="webgl", title="Variation Plot", color_discrete_sequence=px.colors.qualitative.Antique
+        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, render_mode="webgl", title="Bivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique
     )
         st.plotly_chart(bivar, use_container_width=True)    
     # Category plot
@@ -303,6 +305,7 @@ def data_analysis():
                 }
         })
         st.plotly_chart(tern_plot, use_container_width=True)
+        return tern_plot
     
     # Compositional space diagrams selection
     if st.checkbox('Compositional space diagram'):
@@ -362,7 +365,15 @@ def data_analysis():
             title_y = 'F'
             title_z = 'W'
             
-        fig = tern(x,y,z,color,symbol,hover_name)
+        fig = tern(x,y,z,color,symbol,hover_name) 
+        
+#         plot download
+#         if st.button('hit to save'):
+#             buffer = io.StringIO()
+#             fig.write_html(buffer, include_plotlyjs='cdn')
+#             html_bytes = buffer.getvalue().encode()
+#             fig.write_image("tern_plot.png")
+#             pio.write_image(fig, "C:/Users/Hp/plot.png", format='png')
     
     # boxplot
     def box(x,y,color):
