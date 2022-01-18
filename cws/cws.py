@@ -395,7 +395,7 @@ def data_analysis():
 
         # exporting the plot to the local machine
         with st.expander("Click to export compositional space diagram"):
-            if st.button("compositional space diagramas PNG"):
+            if st.button("compositional space diagram as PNG"):
                 fig.write_image("tern_plot.png")
             if st.button("compositional space diagram as JPEG"):
                 fig.write_image("tern_plot.JPEG")
@@ -555,30 +555,17 @@ def data_analysis():
                 heat, ax = plt.subplots()
                 sns.heatmap(data_ox_wi.corr(method=method), ax=ax)
                 st.write(heat)
-            
-#                 # exporting the plot to the local machine
-#                 with st.expander("Click to export Heatmap of correlation matrix"):
-#                     if st.button("Heatmap of correlation matrix as PNG"):
-#                         heat.write_image("heat.png")
-#                     if st.button("Heatmap of correlation matrix as JPEG"):
-#                         heat.write_image("heat.JPEG")
-#                     if st.button("Heatmap of correlation matrix as WebP"):
-#                         heat.write_image("heat.webp")
-#                     if st.button("Heatmap of correlation matrix as SVG"):
-#                         heat.write_image("heat.svg") 
-#                     if st.button("Heatmap of correlation matrix as PDF"):
-#                         heat.write_image("heat.pdf")
-#                     if st.button("Heatmap of correlation matrix as HTML"):
-#                         buffer = io.StringIO()
-#                         heat.write_html(buffer, include_plotlyjs='cdn')
-#                         html_bytes = buffer.getvalue().encode()
-
-#                         st.download_button(
-#                             label='Download HTML',
-#                             data=html_bytes,
-#                             file_name='Heatmap of correlation matrix.html',
-#                             mime='text/html'
-#                         )                     ##############################################################################################################
+                 # exporting the plot to the local machine
+                with st.expander("Click to export Heatmap of correlation matrix"):
+                    if st.button("Heatmap of correlation matrix as PNG"):
+                        heat.savefig('heat.png')
+                    if st.button("Heatmap of correlation matrix as JPEG"):
+                        heat.savefig("heat.JPEG")
+                    if st.button("Heatmap of correlation matrix as SVG"):
+                        heat.savefig("heat.svg") 
+                    if st.button("Heatmap of correlation matrix as PDF"):
+                        heat.savefig("heat.pdf")                        
+##############################################################################################################
 
 ##############################################################################################################
 # Sidebar Navigation
