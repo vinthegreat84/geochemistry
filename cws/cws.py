@@ -14,12 +14,13 @@ import io
 import os
 import base64
 from base64 import b64encode
+# from fpdf import FPDF
 # # from PIL import Image
 
 # import os
 
-# if not os.path.exists("images"):
-#     os.mkdir("images")
+if not os.path.exists("images"):
+    os.mkdir("images")
     
 
 
@@ -292,7 +293,7 @@ def data_analysis():
         # exporting the plot to the local machine
         with st.expander("Click to export bivariate plot"):
             if st.button("bivariate plot as PNG"):
-                bivar.write_image("bivar.png")
+                bivar.write_image("images/bivar.png")
             if st.button("bivariate plotas JPEG"):
                 bivar.write_image("bivar.JPEG")
             if st.button("bivariate plot as WebP"):
@@ -564,7 +565,25 @@ def data_analysis():
                     if st.button("Heatmap of correlation matrix as SVG"):
                         heat.savefig("heat.svg") 
                     if st.button("Heatmap of correlation matrix as PDF"):
-                        heat.savefig("heat.pdf")                        
+                        heat.savefig("heat.pdf")   
+
+# report_text = st.text_input("Report Text")
+
+# export_as_pdf = st.button("Export Report")
+
+# def create_download_link(val, filename):
+#     b64 = base64.b64encode(val)  # val looks like b'...'
+#     return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="{filename}.pdf">Download file</a>'
+
+# if export_as_pdf:
+#     pdf = FPDF()
+#     pdf.add_page()
+#     pdf.set_font('Arial', 'B', 16)
+#     pdf.cell(40, 10, report_text)
+    
+#     html = create_download_link(pdf.output(dest="S").encode("latin-1"), "test")
+
+#     st.markdown(html, unsafe_allow_html=True)                        
 ##############################################################################################################
 
 ##############################################################################################################
