@@ -11,16 +11,18 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import altair as alt
 import io
-import os
-import base64
-from base64 import b64encode
-# from fpdf import FPDF
-# # from PIL import Image
+# from io import BytesIO
+# import os
+# import base64
+# from base64 import b64encode
+# # from fpdf import FPDF
+# from PIL import Image 
+# import PIL 
 
 # import os
 
-if not os.path.exists("images"):
-    os.mkdir("images")
+# if not os.path.exists("images"):
+#     os.mkdir("images")
     
 
 
@@ -93,6 +95,37 @@ def data_analysis():
         return df.to_csv(index=False).encode('utf-8')
     sample = convert_df(df)
     st.download_button("Press to download",sample,"sample.csv","csv",key='download-sample-csv')
+    
+    def plot_html(plot):
+        buffer = io.StringIO()
+        plot.write_html(buffer, include_plotlyjs='cdn')
+        html_bytes = buffer.getvalue().encode()
+                
+        st.download_button(
+        label='Download HTML',
+        data=html_bytes,
+        file_name='plot.html',
+        mime='text/html'
+                )
+    
+#     def get_image_download_link(img,filename,text):
+#         buffered = BytesIO()
+#         img.save(buffered, format="JPEG")
+#         img_str = base64.b64encode(buffered.getvalue()).decode()
+#         href =  f'<a href="data:file/txt;base64,{img_str}" download="{filename}">{text}</a>'
+#         return href
+    
+    #     def plot_svg(plot):
+#         buffer = io.StringIO()
+#         plot.write_html(buffer, include_plotlyjs='cdn')
+#         html_bytes = buffer.getvalue().encode()
+        
+#         st.download_button(
+#         label='Download',
+#         data=html_bytes,
+#         file_name='plot.svg',
+#         mime='image/svg'
+#                 )  
     
     # normalized spider diagram
     if st.checkbox('Variation diagram'):
@@ -292,27 +325,21 @@ def data_analysis():
         
         # exporting the plot to the local machine
         with st.expander("Click to export bivariate plot"):
-            if st.button("bivariate plot as PNG"):
-                bivar.write_image("images/bivar.png")
-            if st.button("bivariate plotas JPEG"):
-                bivar.write_image("bivar.JPEG")
-            if st.button("bivariate plot as WebP"):
-                bivar.write_image("bivar.webp")
-            if st.button("bivariate plot as SVG"):
-                bivar.write_image("bivar.svg") 
-            if st.button("bivariate plot as PDF"):
-                bivar.write_image("bivar.pdf")
+#             if st.button("bivariate plot as PNG"):
+#                 bivar.write_image("images/bivar.png")
+#             if st.button("bivariate plotas JPEG"):
+#                 bivar.write_image("bivar.JPEG")
+#                 img_file = "plot.jpg"
+#                 st.markdown(get_image_download_link(bivar,img_file,'Download '+img_file), unsafe_allow_html=True)
+
+#             if st.button("bivariate plot as WebP"):
+#                 bivar.write_image("bivar.webp")
+#             if st.button("bivariate plot as SVG"):
+#                 bivar.write_image("bivar.svg")
+#             if st.button("bivariate plot as PDF"):
+#                 bivar.write_image("bivar.pdf")
             if st.button("bivariate plot as HTML"):
-                buffer = io.StringIO()
-                bivar.write_html(buffer, include_plotlyjs='cdn')
-                html_bytes = buffer.getvalue().encode()
-                
-                st.download_button(
-                    label='Download HTML',
-                    data=html_bytes,
-                    file_name='bivar.html',
-                    mime='text/html'
-                )
+                plot_html(bivar)
 
     # Category plot
     def tern(x,y,z,color,symbol,hover_name):
@@ -396,27 +423,28 @@ def data_analysis():
 
         # exporting the plot to the local machine
         with st.expander("Click to export compositional space diagram"):
-            if st.button("compositional space diagram as PNG"):
-                fig.write_image("tern_plot.png")
-            if st.button("compositional space diagram as JPEG"):
-                fig.write_image("tern_plot.JPEG")
-            if st.button("compositional space diagram as WebP"):
-                fig.write_image("tern_plot.webp")
-            if st.button("compositional space diagram as SVG"):
-                fig.write_image("tern_plot.svg") 
-            if st.button("compositional space diagram as PDF"):
-                fig.write_image("tern_plot.pdf")
+#             if st.button("compositional space diagram as PNG"):
+#                 fig.write_image("tern_plot.png")
+#             if st.button("compositional space diagram as JPEG"):
+#                 fig.write_image("tern_plot.JPEG")
+#             if st.button("compositional space diagram as WebP"):
+#                 fig.write_image("tern_plot.webp")
+#             if st.button("compositional space diagram as SVG"):
+#                 fig.write_image("tern_plot.svg") 
+#             if st.button("compositional space diagram as PDF"):
+#                 fig.write_image("tern_plot.pdf")
             if st.button("compositional space diagram as HTML"):
-                buffer = io.StringIO()
-                fig.write_html(buffer, include_plotlyjs='cdn')
-                html_bytes = buffer.getvalue().encode()
+#                 buffer = io.StringIO()
+#                 fig.write_html(buffer, include_plotlyjs='cdn')
+#                 html_bytes = buffer.getvalue().encode()
                 
-                st.download_button(
-                    label='Download HTML',
-                    data=html_bytes,
-                    file_name='tern_plot.html',
-                    mime='text/html'
-                )
+#                 st.download_button(
+#                     label='Download HTML',
+#                     data=html_bytes,
+#                     file_name='tern_plot.html',
+#                     mime='text/html'
+#                 )
+                plot_html(fig)
 
     
     # boxplot
@@ -427,27 +455,28 @@ def data_analysis():
         
         # exporting the plot to the local machine
         with st.expander("Click to export boxplot"):
-            if st.button("boxplot as PNG"):
-                box.write_image("box.png")
-            if st.button("boxplot as JPEG"):
-                box.write_image("box.JPEG")
-            if st.button("boxplot as WebP"):
-                box.write_image("box.webp")
-            if st.button("boxplot as SVG"):
-                box.write_image("box.svg") 
-            if st.button("boxplot as PDF"):
-                box.write_image("box.pdf")
-            if st.button("boxplot as HTML"):
-                buffer = io.StringIO()
-                box.write_html(buffer, include_plotlyjs='cdn')
-                html_bytes = buffer.getvalue().encode()
+#             if st.button("boxplot as PNG"):
+#                 box.write_image("box.png")
+#             if st.button("boxplot as JPEG"):
+#                 box.write_image("box.JPEG")
+#             if st.button("boxplot as WebP"):
+#                 box.write_image("box.webp")
+#             if st.button("boxplot as SVG"):
+#                 box.write_image("box.svg") 
+#             if st.button("boxplot as PDF"):
+#                 box.write_image("box.pdf")
+#             if st.button("boxplot as HTML"):
+#                 buffer = io.StringIO()
+#                 box.write_html(buffer, include_plotlyjs='cdn')
+#                 html_bytes = buffer.getvalue().encode()
                 
-                st.download_button(
-                    label='Download HTML',
-                    data=html_bytes,
-                    file_name='box.html',
-                    mime='text/html'
-                )
+#                 st.download_button(
+#                     label='Download HTML',
+#                     data=html_bytes,
+#                     file_name='box.html',
+#                     mime='text/html'
+#                 )
+                plot_html(box)
             
     if st.checkbox('Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
         st.header('Boxplot, Scatter matrix, Correlation matrix and Heatmap')
@@ -476,27 +505,28 @@ def data_analysis():
 
             # exporting the plot to the local machine
             with st.expander("Click to export Scatter matrix of oxides"):
-                if st.button("Scatter matrix of oxides as PNG"):
-                    scatter_ox.write_image("scatter_ox.png")
-                if st.button("Scatter matrix of oxides as JPEG"):
-                    scatter_ox.write_image("scatter_ox.JPEG")
-                if st.button("Scatter matrix of oxides as WebP"):
-                    scatter_ox.write_image("scatter_ox.webp")
-                if st.button("Scatter matrix of oxides as SVG"):
-                    scatter_ox.write_image("scatter_ox.svg") 
-                if st.button("Scatter matrix of oxides as PDF"):
-                    scatter_ox.write_image("scatter_ox.pdf")
-                if st.button("Scatter matrix of oxides as HTML"):
-                    buffer = io.StringIO()
-                    scatter_ox.write_html(buffer, include_plotlyjs='cdn')
-                    html_bytes = buffer.getvalue().encode()
+#                 if st.button("Scatter matrix of oxides as PNG"):
+#                     scatter_ox.write_image("scatter_ox.png")
+#                 if st.button("Scatter matrix of oxides as JPEG"):
+#                     scatter_ox.write_image("scatter_ox.JPEG")
+#                 if st.button("Scatter matrix of oxides as WebP"):
+#                     scatter_ox.write_image("scatter_ox.webp")
+#                 if st.button("Scatter matrix of oxides as SVG"):
+#                     scatter_ox.write_image("scatter_ox.svg") 
+#                 if st.button("Scatter matrix of oxides as PDF"):
+#                     scatter_ox.write_image("scatter_ox.pdf")
+#                 if st.button("Scatter matrix of oxides as HTML"):
+#                     buffer = io.StringIO()
+#                     scatter_ox.write_html(buffer, include_plotlyjs='cdn')
+#                     html_bytes = buffer.getvalue().encode()
 
-                    st.download_button(
-                        label='Download HTML',
-                        data=html_bytes,
-                        file_name='Scatter matrix of oxides.html',
-                        mime='text/html'
-                    )            
+#                     st.download_button(
+#                         label='Download HTML',
+#                         data=html_bytes,
+#                         file_name='Scatter matrix of oxides.html',
+#                         mime='text/html'
+#                     )
+                    plot_html(scatter_ox)
         
         # scatter matrix of weathering indices
         if st.checkbox('Scatter matrix of weathering indices'):
@@ -506,27 +536,28 @@ def data_analysis():
             
             # exporting the plot to the local machine
             with st.expander("Click to export Scatter matrix of weathering indices"):
-                if st.button("Scatter matrix of weathering indices as PNG"):
-                    scatter_wi.write_image("scatter_wi.png")
-                if st.button("Scatter matrix of weathering indices as JPEG"):
-                    scatter_wi.write_image("scatter_wi.JPEG")
-                if st.button("Scatter matrix of weathering indices as WebP"):
-                    scatter_wi.write_image("scatter_wi.webp")
-                if st.button("Scatter matrix of weathering indices as SVG"):
-                    scatter_wi.write_image("scatter_wi.svg") 
-                if st.button("Scatter matrix of weathering indices as PDF"):
-                    scatter_wi.write_image("scatter_wi.pdf")
-                if st.button("Scatter matrix of weathering indices as HTML"):
-                    buffer = io.StringIO()
-                    scatter_wi.write_html(buffer, include_plotlyjs='cdn')
-                    html_bytes = buffer.getvalue().encode()
+#                 if st.button("Scatter matrix of weathering indices as PNG"):
+#                     scatter_wi.write_image("scatter_wi.png")
+#                 if st.button("Scatter matrix of weathering indices as JPEG"):
+#                     scatter_wi.write_image("scatter_wi.JPEG")
+#                 if st.button("Scatter matrix of weathering indices as WebP"):
+#                     scatter_wi.write_image("scatter_wi.webp")
+#                 if st.button("Scatter matrix of weathering indices as SVG"):
+#                     scatter_wi.write_image("scatter_wi.svg") 
+#                 if st.button("Scatter matrix of weathering indices as PDF"):
+#                     scatter_wi.write_image("scatter_wi.pdf")
+#                 if st.button("Scatter matrix of weathering indices as HTML"):
+#                     buffer = io.StringIO()
+#                     scatter_wi.write_html(buffer, include_plotlyjs='cdn')
+#                     html_bytes = buffer.getvalue().encode()
 
-                    st.download_button(
-                        label='Download HTML',
-                        data=html_bytes,
-                        file_name='Scatter matrix of weathering indices.html',
-                        mime='text/html'
-                    )         
+#                     st.download_button(
+#                         label='Download HTML',
+#                         data=html_bytes,
+#                         file_name='Scatter matrix of weathering indices.html',
+#                         mime='text/html'
+#                     )
+                    plot_html(scatter_wi)
 
         # correlation matrix
         if st.checkbox('Correlation matrix'):
@@ -557,15 +588,15 @@ def data_analysis():
                 sns.heatmap(data_ox_wi.corr(method=method), ax=ax)
                 st.write(heat)
                  # exporting the plot to the local machine
-                with st.expander("Click to export Heatmap of correlation matrix"):
-                    if st.button("Heatmap of correlation matrix as PNG"):
-                        heat.savefig('heat.png')
-                    if st.button("Heatmap of correlation matrix as JPEG"):
-                        heat.savefig("heat.JPEG")
-                    if st.button("Heatmap of correlation matrix as SVG"):
-                        heat.savefig("heat.svg") 
-                    if st.button("Heatmap of correlation matrix as PDF"):
-                        heat.savefig("heat.pdf")   
+#                 with st.expander("Click to export Heatmap of correlation matrix"):
+#                     if st.button("Heatmap of correlation matrix as PNG"):
+#                         heat.savefig('heat.png')
+#                     if st.button("Heatmap of correlation matrix as JPEG"):
+#                         heat.savefig("heat.JPEG")
+#                     if st.button("Heatmap of correlation matrix as SVG"):
+#                         heat.savefig("heat.svg") 
+#                     if st.button("Heatmap of correlation matrix as PDF"):
+#                         heat.savefig("heat.pdf")   
 
 # report_text = st.text_input("Report Text")
 
