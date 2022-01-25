@@ -1,4 +1,6 @@
 import streamlit as st
+st.set_page_config(layout="wide", page_title='CWS 0.1.0')
+
 import pandas as pd
 import numpy as np
 import plotly.express as px
