@@ -73,7 +73,7 @@ def data_analysis():
     
     st.write('\n')
     
-    data = st.selectbox('Select Dataset',('Example data', 'User data'))
+    data = st.sidebar.selectbox('Select Dataset',('Example data', 'User data'))
 
     st.write(data)
 
@@ -130,40 +130,52 @@ def data_analysis():
 #                 )  
     
     # normalized spider diagram
-    if st.checkbox('Variation diagram'):
+    if st.sidebar.checkbox('Variation diagram'):
         st.header('Variation diagram')
         data_var = data
 
-        if st.checkbox('Categorization'):
-            type = st.radio('Categorization of variation diagram', ['Category','Subcategory','Subsubcategory'])
+        if st.sidebar.checkbox('Categorization'):
+            type = st.sidebar.radio('Categorization of variation diagram', ['Category','Subcategory','Subsubcategory'])
             if type=='Category':
-                cat = st.selectbox("Select the Catgory:", data_var['category'].unique())
+                cat = st.sidebar.selectbox("Select the Catgory:", data_var['category'].unique())
                 data_var = data_var[data_var['category'].isin([cat])]
             elif type=='Subcategory':
-                cat = st.selectbox("Select the Subcatgory:", data_var['subcategory'].unique())
+                cat = st.sidebar.selectbox("Select the Subcatgory:", data_var['subcategory'].unique())
                 data_var = data_var[data_var['subcategory'].isin([cat])]
             else:
-                cat = st.selectbox("Select the Subsubcatgory:", data_var['subsubcategory'].unique())
+                cat = st.sidebar.selectbox("Select the Subsubcatgory:", data_var['subsubcategory'].unique())
                 data_var = data_var[data_var['subsubcategory'].isin([cat])]
         
         st.write(data_var)
-    
-        var = alt.Chart(data_var).transform_fold(
-            ['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'],
-        ).mark_line().encode(
-            x=alt.X('sample:N', axis=alt.Axis(title='Sample'), sort=None),
-            y=alt.Y('value:Q', axis=alt.Axis(title='Variation %')),
-            tooltip=['sample','category','subcategory','subsubcategory','reference'],
-            color=alt.Color('key:N', legend=alt.Legend(title="Oxide"))
-        ).interactive().properties(width='container')        
-        st.altair_chart(var, use_container_width=True)
 
-#         if st.checkbox('Normalization'):
-#             norm = st.selectbox("Select the Sample:", data_var['sample'].unique())         
-#             data_norm = data_var[data_var['sample'].isin([norm])]
+        var = px.line(data_var, x='sample', y=['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'])
+        var.update_layout(yaxis_title="Oxide %",
+                          legend_title="Oxide")
+        st.plotly_chart(var, use_container_width=True)
+
+        # exporting the plot to the local machine
+        with st.expander("Click to export Variation diagram"):
+            plot_html(var)
+        
+    
+#         var = alt.Chart(data_var).transform_fold(
+#             ['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'],
+#         ).mark_line().encode(
+#             x=alt.X('sample:N', axis=alt.Axis(title='Sample'), sort=None),
+#             y=alt.Y('value:Q', axis=alt.Axis(title='Variation %')),
+#             tooltip=['sample','category','subcategory','subsubcategory','reference'],
+#             color=alt.Color('key:N', legend=alt.Legend(title="Oxide"))
+#         ).interactive().properties(width='container')        
+#         st.altair_chart(var, use_container_width=True)
+
+#         if st.sidebar.checkbox('Normalization'):
+#             st.header('Normalization variation diagram')
+#             data_norm = data
+#             norm = st.sidebar.selectbox("Select the Sample:", data_norm['sample'].unique())         
+#             data_norm = data_norm[data_norm['sample'].isin([norm])]
 #             st.write(data_norm)
-# #             data_norm = data_var.loc[:,"SiO2":].div(data_norm.iloc[0]["SiO2":])
-#             data_norm = data_var.loc[:,"SiO2":].div(data_norm.loc[0]["SiO2":])
+#             data_norm = data_var.loc[:,"SiO2":].div(data_norm.iloc[0]["SiO2":])
+#             data_norm = data_norm.loc[:,"SiO2":].div(data_norm.loc[0]["SiO2":])
 #             st.write(data_norm)
         
 #             var = alt.Chart(data_norm).transform_fold(
@@ -240,28 +252,27 @@ def data_analysis():
 #     data=data.drop(['CO2', 'molar_SiO2', 'molar_TiO2', 'molar_Al2O3', 'molar_Fe2O3', 'molar_MnO', 'molar_MgO', 'molar_CaO','molar_Na2O', 'molar_K2O', 'molar_P2O5', 'molar_CO2', 'diff', 'molar_CaO*'], axis=1)
     
     # data filter     
-    if st.checkbox('Data filter'):
-        st.header('Data filter')
+    if st.sidebar.checkbox('Data filter'):
         # selection of country from 'location'
-        filter = st.radio('Select the data filter:',['sample', 'category', 'subcategory','subsubcategory'])
+        filter = st.sidebar.radio('Select the data filter:',['sample', 'category', 'subcategory','subsubcategory'])
         if filter=='sample':
-            sample = st.multiselect("Select the Samples of the data filter:", data['sample'].unique())
+            sample = st.sidebar.multiselect("Select the Samples of the data filter:", data['sample'].unique())
             data_sample = data[data['sample'].isin(sample)]
             data = data_sample   
         if filter=='category':
-            cat = st.selectbox("Select the Catgory of the data filter:", data['category'].unique())
+            cat = st.sidebar.selectbox("Select the Catgory of the data filter:", data['category'].unique())
             data_cat = data[data['category'].isin([cat])]
             data = data_cat
         if filter=='subcategory':
-            subcat = st.selectbox("Select the Subcatgory of the data filter:", data['subcategory'].unique())
+            subcat = st.sidebar.selectbox("Select the Subcatgory of the data filter:", data['subcategory'].unique())
             data_subcat = data[data['subcategory'].isin([subcat])]
             data = data_subcat
         if filter=='subsubcategory':
-            subsubcat = st.selectbox("Select the Subsubcatgory of the data filter:", data['subsubcategory'].unique())
+            subsubcat = st.sidebar.selectbox("Select the Subsubcatgory of the data filter:", data['subsubcategory'].unique())
             data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
             data = data_subsubcat              
              
-    if st.checkbox('Weathering proxy'):
+    if st.sidebar.checkbox('Weathering proxy'):
         st.header('Weathering proxy')
         proxy =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","Al2O3/TiO2"]
         proxy=data[proxy]
@@ -274,7 +285,7 @@ def data_analysis():
         st.download_button("Press to download",proxy,"proxy.csv","csv",key='download-proxy-csv')
     
     # bivariate plot
-    if st.checkbox('Bivariate plot'):
+    if st.sidebar.checkbox('Bivariate plot'):
         st.header('Bivariate plot')
         data_bivar = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
         hover_name="sample"
@@ -282,20 +293,21 @@ def data_analysis():
         symbol="subsubcategory"
         size=None
         trendline=None      
-        
-        if st.checkbox('Trendline'):
+        marginal_x=None
+        marginal_y=None
+        if st.sidebar.checkbox('Trendline'):
             data_bivar = data_bivar.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1)
             hover_name=None
             color=None
-            symbol=None
-            trendline_type = st.radio('Trendline:',['Linear', 'Non-Linear'])
+            symbol=None            
+            trendline_type = st.sidebar.radio('Trendline:',['Linear', 'Non-Linear'])
             if trendline_type=='Linear':
                 trendline="ols"
             else:
                 trendline="lowess"    
         
-        if st.checkbox('Variable-based marker size'):
-            size = st.radio('Select the oxide/weathering index/ratio:',['oxide', 'weathering index', 'ratio'])
+        if st.sidebar.checkbox('Variable-based marker size'):
+            size = st.sidebar.radio('Select the oxide/weathering index/ratio:',['oxide', 'weathering index', 'ratio'])
             if size=='oxide':
                 col_first="SiO2"
                 col_last="P2O5"
@@ -305,24 +317,48 @@ def data_analysis():
             if size=='ratio':
                 col_first="SiO2/Al2O3"
                 col_last="Al2O3/TiO2"
-            size = st.selectbox('Select the oxide/weathering index/ratio',(list(data_bivar.loc[:,col_first:col_last])))
-                
-        x = st.selectbox('Select the x-axis',(list(data_bivar)))
-        xaxis_type = st.radio('x axis type:',['Linear', 'Logarithmic'])
+            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio',(list(data_bivar.loc[:,col_first:col_last])))
+            
+        if st.sidebar.checkbox('Add marginal distribution'):
+            if st.sidebar.checkbox('X-axis marginal distribution'):
+                type = st.sidebar.radio('Select the X-axis marginal distribution:',['histogram','rug','box','violin'])
+                if type=='histogram':
+                    marginal_x='histogram'
+                if type=='rug':
+                    marginal_x='rug'
+                if type=='box':
+                    marginal_x='box'
+                if type=='violin':
+                    marginal_x='violin'
+            if st.sidebar.checkbox('Y-axis marginal distribution'):
+                type = st.sidebar.radio('Select the Y-axis marginal distribution:',['histogram','rug','box','violin'])
+                if type=='histogram':
+                    marginal_y='histogram'
+                if type=='rug':
+                    marginal_y='rug'
+                if type=='box':
+                    marginal_y='box'
+                if type=='violin':
+                    marginal_y='violin'
+                    
+        x = st.sidebar.selectbox('Select the x-axis',(list(data_bivar)))
+        xaxis_type = st.sidebar.radio('x axis type:',['Linear', 'Logarithmic'])
         if xaxis_type=='Linear':
             log_x=False
         else:
             log_x=True
+            marginal_x=None
         
-        y = st.selectbox('Select the y-axis',(list(data_bivar)))
-        yaxis_type = st.radio('y axis type:',['Linear', 'Logarithmic'])
+        y = st.sidebar.selectbox('Select the y-axis',(list(data_bivar)))
+        yaxis_type = st.sidebar.radio('y axis type:',['Linear', 'Logarithmic'])
         if yaxis_type=='Linear':
             log_y=False
         else:
-            log_y=True
+            log_y=True 
+            marginal_y=None
             
-        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, render_mode="webgl", title="Bivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique
-    )
+        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, marginal_x=marginal_x, marginal_y=marginal_y, render_mode="webgl", title="Bivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique
+    )        
         st.plotly_chart(bivar, use_container_width=True)
         
         # exporting the plot to the local machine
@@ -343,7 +379,7 @@ def data_analysis():
             if st.button("bivariate plot as HTML"):
                 plot_html(bivar)
 
-    # Category plot
+    # Ternary plot
     def tern(x,y,z,color,symbol,hover_name):
         tern_plot = px.scatter_ternary(data, a=x, b=y, c=z, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
         
@@ -364,20 +400,20 @@ def data_analysis():
         return tern_plot
     
     # Compositional space diagrams selection
-    if st.checkbox('Compositional space diagram'):
+    if st.sidebar.checkbox('Compositional space diagram'):
         st.header('Compositional space diagram')
         csd =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","molar_Al2O3","molar_CaO*","molar_Na2O","molar_K2O","molar_Fe2O3","molar_MgO"]
-        data_csd=data[csd]        
-        csd_type = st.radio('Compositional space diagram:',['A - CN - K', 'A - CNK - FM', 'M - F - W'])
-        type = st.radio('Categorization', ['Category','Subcategory'])
+        data_csd=data[csd]
+        hover_name=data_csd['sample']        
+        type = st.sidebar.radio('Categorization', ['Category','Subcategory'])
         if type=='Category':
             color=data_csd['category']
             symbol=None
         else:
             color=data_csd['subcategory']
-            symbol=data_csd['subsubcategory']
+            symbol=data_csd['subsubcategory']        
+        csd_type = st.sidebar.radio('Compositional space diagram:',['A - CN - K', 'A - CNK - FM', 'M - F - W'])
         x=data_csd['molar_Al2O3']
-        hover_name=data_csd['sample']
         if csd_type == 'A - CN - K':
             y=data_csd['molar_CaO*'] + data_csd['molar_Na2O']            
             z=data_csd['molar_K2O']
@@ -480,14 +516,13 @@ def data_analysis():
 #                 )
                 plot_html(box)
             
-    if st.checkbox('Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
-        st.header('Boxplot, Scatter matrix, Correlation matrix and Heatmap')
+    if st.sidebar.checkbox('Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
         ox_wi =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
         data_ox_wi=data[ox_wi]            
         
-        if st.checkbox('Boxplot'):
+        if st.sidebar.checkbox('Boxplot'):
             st.subheader('Boxplot')
-            type = st.radio('Categorization of the boxplot', ['Category','Subcategory','Subsubcategory'])
+            type = st.sidebar.radio('Categorization of the boxplot', ['Category','Subcategory','Subsubcategory'])
             if type=='Category':
                 color=data_ox_wi['category']
             elif type=='Subcategory':
@@ -495,12 +530,12 @@ def data_analysis():
             else:
                 color=data_ox_wi['subsubcategory']
 
-            x = st.selectbox('Select the x-axis',(list(data_ox_wi)))
-            y = st.selectbox('Select the y-axis',(list(data_ox_wi)))
+            x = st.sidebar.selectbox('Select the x-axis',(list(data_ox_wi)))
+            y = st.sidebar.selectbox('Select the y-axis',(list(data_ox_wi)))
             box(x,y,color)
 
         # scatter matrix of oxides
-        if st.checkbox('Scatter matrix of oxides'):
+        if st.sidebar.checkbox('Scatter matrix of oxides'):
             st.subheader('Scatter matrix of oxides')
             scatter_ox = px.scatter_matrix(data_ox_wi, dimensions=["SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"], hover_name="sample")
             st.plotly_chart(scatter_ox, use_container_width=True)
@@ -531,7 +566,7 @@ def data_analysis():
                     plot_html(scatter_ox)
         
         # scatter matrix of weathering indices
-        if st.checkbox('Scatter matrix of weathering indices'):
+        if st.sidebar.checkbox('Scatter matrix of weathering indices'):
             st.subheader('Scatter matrix of weathering indices')
             scatter_wi = px.scatter_matrix(data_ox_wi, dimensions=["(CIW)", "(CPA)", "(CIA)", "(PIA)", "(CIX)", "(ICV)", "(WIP)"], hover_name="sample")
             st.plotly_chart(scatter_wi, use_container_width=True)
@@ -562,11 +597,11 @@ def data_analysis():
                     plot_html(scatter_wi)
 
         # correlation matrix
-        if st.checkbox('Correlation matrix'):
+        if st.sidebar.checkbox('Correlation matrix'):
             st.subheader('Correlation matrix')
 
             # Method of correlation
-            method = st.radio('Choose the method of correlation', ['Pearson', 'Kendall','Spearman'])
+            method = st.sidebar.radio('Choose the method of correlation', ['Pearson', 'Kendall','Spearman'])
             if method=='Pearson':
                 method='pearson'
             elif method=='Kendall':
@@ -584,7 +619,7 @@ def data_analysis():
             st.download_button("Press to download",corrMatrix,"corrMatrix.csv","csv",key='download-corrMatrix-csv')
 
             # heatmap
-            if st.checkbox('Heatmap of correlation matrix'):
+            if st.sidebar.checkbox('Heatmap of correlation matrix'):
                 st.subheader('Heatmap of correlation matrix')
                 heat, ax = plt.subplots()
                 sns.heatmap(data_ox_wi.corr(method=method), ax=ax)
@@ -632,4 +667,3 @@ elif options == 'Data Analysis':
 st.sidebar.write("For source code, check out my [github](https://github.com/vinthegreat84/geochemistry/tree/master/cws)", unsafe_allow_html=True)
 st.sidebar.write("If you want to get in touch, you can find me on [linkedin](https://www.linkedin.com/in/vinay-babu-81791015/)", unsafe_allow_html=True)    
 ##############################################################################################################
-        
