@@ -11,7 +11,7 @@ import plotly.io as pio
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import seaborn as sns
 import matplotlib.pyplot as plt
-import altair as alt
+# import altair as alt
 import io
 # from io import BytesIO
 # import os
