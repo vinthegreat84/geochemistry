@@ -128,24 +128,32 @@ def data_analysis():
 #         file_name='plot.svg',
 #         mime='image/svg'
 #                 )  
-    
+
+    # data filter     
+    if st.sidebar.checkbox('Data filter'):
+        # selection of country from 'location'
+        filter = st.sidebar.radio('Select the data filter:',['sample', 'category', 'subcategory','subsubcategory'])
+        if filter=='sample':
+            sample = st.sidebar.multiselect("Select the Samples of the data filter:", data['sample'].unique())
+            data_sample = data[data['sample'].isin(sample)]
+            data = data_sample   
+        if filter=='category':
+            cat = st.sidebar.selectbox("Select the Catgory of the data filter:", data['category'].unique())
+            data_cat = data[data['category'].isin([cat])]
+            data = data_cat
+        if filter=='subcategory':
+            subcat = st.sidebar.selectbox("Select the Subcatgory of the data filter:", data['subcategory'].unique())
+            data_subcat = data[data['subcategory'].isin([subcat])]
+            data = data_subcat
+        if filter=='subsubcategory':
+            subsubcat = st.sidebar.selectbox("Select the Subsubcatgory of the data filter:", data['subsubcategory'].unique())
+            data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
+            data = data_subsubcat              
+
     # normalized spider diagram
     if st.sidebar.checkbox('Variation diagram'):
         st.header('Variation diagram')
         data_var = data
-
-        if st.sidebar.checkbox('Categorization'):
-            type = st.sidebar.radio('Categorization of variation diagram', ['Category','Subcategory','Subsubcategory'])
-            if type=='Category':
-                cat = st.sidebar.selectbox("Select the Catgory:", data_var['category'].unique())
-                data_var = data_var[data_var['category'].isin([cat])]
-            elif type=='Subcategory':
-                cat = st.sidebar.selectbox("Select the Subcatgory:", data_var['subcategory'].unique())
-                data_var = data_var[data_var['subcategory'].isin([cat])]
-            else:
-                cat = st.sidebar.selectbox("Select the Subsubcatgory:", data_var['subsubcategory'].unique())
-                data_var = data_var[data_var['subsubcategory'].isin([cat])]
-        
         st.write(data_var)
 
         var = px.line(data_var, x='sample', y=['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'])
@@ -155,8 +163,7 @@ def data_analysis():
 
         # exporting the plot to the local machine
         with st.expander("Click to export Variation diagram"):
-            plot_html(var)
-        
+            plot_html(var)     
     
 #         var = alt.Chart(data_var).transform_fold(
 #             ['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'],
@@ -171,11 +178,14 @@ def data_analysis():
 #         if st.sidebar.checkbox('Normalization'):
 #             st.header('Normalization variation diagram')
 #             data_norm = data
-#             norm = st.sidebar.selectbox("Select the Sample:", data_norm['sample'].unique())         
-#             data_norm = data_norm[data_norm['sample'].isin([norm])]
-#             st.write(data_norm)
-#             data_norm = data_var.loc[:,"SiO2":].div(data_norm.iloc[0]["SiO2":])
-#             data_norm = data_norm.loc[:,"SiO2":].div(data_norm.loc[0]["SiO2":])
+#             norm = st.sidebar.selectbox("Select the Sample:", data_norm['sample'].unique())
+#             norm = data_norm[data_norm['sample'].isin([norm])]
+# # #             norm = data_norm[data_norm['sample'].isin([norm])].drop(["sample","category","subcategory","subsubcategory","reference"], axis=1)
+#             st.write(norm)
+# #             data_norm.loc["SiO2":].div(norm.loc["SiO2":], axis='columns')
+#             data_norm=data_norm.div(norm.loc["SiO2":])
+# #             data_norm = data_norm.loc["SiO2":].div(norm.loc["SiO2":], axis=1)
+# #             data_norm = data_norm.loc[:,"SiO2":].div(norm.loc[0]["SiO2":])
 #             st.write(data_norm)
         
 #             var = alt.Chart(data_norm).transform_fold(
@@ -247,31 +257,7 @@ def data_analysis():
     data['SiO2/Al2O3'] = data['SiO2'] / data['Al2O3']
     data['K2O/Al2O3']  = data['K2O'] / data['Al2O3']
     data['Al2O3/TiO2'] = data['Al2O3'] / data['TiO2']
-    
-#     # dropping extra variables
-#     data=data.drop(['CO2', 'molar_SiO2', 'molar_TiO2', 'molar_Al2O3', 'molar_Fe2O3', 'molar_MnO', 'molar_MgO', 'molar_CaO','molar_Na2O', 'molar_K2O', 'molar_P2O5', 'molar_CO2', 'diff', 'molar_CaO*'], axis=1)
-    
-    # data filter     
-    if st.sidebar.checkbox('Data filter'):
-        # selection of country from 'location'
-        filter = st.sidebar.radio('Select the data filter:',['sample', 'category', 'subcategory','subsubcategory'])
-        if filter=='sample':
-            sample = st.sidebar.multiselect("Select the Samples of the data filter:", data['sample'].unique())
-            data_sample = data[data['sample'].isin(sample)]
-            data = data_sample   
-        if filter=='category':
-            cat = st.sidebar.selectbox("Select the Catgory of the data filter:", data['category'].unique())
-            data_cat = data[data['category'].isin([cat])]
-            data = data_cat
-        if filter=='subcategory':
-            subcat = st.sidebar.selectbox("Select the Subcatgory of the data filter:", data['subcategory'].unique())
-            data_subcat = data[data['subcategory'].isin([subcat])]
-            data = data_subcat
-        if filter=='subsubcategory':
-            subsubcat = st.sidebar.selectbox("Select the Subsubcatgory of the data filter:", data['subsubcategory'].unique())
-            data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
-            data = data_subsubcat              
-             
+        
     if st.sidebar.checkbox('Weathering proxy'):
         st.header('Weathering proxy')
         proxy =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","Al2O3/TiO2"]
@@ -598,8 +584,19 @@ def data_analysis():
 
         # correlation matrix
         if st.sidebar.checkbox('Correlation matrix'):
+            data_corr=data_ox_wi
             st.subheader('Correlation matrix')
-
+            
+            # oxide, weathering indices filter
+            if st.sidebar.checkbox('Oxide/Weathering indices filter'):
+                filter = st.sidebar.radio('Choose the filter', ['Oxides','Weathering indices'])
+                if filter=='Oxides':                
+                    ox =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"]
+                    data_corr=data[ox]
+                if filter=='Weathering indices':                
+                    wi =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
+                    data_corr=data[wi]                     
+            
             # Method of correlation
             method = st.sidebar.radio('Choose the method of correlation', ['Pearson', 'Kendall','Spearman'])
             if method=='Pearson':
@@ -609,7 +606,7 @@ def data_analysis():
             else:
                 method='spearman'
 
-            corrMatrix = round(data_ox_wi.corr(method=method), 4)
+            corrMatrix = round(data_corr.corr(method=method), 4)
             st.write(corrMatrix, use_container_width=True)
 
             @st.cache
@@ -620,9 +617,9 @@ def data_analysis():
 
             # heatmap
             if st.sidebar.checkbox('Heatmap of correlation matrix'):
-                st.subheader('Heatmap of correlation matrix')
+                st.subheader('Heatmap of correlation matrix')             
                 heat, ax = plt.subplots()
-                sns.heatmap(data_ox_wi.corr(method=method), ax=ax)
+                sns.heatmap(data_corr.corr(method=method), ax=ax)
                 st.write(heat)
                  # exporting the plot to the local machine
 #                 with st.expander("Click to export Heatmap of correlation matrix"):
