@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit.components.v1 import iframe
 st.set_page_config(layout="wide", page_title='CWS 0.1.0')
 
 import pandas as pd
@@ -9,17 +10,21 @@ from plotly.subplots import make_subplots
 from plotly import tools
 import plotly.io as pio
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import plotly.figure_factory as ff
 import seaborn as sns
 import matplotlib.pyplot as plt
 # import altair as alt
 import io
 # from io import BytesIO
 # import os
+# from fpdf import FPDF
 # import base64
 # from base64 import b64encode
-# # from fpdf import FPDF
 # from PIL import Image 
 # import PIL 
+
+import pdfkit
+from jinja2 import Environment, PackageLoader, select_autoescape, FileSystemLoader
 
 # import os
 
@@ -63,6 +68,7 @@ def data_analysis():
     # major elemental data template
     url = 'https://raw.githubusercontent.com/vinthegreat84/geochemistry/master/template.csv'
     df = pd.read_csv(url)
+#     df = pd.read_csv("C:/Users/Hp/CWS/data/template.csv")
 
     @st.cache
     def convert_df(df):
@@ -82,6 +88,7 @@ def data_analysis():
         if name == 'Example data':
             url = 'https://raw.githubusercontent.com/vinthegreat84/geochemistry/master/SedWeather/raw/sedchem.csv'
             df = pd.read_csv(url)
+#             df = pd.read_csv("C:/Users/Hp/CWS/data/sedchem.csv")
         else:
             uploaded_file = st.file_uploader("Choose a CSV file (max 200 MB)")
             col_list =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","FeO","MnO","MgO","CaO","Na2O","K2O","P2O5","CO2"]
@@ -150,19 +157,19 @@ def data_analysis():
             data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
             data = data_subsubcat              
 
-    # normalized spider diagram
-    if st.sidebar.checkbox('Variation diagram'):
-        st.header('Variation diagram')
+    # Major oxides variation
+    if st.sidebar.checkbox('Major oxides variation'):
+        st.header('Major oxides variation')
         data_var = data
         st.write(data_var)
 
         var = px.line(data_var, x='sample', y=['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'])
-        var.update_layout(yaxis_title="Oxide %",
-                          legend_title="Oxide")
+        var.update_layout(yaxis_title="Major oxide %",
+                          legend_title="Major oxide")
         st.plotly_chart(var, use_container_width=True)
 
         # exporting the plot to the local machine
-        with st.expander("Click to export Variation diagram"):
+        with st.expander("Click to export Major oxides variation diagram"):
             plot_html(var)     
     
 #         var = alt.Chart(data_var).transform_fold(
@@ -264,11 +271,25 @@ def data_analysis():
         proxy=data[proxy]
         st.write(proxy)
         
+        proxy_download=proxy
         @st.cache
-        def convert_df(proxy):
-            return proxy.to_csv(index=False).encode('utf-8')
-        proxy = convert_df(proxy)
-        st.download_button("Press to download",proxy,"proxy.csv","csv",key='download-proxy-csv')
+        def convert_df(proxy_download):
+            return proxy_download.to_csv(index=False).encode('utf-8')
+        proxy_download = convert_df(proxy_download)
+        st.download_button("Press to download",proxy_download,"proxy.csv","csv",key='download-proxy-csv')
+
+        # weathering indices variation
+        if st.sidebar.checkbox('Weathering proxy variation'):
+            st.header('Weathering proxy variation')
+
+            var_proxy = px.line(proxy, x='sample', y=['(CIW)','(CPA)','(CIA)','(PIA)','(CIX)','(ICV)','(WIP)','SiO2/Al2O3','K2O/Al2O3','Al2O3/TiO2'])
+            var_proxy.update_layout(yaxis_title="Weathering proxy",
+                              legend_title="Weathering proxy")
+            st.plotly_chart(var_proxy, use_container_width=True)
+
+            # exporting the plot to the local machine
+            with st.expander("Click to export Weathering proxy variation diagram"):
+                plot_html(var_proxy) 
     
     # bivariate plot
     if st.sidebar.checkbox('Bivariate plot'):
@@ -364,7 +385,61 @@ def data_analysis():
 #                 bivar.write_image("bivar.pdf")
             if st.button("bivariate plot as HTML"):
                 plot_html(bivar)
+    
+    # 3d/trivariate plot
+    if st.sidebar.checkbox('Trivariate plot'):
+        st.header('Trivariate plot')
+        data_trivar = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
+        hover_name="sample"
+        color="subcategory"
+        symbol="subsubcategory"
+        size=None
+        trendline=None      
+        marginal_x=None
+        marginal_y=None
+        marginal_z=None   
+        
+        if st.sidebar.checkbox('Variable-based marker size of trivariate plot'):
+            size = st.sidebar.radio('Select the oxide/weathering index/ratio:',['oxide', 'weathering index', 'ratio'])
+            if size=='oxide':
+                col_first="SiO2"
+                col_last="P2O5"
+            if size=='weathering index':
+                col_first="(CIW)"
+                col_last="(WIP)"            
+            if size=='ratio':
+                col_first="SiO2/Al2O3"
+                col_last="Al2O3/TiO2"
+            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio',(list(data_trivar.loc[:,col_first:col_last])))                              
+                    
+        x = st.sidebar.selectbox('Select the x-axis of trivariate plot',(list(data_trivar)))
+        xaxis_type = st.sidebar.radio('x axis type of trivariate plot:',['Linear', 'Logarithmic'])
+        if xaxis_type=='Linear':
+            log_x=False
+        else:
+            log_x=True
+            marginal_x=None
+        
+        y = st.sidebar.selectbox('Select the y-axis of trivariate plot',(list(data_trivar)))
+        yaxis_type = st.sidebar.radio('y axis type of trivariate plot:',['Linear', 'Logarithmic'])
+        if yaxis_type=='Linear':
+            log_y=False
+        else:
+            log_y=True 
+            marginal_y=None
 
+        z = st.sidebar.selectbox('Select the z-axis of trivariate plot',(list(data_trivar)))
+        zaxis_type = st.sidebar.radio('z axis type of trivariate plot:',['Linear', 'Logarithmic'])
+        if zaxis_type=='Linear':
+            log_z=False
+        else:
+            log_z=True 
+            marginal_z=None            
+            
+        trivar = px.scatter_3d(data_trivar, x=x, y=y, z=z, log_x=log_x, log_y=log_y, log_z=log_z, hover_name=hover_name, color=color, symbol=symbol, size=size, title="Trivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique
+    )        
+        st.plotly_chart(trivar, use_container_width=True)        
+        
     # Ternary plot
     def tern(x,y,z,color,symbol,hover_name):
         tern_plot = px.scatter_ternary(data, a=x, b=y, c=z, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
@@ -617,7 +692,7 @@ def data_analysis():
 
             # heatmap
             if st.sidebar.checkbox('Heatmap of correlation matrix'):
-                st.subheader('Heatmap of correlation matrix')             
+                st.subheader('Heatmap of correlation matrix')
                 heat, ax = plt.subplots()
                 sns.heatmap(data_corr.corr(method=method), ax=ax)
                 st.write(heat)
@@ -631,24 +706,29 @@ def data_analysis():
 #                         heat.savefig("heat.svg") 
 #                     if st.button("Heatmap of correlation matrix as PDF"):
 #                         heat.savefig("heat.pdf")   
+	
+#     env = Environment(loader=FileSystemLoader("."), autoescape=select_autoescape())
+#     template = env.get_template("template.html")
+#     form = left.form("template_form")
+#     submit = form.form_submit_button("Generate PDF")
 
-# report_text = st.text_input("Report Text")
+#     if submit:
+#         html = template.render(
+#             data=data
+#         )
 
-# export_as_pdf = st.button("Export Report")
+#         pdf = pdfkit.from_string(html, False)
+#         st.balloons()
 
-# def create_download_link(val, filename):
-#     b64 = base64.b64encode(val)  # val looks like b'...'
-#     return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="{filename}.pdf">Download file</a>'
-
-# if export_as_pdf:
-#     pdf = FPDF()
-#     pdf.add_page()
-#     pdf.set_font('Arial', 'B', 16)
-#     pdf.cell(40, 10, report_text)
-    
-#     html = create_download_link(pdf.output(dest="S").encode("latin-1"), "test")
-
-#     st.markdown(html, unsafe_allow_html=True)                        
+#         right.success("🎉 Your diploma was generated!")
+#         # st.write(html, unsafe_allow_html=True)
+#         # st.write("")
+#         right.download_button(
+#             "⬇️ Download PDF",
+#             data=pdf,
+#             file_name="diploma.pdf",
+#             mime="application/octet-stream",
+#         )
 ##############################################################################################################
 
 ##############################################################################################################
