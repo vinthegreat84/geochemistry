@@ -21,11 +21,7 @@ import io
 # import base64
 # from base64 import b64encode
 # from PIL import Image 
-# import PIL 
-
-import pdfkit
-from jinja2 import Environment, PackageLoader, select_autoescape, FileSystemLoader
-
+# import PIL
 # import os
 
 # if not os.path.exists("images"):
