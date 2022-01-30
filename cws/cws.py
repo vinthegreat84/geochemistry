@@ -579,13 +579,17 @@ def data_analysis():
         ox_wi =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
         data_ox_wi=data[ox_wi]
         
-        # Subburst
+        # Subburst plot
         if st.sidebar.checkbox('Sunburst plot'):
             st.header('Sunburst plot')            
 
             # selection of 'values'
-            values = st.sidebar.selectbox("Select the Oxide and/or Weathering index:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
-            sun = px.sunburst(data_ox_wi, path=['category','subcategory','subsubcategory'], values=values)
+            values = st.sidebar.selectbox("Select the Oxide and/or Weathering index for values:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
+            
+            # selection of 'color'
+            color = st.sidebar.selectbox("Select the Oxide and/or Weathering index for color:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)            
+            
+            sun = px.sunburst(data_ox_wi, path=['category','subcategory','subsubcategory'], values=values, color=color)
             sun.update_traces(sort=False)
             st.plotly_chart(sun, use_container_width=True)
             
