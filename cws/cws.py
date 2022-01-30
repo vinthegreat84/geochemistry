@@ -54,7 +54,7 @@ def home():
     st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering index with variable-based marker size, linear/non-linear trendline & axes, and marginal distribution.')
     st.write('**Trivariate plot:** Trivariate plot between oxide and/or weathering index with variable-based marker size and linear/non-linear trendline & axes.')
     st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagram after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
-    st.write('**Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and proxies.')
+    st.write('**Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.')
         
 ##############################################################################################################
 
@@ -575,9 +575,33 @@ def data_analysis():
 #                 )
                 plot_html(box)
             
-    if st.sidebar.checkbox('Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
+    if st.sidebar.checkbox('Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
         ox_wi =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
-        data_ox_wi=data[ox_wi]            
+        data_ox_wi=data[ox_wi]
+        
+        if st.sidebar.checkbox('Histogram'):
+            st.subheader('Histogram')
+
+            # selection of variable(s) (oxide and/or weathering index)
+            var = st.sidebar.multiselect("Select the Oxide and/or Weathering index:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
+
+            # Linear/Non-linear y axis
+            yaxis_type = st.sidebar.radio('y axis type:',['Linear', 'Logarithmic'])
+            if yaxis_type=='Linear':
+                log_y=False
+            else:
+                log_y=True
+            
+            hist = px.histogram(data_ox_wi, x=var, opacity=0.6, log_y=log_y)
+            hist.update_layout(xaxis_title="Oxide/Weathering Index")
+            st.plotly_chart(hist)
+            
+            # exporting the plot to the local machine
+            with st.expander("Click to export Histogram"):
+                plot_html(hist)
+            
+#             stats = data_ox_wi.describe
+#             st.write(stats)  
         
         if st.sidebar.checkbox('Boxplot'):
             st.subheader('Boxplot')
