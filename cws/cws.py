@@ -300,11 +300,34 @@ def data_analysis():
         trendline=None      
         marginal_x=None
         marginal_y=None
+        facet_col=None
+        facet_col_wrap=None
+
+        # subplot     
+        if st.sidebar.checkbox('Subplot'):        
+            # selection of subplot
+            sub = st.sidebar.radio('Select the Subplot:',['category', 'subcategory','subsubcategory'])  
+            if sub=='category':
+                facet_col='category'
+            if sub=='subcategory':
+                facet_col='subcategory'
+            if sub=='subsubcategory':
+                facet_col='subsubcategory'            
+
+            # subplot wrap     
+            if st.sidebar.checkbox('Subplot wrap'):
+
+                # wrapping of subplot
+                facet_col_wrap = st.sidebar.number_input('Set the Subplot wrap:', min_value=1, value=1, step=1)
+                facet_col_wrap = int(facet_col_wrap)
+        
         if st.sidebar.checkbox('Trendline'):
             data_bivar = data_bivar.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1)
             hover_name=None
             color=None
-            symbol=None            
+            symbol=None
+            facet_col=None
+            facet_col_wrap=None
             trendline_type = st.sidebar.radio('Trendline:',['Linear', 'Non-Linear'])
             if trendline_type=='Linear':
                 trendline="ols"
@@ -362,7 +385,7 @@ def data_analysis():
             log_y=True 
             marginal_y=None
             
-        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, marginal_x=marginal_x, marginal_y=marginal_y, render_mode="webgl", title="Bivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique
+        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, marginal_x=marginal_x, marginal_y=marginal_y, facet_col=facet_col, facet_col_wrap=facet_col_wrap, render_mode="webgl", title="Bivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique
     )        
         st.plotly_chart(bivar, use_container_width=True)
         
@@ -396,7 +419,7 @@ def data_analysis():
         marginal_x=None
         marginal_y=None
         marginal_z=None   
-        
+                
         if st.sidebar.checkbox('Variable-based marker size of trivariate plot'):
             size = st.sidebar.radio('Select the oxide/weathering index/ratio:',['oxide', 'weathering index', 'ratio'])
             if size=='oxide':
