@@ -612,7 +612,7 @@ def data_analysis():
             # selection of 'color'
             color = st.sidebar.selectbox("Select the Oxide and/or Weathering index for color:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)            
             
-            sun = px.sunburst(data_ox_wi, path=['category','subcategory','subsubcategory'], values=values, color=color)
+            sun = px.sunburst(data_ox_wi, path=['category','subcategory','subsubcategory','sample'], values=values, color=color)
             sun.update_traces(sort=False)
             st.plotly_chart(sun, use_container_width=True)
             
