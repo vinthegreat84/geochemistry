@@ -296,17 +296,12 @@ def data_analysis():
         hover_name="sample"
         color="subcategory"
         symbol="subsubcategory"
-        size=None
-        trendline=None      
-        marginal_x=None
-        marginal_y=None
-        facet_col=None
-        facet_col_wrap=None
+        size = trendline = marginal_x = marginal_y = facet_col = facet_col_wrap = None
 
         # subplot     
         if st.sidebar.checkbox('Subplot'):        
             # selection of subplot
-            sub = st.sidebar.radio('Select the Subplot:',['category', 'subcategory','subsubcategory'])  
+            sub = st.sidebar.radio('Select the Subplot of bivariate plot:',['category', 'subcategory','subsubcategory'])  
             if sub=='category':
                 facet_col='category'
             if sub=='subcategory':
@@ -315,27 +310,23 @@ def data_analysis():
                 facet_col='subsubcategory'            
 
             # subplot wrap     
-            if st.sidebar.checkbox('Subplot wrap'):
+            if st.sidebar.checkbox('Subplot wrap of bivariate plot'):
 
                 # wrapping of subplot
-                facet_col_wrap = st.sidebar.number_input('Set the Subplot wrap:', min_value=1, value=1, step=1)
+                facet_col_wrap = st.sidebar.number_input('Set the Subplot wrap of bivariate plot:', min_value=1, value=1, step=1)
                 facet_col_wrap = int(facet_col_wrap)
         
         if st.sidebar.checkbox('Trendline'):
             data_bivar = data_bivar.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1)
-            hover_name=None
-            color=None
-            symbol=None
-            facet_col=None
-            facet_col_wrap=None
+            hover_name = color = symbol = facet_col = facet_col_wrap = None
             trendline_type = st.sidebar.radio('Trendline:',['Linear', 'Non-Linear'])
             if trendline_type=='Linear':
                 trendline="ols"
             else:
                 trendline="lowess"    
         
-        if st.sidebar.checkbox('Variable-based marker size'):
-            size = st.sidebar.radio('Select the oxide/weathering index/ratio:',['oxide', 'weathering index', 'ratio'])
+        if st.sidebar.checkbox('Variable-based marker size of bivariate plot'):
+            size = st.sidebar.radio('Select the oxide/weathering index/ratio of bivariate plot:',['oxide', 'weathering index', 'ratio'])
             if size=='oxide':
                 col_first="SiO2"
                 col_last="P2O5"
@@ -345,11 +336,11 @@ def data_analysis():
             if size=='ratio':
                 col_first="SiO2/Al2O3"
                 col_last="Al2O3/TiO2"
-            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio',(list(data_bivar.loc[:,col_first:col_last])))
+            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio of bivariate plot:',(list(data_bivar.loc[:,col_first:col_last])))
             
-        if st.sidebar.checkbox('Add marginal distribution'):
-            if st.sidebar.checkbox('X-axis marginal distribution'):
-                type = st.sidebar.radio('Select the X-axis marginal distribution:',['histogram','rug','box','violin'])
+        if st.sidebar.checkbox('Add marginal distribution of bivariate plot'):
+            if st.sidebar.checkbox('X-axis marginal distribution of bivariate plot'):
+                type = st.sidebar.radio('Select the X-axis marginal distribution of bivariate plot:',['histogram','rug','box','violin'])
                 if type=='histogram':
                     marginal_x='histogram'
                 if type=='rug':
@@ -358,8 +349,8 @@ def data_analysis():
                     marginal_x='box'
                 if type=='violin':
                     marginal_x='violin'
-            if st.sidebar.checkbox('Y-axis marginal distribution'):
-                type = st.sidebar.radio('Select the Y-axis marginal distribution:',['histogram','rug','box','violin'])
+            if st.sidebar.checkbox('Y-axis marginal distribution of bivariate plot'):
+                type = st.sidebar.radio('Select the Y-axis marginal distribution of bivariate plot:',['histogram','rug','box','violin'])
                 if type=='histogram':
                     marginal_y='histogram'
                 if type=='rug':
@@ -369,16 +360,16 @@ def data_analysis():
                 if type=='violin':
                     marginal_y='violin'
                     
-        x = st.sidebar.selectbox('Select the x-axis',(list(data_bivar)))
-        xaxis_type = st.sidebar.radio('x axis type:',['Linear', 'Logarithmic'])
+        x = st.sidebar.selectbox('Select the x-axis of bivariate plot',(list(data_bivar)))
+        xaxis_type = st.sidebar.radio('x axis type of bivariate plot:',['Linear', 'Logarithmic'])
         if xaxis_type=='Linear':
             log_x=False
         else:
             log_x=True
             marginal_x=None
         
-        y = st.sidebar.selectbox('Select the y-axis',(list(data_bivar)))
-        yaxis_type = st.sidebar.radio('y axis type:',['Linear', 'Logarithmic'])
+        y = st.sidebar.selectbox('Select the y-axis of bivariate plot',(list(data_bivar)))
+        yaxis_type = st.sidebar.radio('y axis type of bivariate plot:',['Linear', 'Logarithmic'])
         if yaxis_type=='Linear':
             log_y=False
         else:
@@ -414,14 +405,10 @@ def data_analysis():
         hover_name="sample"
         color="subcategory"
         symbol="subsubcategory"
-        size=None
-        trendline=None      
-        marginal_x=None
-        marginal_y=None
-        marginal_z=None   
+        size = trendline = marginal_x = marginal_y = marginal_z = None  
                 
         if st.sidebar.checkbox('Variable-based marker size of trivariate plot'):
-            size = st.sidebar.radio('Select the oxide/weathering index/ratio:',['oxide', 'weathering index', 'ratio'])
+            size = st.sidebar.radio('Select the oxide/weathering index/ratio of trivariate plot:',['oxide', 'weathering index', 'ratio'])
             if size=='oxide':
                 col_first="SiO2"
                 col_last="P2O5"
@@ -431,7 +418,7 @@ def data_analysis():
             if size=='ratio':
                 col_first="SiO2/Al2O3"
                 col_last="Al2O3/TiO2"
-            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio',(list(data_trivar.loc[:,col_first:col_last])))                              
+            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio of trivariate plot',(list(data_trivar.loc[:,col_first:col_last])))                              
                     
         x = st.sidebar.selectbox('Select the x-axis of trivariate plot',(list(data_trivar)))
         xaxis_type = st.sidebar.radio('x axis type of trivariate plot:',['Linear', 'Logarithmic'])
@@ -487,7 +474,7 @@ def data_analysis():
         csd =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","molar_Al2O3","molar_CaO*","molar_Na2O","molar_K2O","molar_Fe2O3","molar_MgO"]
         data_csd=data[csd]
         hover_name=data_csd['sample']        
-        type = st.sidebar.radio('Categorization', ['Category','Subcategory'])
+        type = st.sidebar.radio('Categorization of Compositional space diagram', ['Category','Subcategory'])
         if type=='Category':
             color=data_csd['category']
             symbol=None
@@ -624,10 +611,10 @@ def data_analysis():
             st.subheader('Histogram')
 
             # selection of variable(s) (oxide and/or weathering index)
-            var = st.sidebar.multiselect("Select the Oxide and/or Weathering index:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
+            var = st.sidebar.multiselect("Select the Oxide and/or Weathering index of Histogram:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
 
             # Linear/Non-linear y axis
-            yaxis_type = st.sidebar.radio('y axis type:',['Linear', 'Logarithmic'])
+            yaxis_type = st.sidebar.radio('y axis type of Histogram:',['Linear', 'Logarithmic'])
             if yaxis_type=='Linear':
                 log_y=False
             else:
@@ -654,8 +641,8 @@ def data_analysis():
             else:
                 color=data_ox_wi['subsubcategory']
 
-            x = st.sidebar.selectbox('Select the x-axis',(list(data_ox_wi)))
-            y = st.sidebar.selectbox('Select the y-axis',(list(data_ox_wi)))
+            x = st.sidebar.selectbox('Select the x-axis of Boxplot',(list(data_ox_wi)))
+            y = st.sidebar.selectbox('Select the y-axis of Boxplot',(list(data_ox_wi)))
             box(x,y,color)
 
         # scatter matrix of oxides
@@ -727,7 +714,7 @@ def data_analysis():
             
             # oxide, weathering indices filter
             if st.sidebar.checkbox('Oxide/Weathering indices filter'):
-                filter = st.sidebar.radio('Choose the filter', ['Oxides','Weathering indices'])
+                filter = st.sidebar.radio('Choose the filter of Oxide/Weathering indices', ['Oxides','Weathering indices'])
                 if filter=='Oxides':                
                     ox =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"]
                     data_corr=data[ox]
