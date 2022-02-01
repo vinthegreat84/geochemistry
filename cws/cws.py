@@ -155,20 +155,24 @@ def data_analysis():
             data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
             data = data_subsubcat
             
-    # Major oxides variation
-    if st.sidebar.checkbox('Major oxides variation'):
-        st.header('Major oxides variation')
+    # Major oxides
+    if st.sidebar.checkbox('Major oxides'):
+        st.header('Major oxides')
         data_var = data
         st.write(data_var)
+        
+        #Major oxides variation
+        if st.sidebar.checkbox('Major oxides variation'):
+            st.header('Major oxides variation')
 
-        var = px.line(data_var, x='sample', y=['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'])
-        var.update_layout(yaxis_title="Major oxide %",
-                          legend_title="Major oxide")
-        st.plotly_chart(var, use_container_width=True)
+            var = px.line(data_var, x='sample', y=['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'])
+            var.update_layout(yaxis_title="Major oxide %",
+                              legend_title="Major oxide")
+            st.plotly_chart(var, use_container_width=True)
 
-        # exporting the plot to the local machine
-        with st.expander("Click to export Major oxides variation diagram"):
-            plot_html(var)     
+            # exporting the plot to the local machine
+            with st.expander("Click to export Major oxides variation diagram"):
+                plot_html(var)     
     
 #         var = alt.Chart(data_var).transform_fold(
 #             ['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2'],
@@ -276,7 +280,7 @@ def data_analysis():
         proxy_download = convert_df(proxy_download)
         st.download_button("Press to download",proxy_download,"proxy.csv","csv",key='download-proxy-csv')
 
-        # weathering indices variation
+        # weathering proxy variation
         if st.sidebar.checkbox('Weathering proxy variation'):
             st.header('Weathering proxy variation')
 
@@ -376,8 +380,7 @@ def data_analysis():
             log_y=True 
             marginal_y=None
             
-        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, marginal_x=marginal_x, marginal_y=marginal_y, facet_col=facet_col, facet_col_wrap=facet_col_wrap, render_mode="webgl", title="Bivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique
-    )        
+        bivar = px.scatter(data_bivar, x=x, y=y, log_x=log_x, log_y=log_y, hover_name=hover_name, color=color, symbol=symbol, size=size, trendline=trendline, marginal_x=marginal_x, marginal_y=marginal_y, facet_col=facet_col, facet_col_wrap=facet_col_wrap, render_mode="webgl", title="Bivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique)        
         st.plotly_chart(bivar, use_container_width=True)
         
         # exporting the plot to the local machine
@@ -444,8 +447,7 @@ def data_analysis():
             log_z=True 
             marginal_z=None            
             
-        trivar = px.scatter_3d(data_trivar, x=x, y=y, z=z, log_x=log_x, log_y=log_y, log_z=log_z, hover_name=hover_name, color=color, symbol=symbol, size=size, title="Trivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique
-    )        
+        trivar = px.scatter_3d(data_trivar, x=x, y=y, z=z, log_x=log_x, log_y=log_y, log_z=log_z, hover_name=hover_name, color=color, symbol=symbol, size=size, title="Trivariate Plot", color_discrete_sequence=px.colors.qualitative.Antique)        
         st.plotly_chart(trivar, use_container_width=True)        
         
     # Ternary plot
@@ -474,8 +476,8 @@ def data_analysis():
         csd =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","molar_Al2O3","molar_CaO*","molar_Na2O","molar_K2O","molar_Fe2O3","molar_MgO"]
         data_csd=data[csd]
         hover_name=data_csd['sample']        
-        type = st.sidebar.radio('Categorization of Compositional space diagram', ['Category','Subcategory'])
-        if type=='Category':
+        category = st.sidebar.radio('Categorization of Compositional space diagram', ['Category','Subcategory'])
+        if category=='Category':
             color=data_csd['category']
             symbol=None
         else:
@@ -633,10 +635,10 @@ def data_analysis():
         
         if st.sidebar.checkbox('Boxplot'):
             st.subheader('Boxplot')
-            type = st.sidebar.radio('Categorization of the boxplot', ['Category','Subcategory','Subsubcategory'])
-            if type=='Category':
+            category = st.sidebar.radio('Categorization of the boxplot', ['Category','Subcategory','Subsubcategory'])
+            if category=='Category':
                 color=data_ox_wi['category']
-            elif type=='Subcategory':
+            elif category=='Subcategory':
                 color=data_ox_wi['subcategory']
             else:
                 color=data_ox_wi['subsubcategory']
@@ -713,8 +715,8 @@ def data_analysis():
             st.subheader('Correlation matrix')
             
             # oxide, weathering indices filter
-            if st.sidebar.checkbox('Oxide/Weathering indices filter'):
-                filter = st.sidebar.radio('Choose the filter of Oxide/Weathering indices', ['Oxides','Weathering indices'])
+            if st.sidebar.checkbox('Oxides/Weathering indices filter'):
+                filter = st.sidebar.radio('Choose the filter of Oxides/Weathering indices', ['Oxides','Weathering indices'])
                 if filter=='Oxides':                
                     ox =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"]
                     data_corr=data[ox]
