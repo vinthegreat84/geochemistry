@@ -756,42 +756,16 @@ def data_analysis():
             # heatmap
             if st.sidebar.checkbox('Heatmap of correlation matrix'):
                 st.subheader('Heatmap of correlation matrix')
-                heat, ax = plt.subplots()
-                sns.heatmap(data_corr.corr(method=method), ax=ax)
-                st.write(heat)
-                 # exporting the plot to the local machine
-#                 with st.expander("Click to export Heatmap of correlation matrix"):
-#                     if st.button("Heatmap of correlation matrix as PNG"):
-#                         heat.savefig('heat.png')
-#                     if st.button("Heatmap of correlation matrix as JPEG"):
-#                         heat.savefig("heat.JPEG")
-#                     if st.button("Heatmap of correlation matrix as SVG"):
-#                         heat.savefig("heat.svg") 
-#                     if st.button("Heatmap of correlation matrix as PDF"):
-#                         heat.savefig("heat.pdf")   
-	
-#     env = Environment(loader=FileSystemLoader("."), autoescape=select_autoescape())
-#     template = env.get_template("template.html")
-#     form = left.form("template_form")
-#     submit = form.form_submit_button("Generate PDF")
+                color_continuous_scale=None
+                
+                if st.sidebar.checkbox('Color scale'):
+                    color_continuous_scale = st.sidebar.selectbox('Select the color:', ['agsunset','blackbody','bluered','blues','blugrn','bluyl','brwnyl','bugn','bupu','burg','burgyl','cividis','darkmint','electric','emrld','gnbu','greens','greys','hot','inferno','jet','magenta','magma','mint','orrd','oranges','oryel','peach','pinkyl','plasma','plotly3','pubu','pubugn','purd','purp','purples','purpor','rainbow','rdbu','rdpu','redor','reds','sunset','sunsetdark','teal','tealgrn','turbo','viridis','ylgn','ylgnbu','ylorbr','ylorrd','algae','amp','deep','dense','gray','haline','ice','matter','solar','speed','tempo','thermal','turbid','armyrose','brbg','earth','fall','geyser','prgn','piyg','picnic','portland','puor','rdgy','rdylbu','rdylgn','spectral','tealrose','temps','tropic','balance','curl','delta','oxy','edge','hsv','icefire','phase','twilight','mrybm','mygbm'])                      
+                heat = px.imshow(data_corr.corr(method=method), color_continuous_scale=color_continuous_scale)           
+                st.plotly_chart(heat, use_container_width=True)
 
-#     if submit:
-#         html = template.render(
-#             data=data
-#         )
-
-#         pdf = pdfkit.from_string(html, False)
-#         st.balloons()
-
-#         right.success("🎉 Your diploma was generated!")
-#         # st.write(html, unsafe_allow_html=True)
-#         # st.write("")
-#         right.download_button(
-#             "⬇️ Download PDF",
-#             data=pdf,
-#             file_name="diploma.pdf",
-#             mime="application/octet-stream",
-#         )
+                # exporting the plot to the local machine
+                with st.expander("Click to export Heatmap of correlation matrix"):
+                    plot_html(heat)
 ##############################################################################################################
 
 ##############################################################################################################
