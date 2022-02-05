@@ -4,6 +4,7 @@ st.set_page_config(layout="wide", page_title='CWS 0.1.0')
 
 import pandas as pd
 import numpy as np
+
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -34,8 +35,11 @@ import io
     # Section - flowchart
 
 # to do
-# spider plot
+# normalized multielement diagram
 # histogram and to check the distribution type
+# bivariate of ratios
+# user identified variables
+# inclusion of trace elements
 ##############################################################################################################
 # home
 def home():
@@ -89,8 +93,9 @@ def data_analysis():
 #             df = pd.read_csv("C:/Users/Hp/CWS/data/sedchem.csv")
         else:
             uploaded_file = st.file_uploader("Choose a CSV file (max 200 MB)")
-            col_list =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","FeO","MnO","MgO","CaO","Na2O","K2O","P2O5","CO2"]
-            df = pd.read_csv(uploaded_file, usecols=col_list)
+#             col_list =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","FeO","MnO","MgO","CaO","Na2O","K2O","P2O5","CO2"]
+#             df = pd.read_csv(uploaded_file, usecols=col_list)
+            df = pd.read_csv(uploaded_file)
         return df
 
     data = get_data(data)
@@ -155,6 +160,21 @@ def data_analysis():
             data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
             data = data_subsubcat
             
+#     # multivariable
+#         multi_var_x = st.sidebar.number_input('Set the number of variables of x-axis:', min_value=2, value=2, step=1)
+#         multi_var_x = int(multi_var_x)
+#         st.write(multi_var_x)
+        
+#         def multi_var():
+#             st.sidebar.selectbox("Select the variable of multi_var:", data.columns)
+        
+#         i=1
+#         var=[0]
+#         for i in range(multi_var_x):
+#             var[i] = multi_var()
+#             i+=1
+        
+    
     # Major oxides
     if st.sidebar.checkbox('Major oxides'):
         st.header('Major oxides')
@@ -364,7 +384,7 @@ def data_analysis():
                 if type=='violin':
                     marginal_y='violin'
                     
-        x = st.sidebar.selectbox('Select the x-axis of bivariate plot',(list(data_bivar)))
+        x = st.sidebar.selectbox('Select the x-axis of bivariate plot',(list(data_bivar)))          
         xaxis_type = st.sidebar.radio('x axis type of bivariate plot:',['Linear', 'Logarithmic'])
         if xaxis_type=='Linear':
             log_x=False
@@ -372,7 +392,7 @@ def data_analysis():
             log_x=True
             marginal_x=None
         
-        y = st.sidebar.selectbox('Select the y-axis of bivariate plot',(list(data_bivar)))
+        y = st.sidebar.selectbox('Select the y-axis of bivariate plot',(list(data_bivar)))        
         yaxis_type = st.sidebar.radio('y axis type of bivariate plot:',['Linear', 'Logarithmic'])
         if yaxis_type=='Linear':
             log_y=False
@@ -588,20 +608,21 @@ def data_analysis():
                 plot_html(box)
             
     if st.sidebar.checkbox('Sunburst plot, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
-        ox_wi =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
-        data_ox_wi=data[ox_wi]
+        data_ox_pr = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
+#         ox_wi =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
+#         data_ox_wi=data[ox_wi]
         
         # Subburst plot
         if st.sidebar.checkbox('Sunburst plot'):
             st.header('Sunburst plot')            
 
             # selection of 'values'
-            values = st.sidebar.selectbox("Select the Oxide and/or Weathering index for values:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
+            values = st.sidebar.selectbox("Select the Oxide and/or Weathering proxy for values:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
             
             # selection of 'color'
-            color = st.sidebar.selectbox("Select the Oxide and/or Weathering index for color:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)            
+            color = st.sidebar.selectbox("Select the Oxide and/or Weathering proxy for color:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)            
             
-            sun = px.sunburst(data_ox_wi, path=['category','subcategory','subsubcategory','sample'], values=values, color=color)
+            sun = px.sunburst(data_ox_pr, path=['category','subcategory','subsubcategory','sample'], values=values, color=color)
             sun.update_traces(sort=False)
             st.plotly_chart(sun, use_container_width=True)
             
@@ -613,7 +634,7 @@ def data_analysis():
             st.subheader('Histogram')
 
             # selection of variable(s) (oxide and/or weathering index)
-            var = st.sidebar.multiselect("Select the Oxide and/or Weathering index of Histogram:", data_ox_wi.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
+            var = st.sidebar.multiselect("Select the Oxide and/or Weathering proxy of Histogram:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
 
             # Linear/Non-linear y axis
             yaxis_type = st.sidebar.radio('y axis type of Histogram:',['Linear', 'Logarithmic'])
@@ -622,8 +643,8 @@ def data_analysis():
             else:
                 log_y=True
             
-            hist = px.histogram(data_ox_wi, x=var, opacity=0.6, log_y=log_y)
-            hist.update_layout(xaxis_title="Oxide/Weathering Index")
+            hist = px.histogram(data_ox_pr, x=var, opacity=0.6, log_y=log_y)
+            hist.update_layout(xaxis_title="Oxide/Weathering proxy")
             st.plotly_chart(hist)
             
             # exporting the plot to the local machine
@@ -637,20 +658,20 @@ def data_analysis():
             st.subheader('Boxplot')
             category = st.sidebar.radio('Categorization of the boxplot', ['Category','Subcategory','Subsubcategory'])
             if category=='Category':
-                color=data_ox_wi['category']
+                color=data_ox_pr['category']
             elif category=='Subcategory':
-                color=data_ox_wi['subcategory']
+                color=data_ox_pr['subcategory']
             else:
-                color=data_ox_wi['subsubcategory']
+                color=data_ox_pr['subsubcategory']
 
-            x = st.sidebar.selectbox('Select the x-axis of Boxplot',(list(data_ox_wi)))
-            y = st.sidebar.selectbox('Select the y-axis of Boxplot',(list(data_ox_wi)))
+            x = st.sidebar.selectbox('Select the x-axis of Boxplot',(list(data_ox_pr)))
+            y = st.sidebar.selectbox('Select the y-axis of Boxplot',(list(data_ox_pr)))
             box(x,y,color)
 
         # scatter matrix of oxides
         if st.sidebar.checkbox('Scatter matrix of oxides'):
             st.subheader('Scatter matrix of oxides')
-            scatter_ox = px.scatter_matrix(data_ox_wi, dimensions=["SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"], hover_name="sample")
+            scatter_ox = px.scatter_matrix(data_ox_pr, dimensions=["SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"], hover_name="sample")
             st.plotly_chart(scatter_ox, use_container_width=True)
 
             # exporting the plot to the local machine
@@ -681,7 +702,7 @@ def data_analysis():
         # scatter matrix of weathering indices
         if st.sidebar.checkbox('Scatter matrix of weathering indices'):
             st.subheader('Scatter matrix of weathering indices')
-            scatter_wi = px.scatter_matrix(data_ox_wi, dimensions=["(CIW)", "(CPA)", "(CIA)", "(PIA)", "(CIX)", "(ICV)", "(WIP)"], hover_name="sample")
+            scatter_wi = px.scatter_matrix(data_ox_pr, dimensions=["(CIW)", "(CPA)", "(CIA)", "(PIA)", "(CIX)", "(ICV)", "(WIP)"], hover_name="sample")
             st.plotly_chart(scatter_wi, use_container_width=True)
             
             # exporting the plot to the local machine
@@ -711,18 +732,18 @@ def data_analysis():
 
         # correlation matrix
         if st.sidebar.checkbox('Correlation matrix'):
-            data_corr=data_ox_wi
+            data_corr=data_ox_pr
             st.subheader('Correlation matrix')
             
             # oxide, weathering indices filter
-            if st.sidebar.checkbox('Oxides/Weathering indices filter'):
-                filter = st.sidebar.radio('Choose the filter of Oxides/Weathering indices', ['Oxides','Weathering indices'])
+            if st.sidebar.checkbox('Oxides/Weathering proxy filter'):
+                filter = st.sidebar.radio('Choose the filter of Oxides/Weathering proxy', ['Oxides','Weathering proxy'])
                 if filter=='Oxides':                
                     ox =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"]
                     data_corr=data[ox]
-                if filter=='Weathering indices':                
-                    wi =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
-                    data_corr=data[wi]                     
+                if filter=='Weathering proxy':                
+                    pr =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","Al2O3/TiO2"]
+                    data_corr=data[pr]                     
             
             # Method of correlation
             method = st.sidebar.radio('Choose the method of correlation', ['Pearson', 'Kendall','Spearman'])
