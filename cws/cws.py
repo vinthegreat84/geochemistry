@@ -39,7 +39,7 @@ import io
 # histogram and to check the distribution type
 # bivariate of ratios
 # user identified variables
-# inclusion of trace elements
+# Discrimination diagram
 ##############################################################################################################
 # home
 def home():
@@ -58,7 +58,7 @@ def home():
     st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering index with variable-based marker size, linear/non-linear trendline & axes, and marginal distribution.')
     st.write('**Trivariate plot:** Trivariate plot between oxide and/or weathering index with variable-based marker size and linear/non-linear trendline & axes.')
     st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagram after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
-    st.write('**Sunburst plot, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Sunburst plot, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.')
+    st.write('**Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.')
         
 ##############################################################################################################
 
@@ -490,7 +490,7 @@ def data_analysis():
         st.plotly_chart(tern_plot, use_container_width=True)
         return tern_plot
     
-    # Compositional space diagrams selection
+    # Compositional space diagram selection
     if st.sidebar.checkbox('Compositional space diagram'):
         st.header('Compositional space diagram')
         csd =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","molar_Al2O3","molar_CaO*","molar_Na2O","molar_K2O","molar_Fe2O3","molar_MgO"]
@@ -575,7 +575,13 @@ def data_analysis():
 #                 )
                 plot_html(fig)
 
-    
+# 	    # Discrimination diagram selection
+#         # overlays from Rollinson, 2014
+#     if st.sidebar.checkbox('Discrimination diagram'):
+#         st.header('Discrimination diagram')
+#         data_dis = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
+#         st.write(data_dis)
+        
     # boxplot
     def box(x,y,color):
         box = px.box(data, x=x, y=y, color=color)
@@ -607,11 +613,22 @@ def data_analysis():
 #                 )
                 plot_html(box)
             
-    if st.sidebar.checkbox('Sunburst plot, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
+    if st.sidebar.checkbox('Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
         data_ox_pr = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
 #         ox_wi =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
 #         data_ox_wi=data[ox_wi]
-        
+
+        if st.sidebar.checkbox('Statistical details'):
+            st.subheader('Statistical details')
+            stats = data_ox_pr.describe()
+            st.write(stats, use_container_width=True)
+            
+            @st.cache
+            def convert_df(stats):
+                return stats.to_csv(index=True).encode('utf-8')
+            stats = convert_df(stats)
+            st.download_button("Press to download",stats,"stats.csv","csv",key='download-stats-csv')
+
         # Subburst plot
         if st.sidebar.checkbox('Sunburst plot'):
             st.header('Sunburst plot')            
@@ -629,7 +646,7 @@ def data_analysis():
             # exporting the plot to the local machine
             with st.expander("Click to export Sunburst plot"):
                 plot_html(sun)            
-
+                  
         if st.sidebar.checkbox('Histogram'):
             st.subheader('Histogram')
 
