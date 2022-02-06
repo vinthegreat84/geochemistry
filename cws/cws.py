@@ -262,7 +262,10 @@ def data_analysis():
     data['molar_CaO*'] = np.where(data['diff'] < data['molar_Na2O'], data['diff'], data['molar_Na2O'])
     
     # Chemical Index of Weathering (CIW) after Harnois, 1988
-    data['(CIW)'] = 100 * data['molar_Al2O3'] / (data['molar_Al2O3'] + data['molar_CaO*'] + data['molar_Na2O']) 
+    data['(CIW)'] = 100 * data['molar_Al2O3'] / (data['molar_Al2O3'] + data['molar_CaO*'] + data['molar_Na2O'])
+
+    # Chemical Index of Weathering (CIW') after Cullers, 2000
+    data['(CIW*)'] = data['molar_Al2O3'] / (data['molar_Al2O3'] + data['molar_Na2O'])    
 
     # Chemical Proxy of Alteration (CPA) after Buggle et al., 2011  
     data['(CPA)'] = 100 * data['molar_Al2O3'] / (data['molar_Al2O3'] + data['molar_Na2O']) 
@@ -285,11 +288,12 @@ def data_analysis():
     # ratios
     data['SiO2/Al2O3'] = data['SiO2'] / data['Al2O3']
     data['K2O/Al2O3']  = data['K2O'] / data['Al2O3']
+    data['K2O/Na2O']  = data['K2O'] / data['Na2O']    
     data['Al2O3/TiO2'] = data['Al2O3'] / data['TiO2']
         
     if st.sidebar.checkbox('Weathering proxy'):
         st.header('Weathering proxy')
-        proxy =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","Al2O3/TiO2"]
+        proxy =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CIW*)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","K2O/Na2O","Al2O3/TiO2"]
         proxy=data[proxy]
         st.write(proxy)
         
@@ -304,7 +308,7 @@ def data_analysis():
         if st.sidebar.checkbox('Weathering proxy variation'):
             st.header('Weathering proxy variation')
 
-            var_proxy = px.line(proxy, x='sample', y=['(CIW)','(CPA)','(CIA)','(PIA)','(CIX)','(ICV)','(WIP)','SiO2/Al2O3','K2O/Al2O3','Al2O3/TiO2'])
+            var_proxy = px.line(proxy, x='sample', y=['(CIW)','(CIW*)','(CPA)','(CIA)','(PIA)','(CIX)','(ICV)','(WIP)','SiO2/Al2O3','K2O/Al2O3','K2O/Na2O','Al2O3/TiO2'])
             var_proxy.update_layout(yaxis_title="Weathering proxy",
                               legend_title="Weathering proxy")
             st.plotly_chart(var_proxy, use_container_width=True)
@@ -360,7 +364,7 @@ def data_analysis():
             if size=='ratio':
                 col_first="SiO2/Al2O3"
                 col_last="Al2O3/TiO2"
-            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio of bivariate plot:',(list(data_bivar.loc[:,col_first:col_last])))
+            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio of bivariate plot:',list(data_bivar.loc[:,col_first:col_last]))
             
         if st.sidebar.checkbox('Add marginal distribution of bivariate plot'):
             if st.sidebar.checkbox('X-axis marginal distribution of bivariate plot'):
@@ -384,7 +388,7 @@ def data_analysis():
                 if type=='violin':
                     marginal_y='violin'
                     
-        x = st.sidebar.selectbox('Select the x-axis of bivariate plot',(list(data_bivar)))          
+        x = st.sidebar.selectbox('Select the x-axis of bivariate plot',list(data_bivar))         
         xaxis_type = st.sidebar.radio('x axis type of bivariate plot:',['Linear', 'Logarithmic'])
         if xaxis_type=='Linear':
             log_x=False
@@ -392,7 +396,7 @@ def data_analysis():
             log_x=True
             marginal_x=None
         
-        y = st.sidebar.selectbox('Select the y-axis of bivariate plot',(list(data_bivar)))        
+        y = st.sidebar.selectbox('Select the y-axis of bivariate plot',list(data_bivar))        
         yaxis_type = st.sidebar.radio('y axis type of bivariate plot:',['Linear', 'Logarithmic'])
         if yaxis_type=='Linear':
             log_y=False
@@ -441,9 +445,9 @@ def data_analysis():
             if size=='ratio':
                 col_first="SiO2/Al2O3"
                 col_last="Al2O3/TiO2"
-            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio of trivariate plot',(list(data_trivar.loc[:,col_first:col_last])))                              
+            size = st.sidebar.selectbox('Select the oxide/weathering index/ratio of trivariate plot',list(data_trivar.loc[:,col_first:col_last]))                             
                     
-        x = st.sidebar.selectbox('Select the x-axis of trivariate plot',(list(data_trivar)))
+        x = st.sidebar.selectbox('Select the x-axis of trivariate plot',list(data_trivar))
         xaxis_type = st.sidebar.radio('x axis type of trivariate plot:',['Linear', 'Logarithmic'])
         if xaxis_type=='Linear':
             log_x=False
@@ -451,7 +455,7 @@ def data_analysis():
             log_x=True
             marginal_x=None
         
-        y = st.sidebar.selectbox('Select the y-axis of trivariate plot',(list(data_trivar)))
+        y = st.sidebar.selectbox('Select the y-axis of trivariate plot',list(data_trivar))
         yaxis_type = st.sidebar.radio('y axis type of trivariate plot:',['Linear', 'Logarithmic'])
         if yaxis_type=='Linear':
             log_y=False
@@ -459,7 +463,7 @@ def data_analysis():
             log_y=True 
             marginal_y=None
 
-        z = st.sidebar.selectbox('Select the z-axis of trivariate plot',(list(data_trivar)))
+        z = st.sidebar.selectbox('Select the z-axis of trivariate plot',list(data_trivar))
         zaxis_type = st.sidebar.radio('z axis type of trivariate plot:',['Linear', 'Logarithmic'])
         if zaxis_type=='Linear':
             log_z=False
@@ -471,8 +475,8 @@ def data_analysis():
         st.plotly_chart(trivar, use_container_width=True)        
         
     # Ternary plot
-    def tern(x,y,z,color,symbol,hover_name):
-        tern_plot = px.scatter_ternary(data, a=x, b=y, c=z, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
+    def tern(a,b,c,color,symbol,hover_name):
+        tern_plot = px.scatter_ternary(data, a=a, b=b, c=c, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
         
         tern_plot.update_layout({'ternary': {'sum': 100}})
         tern_plot.update_ternaries(bgcolor='yellow')
@@ -482,14 +486,39 @@ def data_analysis():
             'ternary':
                 {
                 'sum':100,
-                'aaxis':{'title': title_x},
-                'baxis':{'title': title_y},
-                'caxis':{'title': title_z}
+                'aaxis':{'title': title_a},
+                'baxis':{'title': title_b},
+                'caxis':{'title': title_c}
                 }
         })
         st.plotly_chart(tern_plot, use_container_width=True)
         return tern_plot
     
+    # Ternary plot
+    if st.sidebar.checkbox('Ternary plot'):
+        st.header('Ternary plot')
+        data_ter=data.drop(["diff"], axis=1)
+        st.write(data_ter)
+        
+        hover_name=data_ter['sample']
+        category = st.sidebar.radio('Categorization of Ternary plot', ['Category','Subcategory'])
+        if category=='Category':
+            color=data_ter['category']
+            symbol=None
+        else:
+            color=data_ter['subcategory']
+            symbol=data_ter['subsubcategory']        
+        
+        a = st.sidebar.selectbox('Select the component A of Ternary plot', list(data_ter))        
+        b = st.sidebar.selectbox('Select the component B of Ternary plot', list(data_ter))   
+        c = st.sidebar.selectbox('Select the component C of Ternary plot', list(data_ter))           
+
+        title_a = None
+        title_b = None
+        title_c = None
+        
+        fig = tern(a,b,c,color,symbol,hover_name) 
+            
     # Compositional space diagram selection
     if st.sidebar.checkbox('Compositional space diagram'):
         st.header('Compositional space diagram')
@@ -504,19 +533,19 @@ def data_analysis():
             color=data_csd['subcategory']
             symbol=data_csd['subsubcategory']        
         csd_type = st.sidebar.radio('Compositional space diagram:',['A - CN - K', 'A - CNK - FM', 'M - F - W'])
-        x=data_csd['molar_Al2O3']
+        a=data_csd['molar_Al2O3']
         if csd_type == 'A - CN - K':
-            y=data_csd['molar_CaO*'] + data_csd['molar_Na2O']            
-            z=data_csd['molar_K2O']
-            title_x = 'Al<sub>2</sub>O<sub>3</sub>'
-            title_y = 'CaO*+Na<sub>2</sub>O'
-            title_z = 'K<sub>2</sub>O'
+            b=data_csd['molar_CaO*'] + data_csd['molar_Na2O']            
+            c=data_csd['molar_K2O']
+            title_a = 'Al<sub>2</sub>O<sub>3</sub>'
+            title_b = 'CaO*+Na<sub>2</sub>O'
+            title_c = 'K<sub>2</sub>O'
         elif csd_type == 'A - CNK - FM':
-            y=data_csd['molar_CaO*'] + data_csd['molar_Na2O'] + data_csd['molar_K2O']           
-            z=data_csd['molar_Fe2O3'] + data_csd['molar_MgO']
-            title_x = 'Al<sub>2</sub>O<sub>3</sub>'
-            title_y = 'CaO*+Na<sub>2</sub>O+K<sub>2</sub>O'
-            title_z = 'Fe<sub>2</sub>O<sub>3</sub>+MgO'
+            b=data_csd['molar_CaO*'] + data_csd['molar_Na2O'] + data_csd['molar_K2O']           
+            c=data_csd['molar_Fe2O3'] + data_csd['molar_MgO']
+            title_a = 'Al<sub>2</sub>O<sub>3</sub>'
+            title_b = 'CaO*+Na<sub>2</sub>O+K<sub>2</sub>O'
+            title_c = 'Fe<sub>2</sub>O<sub>3</sub>+MgO'
         else:
             # eight oxides (SiO2, TiO2, Al2O3, Fe2O3, MgO, CaO, Na2O and K2O) used in the formulas and re-closing to 100 wt.% (expressed as OXIDE.100 = 100*OXIDE/sum)
             data_csd['sum'] = data_csd[['SiO2', 'TiO2', 'Al2O3', 'Fe2O3', 'MgO', 'CaO', 'Na2O', 'K2O']].sum(axis=1)
@@ -541,14 +570,14 @@ def data_analysis():
             data_csd['(F)'] = np.exp(data_csd['(F)'])
             data_csd['(W)'] = np.exp(data_csd['(W)'])
 
-            x=data_csd['(M)']
-            y=data_csd['(F)']            
-            z=data_csd['(W)']
-            title_x = 'M'
-            title_y = 'F'
-            title_z = 'W'
+            a=data_csd['(M)']
+            b=data_csd['(F)']            
+            c=data_csd['(W)']
+            title_a = 'M'
+            title_b = 'F'
+            title_c = 'W'
             
-        fig = tern(x,y,z,color,symbol,hover_name)      
+        fig = tern(a,b,c,color,symbol,hover_name)      
 
         # exporting the plot to the local machine
         with st.expander("Click to export compositional space diagram"):
@@ -577,8 +606,8 @@ def data_analysis():
 
 # 	    # Discrimination diagram selection
 #         # overlays from Rollinson, 2014
-#     if st.sidebar.checkbox('Discrimination diagram'):
-#         st.header('Discrimination diagram')
+#     if st.sidebar.checkbox('Tectonic discrimination diagram'):
+#         st.header('Tectonic discrimination diagram')
 #         data_dis = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
 #         st.write(data_dis)
         
@@ -681,8 +710,8 @@ def data_analysis():
             else:
                 color=data_ox_pr['subsubcategory']
 
-            x = st.sidebar.selectbox('Select the x-axis of Boxplot',(list(data_ox_pr)))
-            y = st.sidebar.selectbox('Select the y-axis of Boxplot',(list(data_ox_pr)))
+            x = st.sidebar.selectbox('Select the x-axis of Boxplot',list(data_ox_pr))
+            y = st.sidebar.selectbox('Select the y-axis of Boxplot',list(data_ox_pr))
             box(x,y,color)
 
         # scatter matrix of oxides
@@ -717,10 +746,10 @@ def data_analysis():
                     plot_html(scatter_ox)
         
         # scatter matrix of weathering indices
-        if st.sidebar.checkbox('Scatter matrix of weathering indices'):
-            st.subheader('Scatter matrix of weathering indices')
-            scatter_wi = px.scatter_matrix(data_ox_pr, dimensions=["(CIW)", "(CPA)", "(CIA)", "(PIA)", "(CIX)", "(ICV)", "(WIP)"], hover_name="sample")
-            st.plotly_chart(scatter_wi, use_container_width=True)
+        if st.sidebar.checkbox('Scatter matrix of weathering proxy'):
+            st.subheader('Scatter matrix of weathering proxy')
+            scatter_pr = px.scatter_matrix(data_ox_pr, dimensions=["(CIW)", "(CIW*)", "(CPA)", "(CIA)", "(PIA)", "(CIX)", "(ICV)", "(WIP)","SiO2/Al2O3","K2O/Al2O3","K2O/Na2O","Al2O3/TiO2"], hover_name="sample")
+            st.plotly_chart(scatter_pr, use_container_width=True)
             
             # exporting the plot to the local machine
             with st.expander("Click to export Scatter matrix of weathering indices"):
@@ -745,7 +774,7 @@ def data_analysis():
 #                         file_name='Scatter matrix of weathering indices.html',
 #                         mime='text/html'
 #                     )
-                    plot_html(scatter_wi)
+                    plot_html(scatter_pr)
 
         # correlation matrix
         if st.sidebar.checkbox('Correlation matrix'):
@@ -759,7 +788,7 @@ def data_analysis():
                     ox =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"]
                     data_corr=data[ox]
                 if filter=='Weathering proxy':                
-                    pr =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","Al2O3/TiO2"]
+                    pr =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CIW*)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","K2O/Na2O","Al2O3/TiO2"]
                     data_corr=data[pr]                     
             
             # Method of correlation
@@ -786,7 +815,8 @@ def data_analysis():
                 color_continuous_scale=None
                 
                 if st.sidebar.checkbox('Color scale'):
-                    color_continuous_scale = st.sidebar.selectbox('Select the color:', ['agsunset','blackbody','bluered','blues','blugrn','bluyl','brwnyl','bugn','bupu','burg','burgyl','cividis','darkmint','electric','emrld','gnbu','greens','greys','hot','inferno','jet','magenta','magma','mint','orrd','oranges','oryel','peach','pinkyl','plasma','plotly3','pubu','pubugn','purd','purp','purples','purpor','rainbow','rdbu','rdpu','redor','reds','sunset','sunsetdark','teal','tealgrn','turbo','viridis','ylgn','ylgnbu','ylorbr','ylorrd','algae','amp','deep','dense','gray','haline','ice','matter','solar','speed','tempo','thermal','turbid','armyrose','brbg','earth','fall','geyser','prgn','piyg','picnic','portland','puor','rdgy','rdylbu','rdylgn','spectral','tealrose','temps','tropic','balance','curl','delta','oxy','edge','hsv','icefire','phase','twilight','mrybm','mygbm'])                      
+                    color_scale = ['agsunset','blackbody','bluered','blues','blugrn','bluyl','brwnyl','bugn','bupu','burg','burgyl','cividis','darkmint','electric','emrld','gnbu','greens','greys','hot','inferno','jet','magenta','magma','mint','orrd','oranges','oryel','peach','pinkyl','plasma','plotly3','pubu','pubugn','purd','purp','purples','purpor','rainbow','rdbu','rdpu','redor','reds','sunset','sunsetdark','teal','tealgrn','turbo','viridis','ylgn','ylgnbu','ylorbr','ylorrd','algae','amp','deep','dense','gray','haline','ice','matter','solar','speed','tempo','thermal','turbid','armyrose','brbg','earth','fall','geyser','prgn','piyg','picnic','portland','puor','rdgy','rdylbu','rdylgn','spectral','tealrose','temps','tropic','balance','curl','delta','oxy','edge','hsv','icefire','phase','twilight','mrybm','mygbm'] 
+                    color_continuous_scale = st.sidebar.selectbox('Select the color:', color_scale)                      
                 heat = px.imshow(data_corr.corr(method=method), color_continuous_scale=color_continuous_scale)           
                 st.plotly_chart(heat, use_container_width=True)
 
