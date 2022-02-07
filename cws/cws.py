@@ -8,10 +8,10 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from plotly import tools
-import plotly.io as pio
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-import plotly.figure_factory as ff
+# from plotly import tools
+# import plotly.io as pio
+# from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+# import plotly.figure_factory as ff
 # import seaborn as sns
 # import matplotlib.pyplot as plt
 # import altair as alt
@@ -54,15 +54,14 @@ def home():
     st.write('**Data panel:** Selection of the major elemental geochemical dataset.')
     st.write('**Data filter:** Data filter based on sample/category/subcategory/subsubcategory.')
     st.write('**Major Oxides variation**: Variation of major oxides against samples.')
-    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Index of Weathering (CIW*) after [**Cullers, 2000**](https://doi.org/10.1016/S0024-4937(99)00063-8); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
+    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Index of Weathering without CaO (CIW*) after [**Cullers, 2000**](https://doi.org/10.1016/S0024-4937(99)00063-8); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
     st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering proxy with variable-based marker size, linear/non-linear trendline & axes, and marginal distribution.')
     st.write('**Trivariate plot:** Trivariate plot between oxide and/or weathering proxy with variable-based marker size and linear/non-linear trendline & axes.')
     st.write('**Ternary plot:** Ternary plot between oxide and/or weathering proxy.')    
     st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagram after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
-    st.write('**Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.')
-        
+    st.write('**Chemical classification:** Chemical classification including ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after [**Kroonenberg, 1990**](https://doi.org/10.1016/0009-2541(90)90172-4) and binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after [**Herron, 1988**](https://doi.org/10.1306/212F8E77-2B24-11D7-8648000102C1865D).')
+    st.write('**Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.')        
 ##############################################################################################################
-
 
 ##############################################################################################################
 # Dataset
@@ -142,8 +141,9 @@ def data_analysis():
 
     # data filter     
     if st.sidebar.checkbox('Data filter'):
+        filter = st.sidebar.expander('filter', False)        
         # selection of country from 'location'
-        filter = st.sidebar.radio('Select the data filter:',['sample', 'category', 'subcategory','subsubcategory'])
+        filter = filter.radio('Select the data filter:',['sample', 'category', 'subcategory','subsubcategory'])
         if filter=='sample':
             sample = st.sidebar.multiselect("Select the Samples of the data filter:", data['sample'].unique(), default=data['sample'].iloc[0])
             data_sample = data[data['sample'].isin(sample)]
@@ -330,7 +330,8 @@ def data_analysis():
         # subplot     
         if st.sidebar.checkbox('Subplot'):        
             # selection of subplot
-            sub = st.sidebar.radio('Select the Subplot of bivariate plot:',['category', 'subcategory','subsubcategory'])  
+            sub = st.sidebar.expander('Subplot', False)            
+            sub = sub.radio('Select the Subplot of bivariate plot:',['category', 'subcategory','subsubcategory'])  
             if sub=='category':
                 facet_col='category'
             if sub=='subcategory':
@@ -348,14 +349,16 @@ def data_analysis():
         if st.sidebar.checkbox('Trendline'):
             data_bivar = data_bivar.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1)
             hover_name = color = symbol = facet_col = facet_col_wrap = None
-            trendline_type = st.sidebar.radio('Trendline:',['Linear', 'Non-Linear'])
+            trendline_type = st.sidebar.expander('Trendline type', False)              
+            trendline_type = trendline_type.radio('Trendline:',['Linear', 'Non-Linear'])
             if trendline_type=='Linear':
                 trendline="ols"
             else:
                 trendline="lowess"    
         
         if st.sidebar.checkbox('Variable-based marker size of bivariate plot'):
-            size = st.sidebar.radio('Select the oxide/weathering index/ratio of bivariate plot:',['oxide', 'weathering index', 'ratio'])
+            size = st.sidebar.expander('oxide/weathering index/ratio', False)              
+            size = size.radio('Select the oxide/weathering index/ratio of bivariate plot:',['oxide', 'weathering index', 'ratio'])
             if size=='oxide':
                 col_first="SiO2"
                 col_last="P2O5"
@@ -369,7 +372,8 @@ def data_analysis():
             
         if st.sidebar.checkbox('Add marginal distribution of bivariate plot'):
             if st.sidebar.checkbox('X-axis marginal distribution of bivariate plot'):
-                type = st.sidebar.radio('Select the X-axis marginal distribution of bivariate plot:',['histogram','rug','box','violin'])
+                type = st.sidebar.expander('X-axis marginal distribution', False)                
+                type = type.radio('Select the X-axis marginal distribution of bivariate plot:',['histogram','rug','box','violin'])
                 if type=='histogram':
                     marginal_x='histogram'
                 if type=='rug':
@@ -379,7 +383,8 @@ def data_analysis():
                 if type=='violin':
                     marginal_x='violin'
             if st.sidebar.checkbox('Y-axis marginal distribution of bivariate plot'):
-                type = st.sidebar.radio('Select the Y-axis marginal distribution of bivariate plot:',['histogram','rug','box','violin'])
+                type = st.sidebar.expander('Y-axis marginal distribution', False)                 
+                type = type.radio('Select the Y-axis marginal distribution of bivariate plot:',['histogram','rug','box','violin'])
                 if type=='histogram':
                     marginal_y='histogram'
                 if type=='rug':
@@ -390,7 +395,8 @@ def data_analysis():
                     marginal_y='violin'
                     
         x = st.sidebar.selectbox('Select the x-axis of bivariate plot',list(data_bivar))         
-        xaxis_type = st.sidebar.radio('x axis type of bivariate plot:',['Linear', 'Logarithmic'])
+        xaxis_type = st.sidebar.expander('X-axis type', False)           
+        xaxis_type = xaxis_type.radio('x axis type of bivariate plot:',['Linear', 'Logarithmic'])
         if xaxis_type=='Linear':
             log_x=False
         else:
@@ -398,7 +404,8 @@ def data_analysis():
             marginal_x=None
         
         y = st.sidebar.selectbox('Select the y-axis of bivariate plot',list(data_bivar))        
-        yaxis_type = st.sidebar.radio('y axis type of bivariate plot:',['Linear', 'Logarithmic'])
+        yaxis_type = st.sidebar.expander('Y-axis type', False)         
+        yaxis_type = yaxis_type.radio('y axis type of bivariate plot:',['Linear', 'Logarithmic'])
         if yaxis_type=='Linear':
             log_y=False
         else:
@@ -436,7 +443,8 @@ def data_analysis():
         size = trendline = marginal_x = marginal_y = marginal_z = None  
                 
         if st.sidebar.checkbox('Variable-based marker size of trivariate plot'):
-            size = st.sidebar.radio('Select the oxide/weathering index/ratio of trivariate plot:',['oxide', 'weathering index', 'ratio'])
+            size = st.sidebar.expander('oxide/weathering index/ratio', False)            
+            size = size.radio('Select the oxide/weathering index/ratio of trivariate plot:',['oxide', 'weathering index', 'ratio'])
             if size=='oxide':
                 col_first="SiO2"
                 col_last="P2O5"
@@ -449,7 +457,8 @@ def data_analysis():
             size = st.sidebar.selectbox('Select the oxide/weathering index/ratio of trivariate plot',list(data_trivar.loc[:,col_first:col_last]))                             
                     
         x = st.sidebar.selectbox('Select the x-axis of trivariate plot',list(data_trivar))
-        xaxis_type = st.sidebar.radio('x axis type of trivariate plot:',['Linear', 'Logarithmic'])
+        xaxis_type = st.sidebar.expander('X-axis type', False)         
+        xaxis_type = xaxis_type.radio('x axis type of trivariate plot:',['Linear', 'Logarithmic'])
         if xaxis_type=='Linear':
             log_x=False
         else:
@@ -457,7 +466,8 @@ def data_analysis():
             marginal_x=None
         
         y = st.sidebar.selectbox('Select the y-axis of trivariate plot',list(data_trivar))
-        yaxis_type = st.sidebar.radio('y axis type of trivariate plot:',['Linear', 'Logarithmic'])
+        yaxis_type = st.sidebar.expander('Y-axis type', False) 
+        yaxis_type = yaxis_type.radio('y axis type of trivariate plot:',['Linear', 'Logarithmic'])
         if yaxis_type=='Linear':
             log_y=False
         else:
@@ -465,7 +475,8 @@ def data_analysis():
             marginal_y=None
 
         z = st.sidebar.selectbox('Select the z-axis of trivariate plot',list(data_trivar))
-        zaxis_type = st.sidebar.radio('z axis type of trivariate plot:',['Linear', 'Logarithmic'])
+        zaxis_type = st.sidebar.expander('Z-axis type', False)        
+        zaxis_type = zaxis_type.radio('z axis type of trivariate plot:',['Linear', 'Logarithmic'])
         if zaxis_type=='Linear':
             log_z=False
         else:
@@ -502,7 +513,8 @@ def data_analysis():
         st.write(data_ter)
         
         hover_name=data_ter['sample']
-        category = st.sidebar.radio('Categorization of Ternary plot', ['Category','Subcategory'])
+        category = st.sidebar.expander('Categorization', False)         
+        category = category.radio('Categorization of Ternary plot', ['Category','Subcategory'])
         if category=='Category':
             color=data_ter['category']
             symbol=None
@@ -510,9 +522,10 @@ def data_analysis():
             color=data_ter['subcategory']
             symbol=data_ter['subsubcategory']        
         
-        a = st.sidebar.selectbox('Select the component A of Ternary plot', list(data_ter))        
-        b = st.sidebar.selectbox('Select the component B of Ternary plot', list(data_ter))   
-        c = st.sidebar.selectbox('Select the component C of Ternary plot', list(data_ter))           
+        axis = st.sidebar.expander('Axes', False)           
+        a = axis.selectbox('Select the component A of Ternary plot', list(data_ter))        
+        b = axis.selectbox('Select the component B of Ternary plot', list(data_ter))   
+        c = axis.selectbox('Select the component C of Ternary plot', list(data_ter))           
 
         title_a = None
         title_b = None
@@ -526,14 +539,16 @@ def data_analysis():
         csd =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","molar_Al2O3","molar_CaO*","molar_Na2O","molar_K2O","molar_Fe2O3","molar_MgO"]
         data_csd=data[csd]
         hover_name=data_csd['sample']        
-        category = st.sidebar.radio('Categorization of Compositional space diagram', ['Category','Subcategory'])
+        category = st.sidebar.expander('Categorization', False)          
+        category = category.radio('Categorization of Compositional space diagram', ['Category','Subcategory'])
         if category=='Category':
             color=data_csd['category']
             symbol=None
         else:
             color=data_csd['subcategory']
             symbol=data_csd['subsubcategory']        
-        csd_type = st.sidebar.radio('Compositional space diagram:',['A - CN - K', 'A - CNK - FM', 'M - F - W'])
+        csd_type = st.sidebar.expander('Compositional space diagram', False)         
+        csd_type = csd_type.radio('Compositional space diagram:',['A - CN - K', 'A - CNK - FM', 'M - F - W'])
         a=data_csd['molar_Al2O3']
         if csd_type == 'A - CN - K':
             b=data_csd['molar_CaO*'] + data_csd['molar_Na2O']            
@@ -605,12 +620,227 @@ def data_analysis():
 #                 )
                 plot_html(fig)
 
-# 	    # Discrimination diagram selection
-#         # overlays from Rollinson, 2014
-#     if st.sidebar.checkbox('Tectonic discrimination diagram'):
-#         st.header('Tectonic discrimination diagram')
-#         data_dis = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
-#         st.write(data_dis)
+	    # Chemical classification selection
+        # Ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after Kroonenberg, 1990
+        # Binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after Herron, 1988             
+        # overlays from Rollinson, 2014
+    if st.sidebar.checkbox('Chemical classification'):
+        st.header('Chemical classification')
+        classfication = ['sample','category','subcategory','subsubcategory','reference','SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2']
+        data_class = data[classfication]
+        hover_name=data_class['sample']        
+        
+        # color palette
+        col = ['darkorchid','darkred','darksalmon','darkseagreen','darkslateblue','darkslategray','darkslategrey,darkturquoise','darkviolet','deeppink','deepskyblue','dimgray','dimgrey','dodgerblue','firebrick','floralwhite','forestgreen','fuchsia','gainsboro','ghostwhite','gold','goldenrod','gray','grey','green','greenyellow','honeydew','hotpink','indianred','indigo','ivory','khaki','lavender','lavenderblush','lawngreen','lemonchiffon','lightblue','lightcoral','lightcyan','lightgoldenrodyellow','lightgray','lightgrey','lightgreen','lightpink','lightsalmon','lightseagreen','lightskyblue','lightslategray','lightslategrey','lightsteelblue','lightyellow','lime','limegreen','linen','magenta','maroon','mediumaquamarine','mediumblue','mediumorchid','mediumpurple','mediumseagreen','mediumslateblue','mediumspringgreen','mediumturquoise','mediumvioletred','midnightblue','mintcream','mistyrose','moccasin','navajowhite','navy,oldlace','olive','olivedrab','orange','orangered','orchid','palegoldenrod','palegreen','paleturquoise','palevioletred','papayawhip','peachpuff','peru','pink','plum','powderblue','purple','red','rosybrown','royalblue','saddlebrown','salmon','sandybrown','seagreen','seashell','sienna','silver','skyblue','slateblue','slategray','slategrey','snow','springgreen','steelblue','tan','teal','thistle','tomato','turquoise','violet','wheat','white','whitesmoke','yellow','yellowgreen']
+        
+        text_col = ['Gainsboro', 'LightGray', 'Silver', 'DarkGray', 'Gray', 'DimGray', 'LightSlateGray', 'SlateGray', 'DarkSlateGray', 'Black']
+        
+        # line style
+        dash = ['solid', 'dot', 'dash', 'longdash', 'dashdot', 'longdashdot']
+        
+        # Opacity
+        opacity = 1 # default
+        
+        # selection of classification diagram
+        class_type = st.sidebar.radio('Classification diagram:',['SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', 'log(Fe2O3/K2O) - log(SiO2/Al2O3)'])
+        
+        if class_type == 'SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3':
+            marker_size = 12
+            marker_line_col = marker_line_width = None
+            category = st.sidebar.expander('Categorization', False)
+            category = category.radio('Categorization of Compositional space diagram',['Category','Subcategory'])
+            if category=='Category':
+                color=data_class['category']
+                symbol=None
+            else:
+                color=data_class['subcategory']
+                symbol=data_class['subsubcategory']            
+            
+            if st.sidebar.checkbox('Marker attributes'):
+                marker_size = st.sidebar.expander('Size of marker', False)                
+                marker_size = marker_size.number_input('Set the Size of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=12, step=1)
+                marker_size = int(marker_size)                
+                marker_line_col = st.sidebar.expander('Line color of marker', False) 
+                marker_line_col = marker_line_col.selectbox('Select the Line color of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', col)
+                marker_line_width = st.sidebar.expander('Line width of marker', False)                 
+                marker_line_width = marker_line_width.number_input('Set the Line width of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=1, step=1)
+                opacity = st.sidebar.expander('Opacity of marker', False)                
+                opacity = opacity.number_input('Set the Opacity of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
+                        
+            fig = px.scatter_ternary(data_class, a=data_class['SiO2']/20, b=data_class['K2O'] + data_class['Na2O'], c=data_class['TiO2'] + data_class['MgO'] + data_class['Fe2O3'], opacity=opacity, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
+                
+            fig.update_layout({'ternary': {'sum': 100}})
+            fig.update_ternaries(bgcolor='yellow')
+            fig.update_traces(marker=dict(size=marker_size, line=dict(width=marker_line_width, color=marker_line_col)), selector=dict(mode='markers'))
+
+            fig.update_layout({
+                'ternary':
+                    {
+                    'sum':100,
+                    'aaxis':{'title': 'SiO2/20'},
+                    'baxis':{'title': 'K2O + Na2O'},
+                    'caxis':{'title': 'TiO2 + MgO + Fe2O3'}
+                    }
+            })                 
+            
+        if class_type == 'log(Fe2O3/K2O) - log(SiO2/Al2O3)':
+            marker_color = color = width = None
+            size = 12
+            symbol = 0
+
+            if st.sidebar.checkbox('Marker attributes'):
+                marker = st.sidebar.expander('Symbol', False)
+                symbol = marker.number_input('Set the Symbol of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0, max_value=24, value=0, step=1)
+                symbol = int(symbol)                
+                if st.sidebar.checkbox('Symbol variant'):
+                    variant = st.sidebar.expander('Symbol variant', False)
+                    variant = variant.radio('Select a variant:',['open', 'dot', 'open-dot'])
+                    if variant=='open':
+                        symbol = symbol+100
+                    if variant=='dot':
+                        symbol = symbol+200
+                    if variant=='open-dot':
+                        symbol = symbol+300                
+                marker_color = st.sidebar.expander('Color of marker', False)
+                marker_color = marker_color.selectbox('Select the Color of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
+                size = st.sidebar.expander('Size of marker', False)
+                size = size.number_input('Set the Size of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=12, step=1)
+                size = int(size)                
+                color = st.sidebar.expander('Line color of marker', False)
+                color = color.selectbox('Select the Line color of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
+                width = st.sidebar.expander('Line width of marker', False)                
+                width = width.number_input('Set the Line width of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=2, step=1)
+                width = int(width)
+                opacity = st.sidebar.expander('Opacity of marker', False)                  
+                opacity = opacity.number_input('Set the Opacity of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
+            
+            x = np.log(data_class['SiO2']/data_class['Al2O3'])
+            y = np.log(data_class['Fe2O3']/data_class['K2O'])                
+
+            fig = go.Figure()
+
+            fig.add_trace(go.Scatter(x=x, y=y, opacity=opacity, marker_symbol=symbol, mode='markers', marker=dict(color=marker_color, size=size, opacity=opacity, line=dict(color=color,width=width))))
+
+            color = width = None
+            if st.sidebar.checkbox('Overlay attributes'):
+                color = st.sidebar.expander('Color of overlay', False)                  
+                color = color.selectbox('Select the Color of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
+                width = st.sidebar.expander('Width of overlay', False)                  
+                width = width.number_input('Select the Width of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=2, step=1)
+                width = int(width)                 
+                opacity = st.sidebar.expander('Opacity of overlay', False)                 
+                opacity = opacity.number_input('Set the Opacity of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
+            
+            # boundaries overlay            
+            # boundary between Shale and Fe-shale
+            x_overlay = [+0.00, +0.71]
+            y_overlay = [+0.60, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+            
+            # boundary between Fe-shale and Fe-sand
+            x_overlay = [+0.71, +0.71]
+            y_overlay = [+0.60, +1.50]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
+            
+            # boundary between Wacke and Shale
+            x_overlay = [+0.55, +0.71]
+            y_overlay = [-0.10, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+            
+            # boundary between Wacke and Fe-sand
+            x_overlay = [+0.71, +0.87]
+            y_overlay = [+0.60, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+            
+            # boundary between Litharenite and Fe-sand
+            x_overlay = [+0.87, +1.14]
+            y_overlay = [+0.60, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+            
+            # boundary between Sublitharenite and Fe-sand
+            x_overlay = [+1.14, +1.70]
+            y_overlay = [+0.60, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+
+            # boundary between Arkose and Wacke
+            x_overlay = [+0.64, +0.76]
+            y_overlay = [-0.50, +0.00]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+            
+            # boundary between Litharenite and Wacke
+            x_overlay = [+0.76, +0.87]
+            y_overlay = [+0.00, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))  
+
+            # boundary between Arkose, Litharenite and Subarkose, Sublitharenite
+            x_overlay = [+1.00, +1.14]
+            y_overlay = [-1.00, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width))) 
+
+            # boundary between Arkose, Subarkose and Litharenite, Sublitharenite
+            x_overlay = [+0.76, +1.68]
+            y_overlay = [+0.00, +0.00]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))              
+            
+            # boundary between Subarkose and Quartz arenite 
+            x_overlay = [+1.60, +1.68]
+            y_overlay = [-1.00, +0.00]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+            
+            # boundary between Sublitharenite and Quartz arenite 
+            x_overlay = [+1.68, +1.70]
+            y_overlay = [+0.00, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))    
+            
+            # boundary between Fe-sand and Quartz arenite 
+            x_overlay = [+1.80, +1.70]
+            y_overlay = [+1.50, +0.60]
+            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+            
+            # text annotation
+            size = 16
+            color = 'Black'
+            opacity = 0.8
+            if st.sidebar.checkbox('Text attributes'):
+                size = st.sidebar.expander('Size of text', False)                 
+                size = size.number_input('Select the Size of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=20, step=1)
+                size = int(size) 
+                color = st.sidebar.expander('Color of text', False)  
+                color = color.selectbox('Select the Color of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3)', text_col)                
+                opacity = st.sidebar.expander('Opacity of text', False)                  
+                opacity = opacity.number_input('Set the Opacity of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
+            
+            # text overlay
+            fig.add_annotation(x=0.35, y=1,text="Fe-shale",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+            fig.add_annotation(x=0.35, y=0,text="Shale",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)            
+            fig.add_annotation(x=1.2, y=1,text="Fe-sand",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+            fig.add_annotation(x=1.4, y=0.25,text="Sublitharenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+            fig.add_annotation(x=1.4, y=-0.5,text="Subarkose",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+            fig.add_annotation(x=0.97, y=0.3,text="Litharenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+            fig.add_annotation(x=0.9, y=-0.5,text="Arkose",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+            fig.add_annotation(x=0.7, y=0.16,text="Wacke",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity, xref="x", yref="y", textangle=-35)            
+            fig.add_annotation(x=1.9, y=0.5,text="Quartz arenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)            
+
+            fig.update_layout(yaxis_title="log(Fe<sub>2</sub>O<sub>3</sub>/K<sub>2</sub>O)", xaxis_title="log(SiO<sub>2</sub>/Al<sub>2</sub>O<sub>3</sub>)", showlegend=False)
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # exporting the plot to the local machine
+        with st.expander("Click to export Classification diagram"):
+            plot_html(fig)
         
     # boxplot
     def box(x,y,color):
@@ -662,12 +892,14 @@ def data_analysis():
         # Subburst plot
         if st.sidebar.checkbox('Sunburst plot'):
             st.header('Sunburst plot')            
-
+            
             # selection of 'values'
-            values = st.sidebar.selectbox("Select the Oxide and/or Weathering proxy for values:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
+            values = st.sidebar.expander('Values', False)            
+            values = values.selectbox("Select the Oxide and/or Weathering proxy for values:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
             
             # selection of 'color'
-            color = st.sidebar.selectbox("Select the Oxide and/or Weathering proxy for color:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)            
+            color = st.sidebar.expander('Color', False)            
+            color = color.selectbox("Select the Oxide and/or Weathering proxy for color:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)            
             
             sun = px.sunburst(data_ox_pr, path=['category','subcategory','subsubcategory','sample'], values=values, color=color)
             sun.update_traces(sort=False)
@@ -681,10 +913,12 @@ def data_analysis():
             st.subheader('Histogram')
 
             # selection of variable(s) (oxide and/or weathering index)
-            var = st.sidebar.multiselect("Select the Oxide and/or Weathering proxy of Histogram:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
+            var = st.sidebar.expander('Oxide and/or Weathering proxy', False)            
+            var = var.multiselect("Select the Oxide and/or Weathering proxy of Histogram:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
 
             # Linear/Non-linear y axis
-            yaxis_type = st.sidebar.radio('y axis type of Histogram:',['Linear', 'Logarithmic'])
+            yaxis_type = st.sidebar.expander('Y-axis type', False)            
+            yaxis_type = yaxis_type.radio('y axis type of Histogram:',['Linear', 'Logarithmic'])
             if yaxis_type=='Linear':
                 log_y=False
             else:
@@ -703,7 +937,8 @@ def data_analysis():
         
         if st.sidebar.checkbox('Boxplot'):
             st.subheader('Boxplot')
-            category = st.sidebar.radio('Categorization of the boxplot', ['Category','Subcategory','Subsubcategory'])
+            category = st.sidebar.expander('Categorization', False)            
+            category = category.radio('Categorization of the boxplot', ['Category','Subcategory','Subsubcategory'])
             if category=='Category':
                 color=data_ox_pr['category']
             elif category=='Subcategory':
@@ -711,8 +946,9 @@ def data_analysis():
             else:
                 color=data_ox_pr['subsubcategory']
 
-            x = st.sidebar.selectbox('Select the x-axis of Boxplot',list(data_ox_pr))
-            y = st.sidebar.selectbox('Select the y-axis of Boxplot',list(data_ox_pr))
+            axis = st.sidebar.expander('Axes', False)            
+            x = axis.selectbox('Select the x-axis of Boxplot',list(data_ox_pr))
+            y = axis.selectbox('Select the y-axis of Boxplot',list(data_ox_pr))
             box(x,y,color)
 
         # scatter matrix of oxides
@@ -784,7 +1020,8 @@ def data_analysis():
             
             # oxide, weathering indices filter
             if st.sidebar.checkbox('Oxides/Weathering proxy filter'):
-                filter = st.sidebar.radio('Choose the filter of Oxides/Weathering proxy', ['Oxides','Weathering proxy'])
+                filter = st.sidebar.expander('filter', False)                
+                filter = filter.radio('Choose the filter of Oxides/Weathering proxy', ['Oxides','Weathering proxy'])
                 if filter=='Oxides':                
                     ox =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"]
                     data_corr=data[ox]
@@ -793,7 +1030,8 @@ def data_analysis():
                     data_corr=data[pr]                     
             
             # Method of correlation
-            method = st.sidebar.radio('Choose the method of correlation', ['Pearson', 'Kendall','Spearman'])
+            method = st.sidebar.expander('method of correlation', False)            
+            method = method.radio('Choose the method of correlation', ['Pearson', 'Kendall','Spearman'])
             if method=='Pearson':
                 method='pearson'
             elif method=='Kendall':
