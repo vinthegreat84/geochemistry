@@ -9,6 +9,7 @@ CWS is a tool designed using Python and Streamlit to analyze major elemental geo
 * **Bivariate plot:** Bivariate plot between oxide and/or weathering index with variable-based marker size, linear/non-linear trendline & axes, and marginal distribution.
 * **Trivariate plot:** Trivariate plot between oxide and/or weathering index with variable-based marker size and linear/non-linear trendline & axes.
 * **Compositional space diagram**: Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagram after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).
+* **Chemical classification** Chemical classification including ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after [**Kroonenberg, 1990**](https://doi.org/10.1016/0009-2541(90)90172-4) and binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after [**Herron, 1988**](https://doi.org/10.1306/212F8E77-2B24-11D7-8648000102C1865D).
 * **Sunburst plot, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Sunburst plot, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.
 
 A running version of the app can be accessed at https://tinyurl.com/sedweather. The app may run slowly when accessing it. This is due to the hosting and should not affect functionality.
