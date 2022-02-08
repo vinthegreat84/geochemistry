@@ -4,6 +4,7 @@ st.set_page_config(layout="wide", page_title='CWS 0.1.0')
 
 import pandas as pd
 import numpy as np
+from sklearn.linear_model import LinearRegression
 
 import plotly.express as px
 import plotly.graph_objects as go
@@ -13,7 +14,7 @@ from plotly.subplots import make_subplots
 # from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 # import plotly.figure_factory as ff
 # import seaborn as sns
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 # import altair as alt
 import io
 # from io import BytesIO
@@ -59,7 +60,7 @@ def home():
     st.write('**Trivariate plot:** Trivariate plot between oxide and/or weathering proxy with variable-based marker size and linear/non-linear trendline & axes.')
     st.write('**Ternary plot:** Ternary plot between oxide and/or weathering proxy.')    
     st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagram after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
-    st.write('**Chemical classification:** Chemical classification including ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after [**Kroonenberg, 1990**](https://doi.org/10.1016/0009-2541(90)90172-4) and binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after [**Herron, 1988**](https://doi.org/10.1306/212F8E77-2B24-11D7-8648000102C1865D).')
+    st.write('**Chemical classification** Chemical classification including ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after [**Kroonenberg, 1990**](https://doi.org/10.1016/0009-2541(90)90172-4) and binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after [**Herron, 1988**](https://doi.org/10.1306/212F8E77-2B24-11D7-8648000102C1865D).')
     st.write('**Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.')        
 ##############################################################################################################
 
@@ -277,7 +278,7 @@ def data_analysis():
     # Plagioclase Index of Alteration (PIA) after Fedo et al., 1995
     data['(PIA)'] = 100 * (data['molar_Al2O3'] - data['molar_K2O']) / (data['molar_Al2O3'] + data['molar_CaO*'] + data['molar_Na2O'] - data['molar_K2O'])
 
-    # Modified Chemical Index of Alteration (CIX) after Garzanti et al., 2014                                                            
+    # Modified Chemical Index of Alteration (CIX) after Garzanti et al., 2014                                                          
     data['(CIX)'] = 100 * data['molar_Al2O3'] / (data['molar_Al2O3'] + data['molar_Na2O'] + data['molar_K2O']) 
 
     # Index of Compositional Variability (ICV) after Cox et al., 1995
@@ -623,7 +624,7 @@ def data_analysis():
 	    # Chemical classification selection
         # Ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after Kroonenberg, 1990
         # Binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after Herron, 1988             
-        # overlays from Rollinson, 2014
+        # overlays from Rollinson, 2021
     if st.sidebar.checkbox('Chemical classification'):
         st.header('Chemical classification')
         classfication = ['sample','category','subcategory','subsubcategory','reference','SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2']
@@ -677,9 +678,9 @@ def data_analysis():
                 'ternary':
                     {
                     'sum':100,
-                    'aaxis':{'title': 'SiO2/20'},
-                    'baxis':{'title': 'K2O + Na2O'},
-                    'caxis':{'title': 'TiO2 + MgO + Fe2O3'}
+                    'aaxis':{'title': 'SiO<sub>2</sub>/20'},
+                    'baxis':{'title': 'K<sub>2</sub>O + Na<sub>2</sub>O'},
+                    'caxis':{'title': 'TiO<sub>2</sub> + MgO + Fe<sub>2</sub>O<sub>3</sub>'}
                     }
             })                 
             
@@ -734,80 +735,55 @@ def data_analysis():
             # boundaries overlay            
             # boundary between Shale and Fe-shale
             x_overlay = [+0.00, +0.71]
-            y_overlay = [+0.60, +0.60]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-            
+            y_overlay = [+0.60, +0.60]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
             # boundary between Fe-shale and Fe-sand
             x_overlay = [+0.71, +0.71]
-            y_overlay = [+0.60, +1.50]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
-            
+            y_overlay = [+0.60, +1.50]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                        
             # boundary between Wacke and Shale
             x_overlay = [+0.55, +0.71]
-            y_overlay = [-0.10, +0.60]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-            
+            y_overlay = [-0.10, +0.60]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
             # boundary between Wacke and Fe-sand
             x_overlay = [+0.71, +0.87]
-            y_overlay = [+0.60, +0.60]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-            
+            y_overlay = [+0.60, +0.60]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
             # boundary between Litharenite and Fe-sand
             x_overlay = [+0.87, +1.14]
-            y_overlay = [+0.60, +0.60]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-            
+            y_overlay = [+0.60, +0.60]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
             # boundary between Sublitharenite and Fe-sand
             x_overlay = [+1.14, +1.70]
-            y_overlay = [+0.60, +0.60]
-            
+            y_overlay = [+0.60, +0.60]            
             fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-
             # boundary between Arkose and Wacke
             x_overlay = [+0.64, +0.76]
-            y_overlay = [-0.50, +0.00]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-            
+            y_overlay = [-0.50, +0.00]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
             # boundary between Litharenite and Wacke
             x_overlay = [+0.76, +0.87]
-            y_overlay = [+0.00, +0.60]
-            
+            y_overlay = [+0.00, +0.60]            
             fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))  
-
             # boundary between Arkose, Litharenite and Subarkose, Sublitharenite
             x_overlay = [+1.00, +1.14]
-            y_overlay = [-1.00, +0.60]
-            
+            y_overlay = [-1.00, +0.60]            
             fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width))) 
-
             # boundary between Arkose, Subarkose and Litharenite, Sublitharenite
             x_overlay = [+0.76, +1.68]
-            y_overlay = [+0.00, +0.00]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))              
-            
+            y_overlay = [+0.00, +0.00]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                          
             # boundary between Subarkose and Quartz arenite 
             x_overlay = [+1.60, +1.68]
-            y_overlay = [-1.00, +0.00]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-            
+            y_overlay = [-1.00, +0.00]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
             # boundary between Sublitharenite and Quartz arenite 
             x_overlay = [+1.68, +1.70]
-            y_overlay = [+0.00, +0.60]
-            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))    
-            
+            y_overlay = [+0.00, +0.60]            
+            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                
             # boundary between Fe-sand and Quartz arenite 
             x_overlay = [+1.80, +1.70]
-            y_overlay = [+1.50, +0.60]
-            
+            y_overlay = [+1.50, +0.60]            
             fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
             
             # text annotation
@@ -841,6 +817,105 @@ def data_analysis():
         # exporting the plot to the local machine
         with st.expander("Click to export Classification diagram"):
             plot_html(fig)
+
+	    # Harker diagram
+    if st.sidebar.checkbox('Harker diagram'):
+        st.header('Harker diagram')
+        ox =['sample','category','subcategory','subsubcategory','reference','SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5']
+        data_harker=data[ox]
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+        # Add traces
+        fig.add_trace(
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['TiO2'], name="TiO<sub>2</sub>", mode='markers'),secondary_y=False,)
+        fig.add_trace(
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['Al2O3'], name="Al<sub>2</sub>O<sub>3</sub>", mode='markers'),secondary_y=False,)
+        fig.add_trace(        
+        go.Scatter(x=data_harker['SiO2'], y=data_harker['Fe2O3'], name="Fe<sub>2</sub>O<sub>3</sub>", mode='markers'),secondary_y=False,)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['FeO'], name="FeO", mode='markers'),secondary_y=False,)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['MnO'], name="MnO", mode='markers'),secondary_y=False,)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['MgO'], name="MgO", mode='markers'),secondary_y=False,)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['CaO'], name="CaO", mode='markers'),secondary_y=False,)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['Na2O'], name="Na<sub>2</sub>O<sub>", mode='markers'),secondary_y=False,)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['K2O'], name="K<sub>2</sub>O<sub>", mode='markers'),secondary_y=False,)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['P2O5'], name="P<sub>2</sub>O<sub>5</sub>", mode='markers'),secondary_y=False,)                   
+        
+        # trendline
+        data_harker = data_harker.dropna() # dropping missing values
+        trend = LinearRegression()        
+        x = data_harker.loc[:, data_harker.columns == 'SiO2']
+        
+        y = data_harker.loc[:, data_harker.columns == 'TiO2']
+        trend.fit(x,y)
+        data_harker['trend_TiO2'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_TiO2'], name='TiO<sub>2</sub>', mode='lines'),secondary_y=False,)
+        
+        y = data_harker.loc[:, data_harker.columns == 'Al2O3']
+        trend.fit(x,y)
+        data_harker['trend_Al2O3'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_Al2O3'], name='Al<sub>2</sub>O<sub>3</sub>', mode='lines'),secondary_y=False,) 
+
+        y = data_harker.loc[:, data_harker.columns == 'Fe2O3']
+        trend.fit(x,y)
+        data_harker['trend_Fe2O3'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_Fe2O3'], name='Fe<sub>2</sub>O<sub>3</sub>', mode='lines'),secondary_y=False,)         
+
+        y = data_harker.loc[:, data_harker.columns == 'FeO']
+        trend.fit(x,y)
+        data_harker['trend_FeO'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_FeO'], name='FeO', mode='lines'),secondary_y=False,)
+
+        y = data_harker.loc[:, data_harker.columns == 'MnO']
+        trend.fit(x,y)
+        data_harker['trend_MnO'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_MnO'], name='MnO', mode='lines'),secondary_y=False,) 
+
+        y = data_harker.loc[:, data_harker.columns == 'MgO']
+        trend.fit(x,y)
+        data_harker['trend_MgO'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_MgO'], name='MgO', mode='lines'),secondary_y=False,)
+
+        y = data_harker.loc[:, data_harker.columns == 'CaO']
+        trend.fit(x,y)
+        data_harker['trend_CaO'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_CaO'], name='CaO', mode='lines'),secondary_y=False,)
+
+        y = data_harker.loc[:, data_harker.columns == 'Na2O']
+        trend.fit(x,y)
+        data_harker['trend_Na2O'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_Na2O'], name='Na<sub>2</sub>O', mode='lines'),secondary_y=False,)          
+        
+        y = data_harker.loc[:, data_harker.columns == 'K2O']
+        trend.fit(x,y)
+        data_harker['trend_K2O'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_K2O'], name='K<sub>2</sub>O', mode='lines'),secondary_y=False,)
+
+        y = data_harker.loc[:, data_harker.columns == 'P2O5']
+        trend.fit(x,y)
+        data_harker['trend_P2O5'] = trend.predict(x)
+        fig.add_trace(        
+            go.Scatter(x=data_harker['SiO2'], y=data_harker['trend_P2O5'], name='P<sub>2</sub>O<sub>5</sub>', mode='lines'),secondary_y=False,)        
+        
+        fig.update_yaxes(rangemode="nonnegative")
+        fig.update_layout(xaxis_title='SiO<sub>2</sub> (%)', yaxis_title='Oxide (%)', showlegend=True)   
+        
+        st.plotly_chart(fig, use_container_width=True)
         
     # boxplot
     def box(x,y,color):
@@ -954,7 +1029,7 @@ def data_analysis():
         # scatter matrix of oxides
         if st.sidebar.checkbox('Scatter matrix of oxides'):
             st.subheader('Scatter matrix of oxides')
-            scatter_ox = px.scatter_matrix(data_ox_pr, dimensions=["SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"], hover_name="sample")
+            scatter_ox = px.scatter_matrix(data_ox_pr, dimensions=['SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O'], hover_name="sample")
             st.plotly_chart(scatter_ox, use_container_width=True)
 
             # exporting the plot to the local machine
