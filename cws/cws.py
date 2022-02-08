@@ -162,21 +162,6 @@ def data_analysis():
             subsubcat = st.sidebar.selectbox("Select the Subsubcatgory of the data filter:", data['subsubcategory'].unique())
             data_subsubcat = data[data['subsubcategory'].isin([subsubcat])]
             data = data_subsubcat
-            
-#     # multivariable
-#         multi_var_x = st.sidebar.number_input('Set the number of variables of x-axis:', min_value=2, value=2, step=1)
-#         multi_var_x = int(multi_var_x)
-#         st.write(multi_var_x)
-        
-#         def multi_var():
-#             st.sidebar.selectbox("Select the variable of multi_var:", data.columns)
-        
-#         i=1
-#         var=[0]
-#         for i in range(multi_var_x):
-#             var[i] = multi_var()
-#             i+=1
-        
     
     # Major oxides
     if st.sidebar.checkbox('Major oxides'):
@@ -524,15 +509,14 @@ def data_analysis():
             color=data_ter['subcategory']
             symbol=data_ter['subsubcategory']        
         
-        axis = st.sidebar.expander('Axes', False)           
+        axis = st.sidebar.expander('Axes', False)
         a = axis.selectbox('Select the component A of Ternary plot', list(data_ter))        
         b = axis.selectbox('Select the component B of Ternary plot', list(data_ter))   
         c = axis.selectbox('Select the component C of Ternary plot', list(data_ter))           
 
-        title_a = None
-        title_b = None
-        title_c = None
-        
+        title_a = a
+        title_b = b
+        title_c = c
         fig = tern(a,b,c,color,symbol,hover_name) 
             
     # Compositional space diagram selection
@@ -599,27 +583,7 @@ def data_analysis():
 
         # exporting the plot to the local machine
         with st.expander("Click to export compositional space diagram"):
-#             if st.button("compositional space diagram as PNG"):
-#                 fig.write_image("tern_plot.png")
-#             if st.button("compositional space diagram as JPEG"):
-#                 fig.write_image("tern_plot.JPEG")
-#             if st.button("compositional space diagram as WebP"):
-#                 fig.write_image("tern_plot.webp")
-#             if st.button("compositional space diagram as SVG"):
-#                 fig.write_image("tern_plot.svg") 
-#             if st.button("compositional space diagram as PDF"):
-#                 fig.write_image("tern_plot.pdf")
             if st.button("compositional space diagram as HTML"):
-#                 buffer = io.StringIO()
-#                 fig.write_html(buffer, include_plotlyjs='cdn')
-#                 html_bytes = buffer.getvalue().encode()
-                
-#                 st.download_button(
-#                     label='Download HTML',
-#                     data=html_bytes,
-#                     file_name='tern_plot.html',
-#                     mime='text/html'
-#                 )
                 plot_html(fig)
 
 	    # Chemical classification selection
@@ -926,33 +890,11 @@ def data_analysis():
         
         # exporting the plot to the local machine
         with st.expander("Click to export boxplot"):
-#             if st.button("boxplot as PNG"):
-#                 box.write_image("box.png")
-#             if st.button("boxplot as JPEG"):
-#                 box.write_image("box.JPEG")
-#             if st.button("boxplot as WebP"):
-#                 box.write_image("box.webp")
-#             if st.button("boxplot as SVG"):
-#                 box.write_image("box.svg") 
-#             if st.button("boxplot as PDF"):
-#                 box.write_image("box.pdf")
-#             if st.button("boxplot as HTML"):
-#                 buffer = io.StringIO()
-#                 box.write_html(buffer, include_plotlyjs='cdn')
-#                 html_bytes = buffer.getvalue().encode()
-                
-#                 st.download_button(
-#                     label='Download HTML',
-#                     data=html_bytes,
-#                     file_name='box.html',
-#                     mime='text/html'
-#                 )
+            if st.button("boxplot as HTML"):
                 plot_html(box)
             
     if st.sidebar.checkbox('Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
         data_ox_pr = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
-#         ox_wi =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O","(CIW)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)"]
-#         data_ox_wi=data[ox_wi]
 
         if st.sidebar.checkbox('Statistical details'):
             st.subheader('Statistical details')
@@ -1007,9 +949,6 @@ def data_analysis():
             # exporting the plot to the local machine
             with st.expander("Click to export Histogram"):
                 plot_html(hist)
-            
-#             stats = data_ox_wi.describe
-#             st.write(stats)  
         
         if st.sidebar.checkbox('Boxplot'):
             st.subheader('Boxplot')
@@ -1035,27 +974,7 @@ def data_analysis():
 
             # exporting the plot to the local machine
             with st.expander("Click to export Scatter matrix of oxides"):
-#                 if st.button("Scatter matrix of oxides as PNG"):
-#                     scatter_ox.write_image("scatter_ox.png")
-#                 if st.button("Scatter matrix of oxides as JPEG"):
-#                     scatter_ox.write_image("scatter_ox.JPEG")
-#                 if st.button("Scatter matrix of oxides as WebP"):
-#                     scatter_ox.write_image("scatter_ox.webp")
-#                 if st.button("Scatter matrix of oxides as SVG"):
-#                     scatter_ox.write_image("scatter_ox.svg") 
-#                 if st.button("Scatter matrix of oxides as PDF"):
-#                     scatter_ox.write_image("scatter_ox.pdf")
-#                 if st.button("Scatter matrix of oxides as HTML"):
-#                     buffer = io.StringIO()
-#                     scatter_ox.write_html(buffer, include_plotlyjs='cdn')
-#                     html_bytes = buffer.getvalue().encode()
-
-#                     st.download_button(
-#                         label='Download HTML',
-#                         data=html_bytes,
-#                         file_name='Scatter matrix of oxides.html',
-#                         mime='text/html'
-#                     )
+                if st.button("Scatter matrix of oxides as HTML"):
                     plot_html(scatter_ox)
         
         # scatter matrix of weathering indices
@@ -1066,27 +985,7 @@ def data_analysis():
             
             # exporting the plot to the local machine
             with st.expander("Click to export Scatter matrix of weathering indices"):
-#                 if st.button("Scatter matrix of weathering indices as PNG"):
-#                     scatter_wi.write_image("scatter_wi.png")
-#                 if st.button("Scatter matrix of weathering indices as JPEG"):
-#                     scatter_wi.write_image("scatter_wi.JPEG")
-#                 if st.button("Scatter matrix of weathering indices as WebP"):
-#                     scatter_wi.write_image("scatter_wi.webp")
-#                 if st.button("Scatter matrix of weathering indices as SVG"):
-#                     scatter_wi.write_image("scatter_wi.svg") 
-#                 if st.button("Scatter matrix of weathering indices as PDF"):
-#                     scatter_wi.write_image("scatter_wi.pdf")
-#                 if st.button("Scatter matrix of weathering indices as HTML"):
-#                     buffer = io.StringIO()
-#                     scatter_wi.write_html(buffer, include_plotlyjs='cdn')
-#                     html_bytes = buffer.getvalue().encode()
-
-#                     st.download_button(
-#                         label='Download HTML',
-#                         data=html_bytes,
-#                         file_name='Scatter matrix of weathering indices.html',
-#                         mime='text/html'
-#                     )
+                if st.button("Scatter matrix of weathering indices as HTML"):
                     plot_html(scatter_pr)
 
         # correlation matrix
