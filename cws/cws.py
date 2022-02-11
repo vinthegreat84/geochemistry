@@ -4,6 +4,7 @@ st.set_page_config(layout="wide", page_title='CWS 0.1.0')
 
 import pandas as pd
 import numpy as np
+from numpy import *
 from sklearn.linear_model import LinearRegression
 
 import plotly.express as px
@@ -46,7 +47,7 @@ import io
 def home():
     st.title('CWS 0.1.0')
     st.subheader('App to analyze major elemental geochemical data of clastic sediments')
-    st.caption('Check the sidebar options (top-left arrow to be clicked, if sidebar is not visible)')
+    st.caption('Check the sidebar options (top-left arrow to be clicked, if not visible)')
     st.subheader('Created by Vinay Babu')
     st.write('''CWS is a tool designed using Python and Streamlit to analyze major elemental geochemistry of clastic sediments.''')
     st.write('One may navigate to different options on the sidebar menu.')
@@ -55,7 +56,7 @@ def home():
     st.write('**Data panel:** Selection of the major elemental geochemical dataset.')
     st.write('**Data filter:** Data filter based on sample/category/subcategory/subsubcategory.')
     st.write('**Major Oxides variation**: Variation of major oxides against samples.')
-    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Index of Weathering without CaO (CIW*) after [**Cullers, 2000**](https://doi.org/10.1016/S0024-4937(99)00063-8); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and chemical proxies like SiO2/Al2O3, K2O/Al2O3, Al2O3/TiO2.')
+    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Index of Weathering without CaO (CIW*) after [**Cullers, 2000**](https://doi.org/10.1016/S0024-4937(99)00063-8); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and chemical proxies like SiO2/Al2O3, K2O/Al2O3, K2O/Na2O, Al2O3/TiO2.')
     st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering proxy with variable-based marker size, linear/non-linear trendline & axes, and marginal distribution.')
     st.write('**Trivariate plot:** Trivariate plot between oxide and/or weathering proxy with variable-based marker size and linear/non-linear trendline & axes.')
     st.write('**Ternary plot:** Ternary plot between oxide and/or weathering proxy.')    
@@ -514,9 +515,7 @@ def data_analysis():
         b = axis.selectbox('Select the component B of Ternary plot', list(data_ter))   
         c = axis.selectbox('Select the component C of Ternary plot', list(data_ter))           
 
-        title_a = a
-        title_b = b
-        title_c = c
+        title_a, title_b, title_c = a, b, c
         fig = tern(a,b,c,color,symbol,hover_name) 
             
     # Compositional space diagram selection
@@ -586,13 +585,13 @@ def data_analysis():
             if st.button("compositional space diagram as HTML"):
                 plot_html(fig)
 
-	    # Chemical classification selection
-        # Ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after Kroonenberg, 1990
-        # Binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after Herron, 1988             
-        # overlays from Rollinson, 2021
+    # Chemical classification selection
+    # Ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after Kroonenberg, 1990
+    # Binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after Herron, 1988             
+    # overlays from Rollinson, 2021
     if st.sidebar.checkbox('Chemical classification'):
         st.header('Chemical classification')
-        classfication = ['sample','category','subcategory','subsubcategory','reference','SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5','CO2']
+        classfication = ['sample','category','subcategory','subsubcategory','reference','SiO2','TiO2','Al2O3','Fe2O3','FeO','MnO','MgO','CaO','Na2O','K2O','P2O5']
         data_class = data[classfication]
         hover_name=data_class['sample']        
         
@@ -607,181 +606,220 @@ def data_analysis():
         # Opacity
         opacity = 1 # default
         
-        # selection of classification diagram
-        class_type = st.sidebar.radio('Classification diagram:',['SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', 'log(Fe2O3/K2O) - log(SiO2/Al2O3)'])
+        # classification diagram
+        if st.sidebar.checkbox('Classification diagram'):
+            st.header('Classification diagram') 
         
-        if class_type == 'SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3':
-            marker_size = 12
-            marker_line_col = marker_line_width = None
-            category = st.sidebar.expander('Categorization', False)
-            category = category.radio('Categorization of Compositional space diagram',['Category','Subcategory'])
-            if category=='Category':
-                color=data_class['category']
-                symbol=None
-            else:
-                color=data_class['subcategory']
-                symbol=data_class['subsubcategory']            
-            
-            if st.sidebar.checkbox('Marker attributes'):
-                marker_size = st.sidebar.expander('Size of marker', False)                
-                marker_size = marker_size.number_input('Set the Size of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=12, step=1)
-                marker_size = int(marker_size)                
-                marker_line_col = st.sidebar.expander('Line color of marker', False) 
-                marker_line_col = marker_line_col.selectbox('Select the Line color of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', col)
-                marker_line_width = st.sidebar.expander('Line width of marker', False)                 
-                marker_line_width = marker_line_width.number_input('Set the Line width of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=1, step=1)
-                opacity = st.sidebar.expander('Opacity of marker', False)                
-                opacity = opacity.number_input('Set the Opacity of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
-                        
-            fig = px.scatter_ternary(data_class, a=data_class['SiO2']/20, b=data_class['K2O'] + data_class['Na2O'], c=data_class['TiO2'] + data_class['MgO'] + data_class['Fe2O3'], opacity=opacity, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
-                
-            fig.update_layout({'ternary': {'sum': 100}})
-            fig.update_ternaries(bgcolor='yellow')
-            fig.update_traces(marker=dict(size=marker_size, line=dict(width=marker_line_width, color=marker_line_col)), selector=dict(mode='markers'))
+            # selection of classification diagram
+            class_type = st.sidebar.radio('Classification diagram:',['SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', 'log(Fe2O3/K2O) - log(SiO2/Al2O3)'])
 
-            fig.update_layout({
-                'ternary':
-                    {
-                    'sum':100,
-                    'aaxis':{'title': 'SiO<sub>2</sub>/20'},
-                    'baxis':{'title': 'K<sub>2</sub>O + Na<sub>2</sub>O'},
-                    'caxis':{'title': 'TiO<sub>2</sub> + MgO + Fe<sub>2</sub>O<sub>3</sub>'}
-                    }
-            })                 
-            
-        if class_type == 'log(Fe2O3/K2O) - log(SiO2/Al2O3)':
-            marker_color = color = width = None
-            size = 12
-            symbol = 0
+            if class_type == 'SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3':
+                marker_size = 12
+                marker_line_col = marker_line_width = None
+                category = st.sidebar.expander('Categorization', False)
+                category = category.radio('Categorization of Compositional space diagram',['Category','Subcategory'])
+                if category=='Category':
+                    color=data_class['category']
+                    symbol=None
+                else:
+                    color=data_class['subcategory']
+                    symbol=data_class['subsubcategory']            
 
-            if st.sidebar.checkbox('Marker attributes'):
-                marker = st.sidebar.expander('Symbol', False)
-                symbol = marker.number_input('Set the Symbol of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0, max_value=24, value=0, step=1)
-                symbol = int(symbol)                
-                if st.sidebar.checkbox('Symbol variant'):
-                    variant = st.sidebar.expander('Symbol variant', False)
-                    variant = variant.radio('Select a variant:',['open', 'dot', 'open-dot'])
-                    if variant=='open':
-                        symbol = symbol+100
-                    if variant=='dot':
-                        symbol = symbol+200
-                    if variant=='open-dot':
-                        symbol = symbol+300                
-                marker_color = st.sidebar.expander('Color of marker', False)
-                marker_color = marker_color.selectbox('Select the Color of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
-                size = st.sidebar.expander('Size of marker', False)
-                size = size.number_input('Set the Size of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=12, step=1)
-                size = int(size)                
-                color = st.sidebar.expander('Line color of marker', False)
-                color = color.selectbox('Select the Line color of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
-                width = st.sidebar.expander('Line width of marker', False)                
-                width = width.number_input('Set the Line width of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=2, step=1)
-                width = int(width)
-                opacity = st.sidebar.expander('Opacity of marker', False)                  
-                opacity = opacity.number_input('Set the Opacity of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
-            
-            x = np.log(data_class['SiO2']/data_class['Al2O3'])
-            y = np.log(data_class['Fe2O3']/data_class['K2O'])                
+                if st.sidebar.checkbox('Marker attributes'):
+                    marker_size = st.sidebar.expander('Size of marker', False)                
+                    marker_size = marker_size.number_input('Set the Size of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=12, step=1)
+                    marker_size = int(marker_size)                
+                    marker_line_col = st.sidebar.expander('Line color of marker', False) 
+                    marker_line_col = marker_line_col.selectbox('Select the Line color of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', col)
+                    marker_line_width = st.sidebar.expander('Line width of marker', False)                 
+                    marker_line_width = marker_line_width.number_input('Set the Line width of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=1, step=1)
+                    opacity = st.sidebar.expander('Opacity of marker', False)                
+                    opacity = opacity.number_input('Set the Opacity of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
 
-            fig = go.Figure()
+                fig = px.scatter_ternary(data_class, a=data_class['SiO2']/20, b=data_class['K2O'] + data_class['Na2O'], c=data_class['TiO2'] + data_class['MgO'] + data_class['Fe2O3'], opacity=opacity, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
 
-            fig.add_trace(go.Scatter(x=x, y=y, opacity=opacity, marker_symbol=symbol, mode='markers', marker=dict(color=marker_color, size=size, opacity=opacity, line=dict(color=color,width=width))))
+                fig.update_layout({'ternary': {'sum': 100}})
+                fig.update_ternaries(bgcolor='yellow')
+                fig.update_traces(marker=dict(size=marker_size, line=dict(width=marker_line_width, color=marker_line_col)), selector=dict(mode='markers'))
 
-            color = width = None
-            if st.sidebar.checkbox('Overlay attributes'):
-                color = st.sidebar.expander('Color of overlay', False)                  
-                color = color.selectbox('Select the Color of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
-                width = st.sidebar.expander('Width of overlay', False)                  
-                width = width.number_input('Select the Width of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=2, step=1)
-                width = int(width)                 
-                opacity = st.sidebar.expander('Opacity of overlay', False)                 
-                opacity = opacity.number_input('Set the Opacity of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
-            
-            # boundaries overlay            
-            # boundary between Shale and Fe-shale
-            x_overlay = [+0.00, +0.71]
-            y_overlay = [+0.60, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
-            # boundary between Fe-shale and Fe-sand
-            x_overlay = [+0.71, +0.71]
-            y_overlay = [+0.60, +1.50]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                        
-            # boundary between Wacke and Shale
-            x_overlay = [+0.55, +0.71]
-            y_overlay = [-0.10, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
-            # boundary between Wacke and Fe-sand
-            x_overlay = [+0.71, +0.87]
-            y_overlay = [+0.60, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
-            # boundary between Litharenite and Fe-sand
-            x_overlay = [+0.87, +1.14]
-            y_overlay = [+0.60, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
-            # boundary between Sublitharenite and Fe-sand
-            x_overlay = [+1.14, +1.70]
-            y_overlay = [+0.60, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-            # boundary between Arkose and Wacke
-            x_overlay = [+0.64, +0.76]
-            y_overlay = [-0.50, +0.00]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
-            # boundary between Litharenite and Wacke
-            x_overlay = [+0.76, +0.87]
-            y_overlay = [+0.00, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))  
-            # boundary between Arkose, Litharenite and Subarkose, Sublitharenite
-            x_overlay = [+1.00, +1.14]
-            y_overlay = [-1.00, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width))) 
-            # boundary between Arkose, Subarkose and Litharenite, Sublitharenite
-            x_overlay = [+0.76, +1.68]
-            y_overlay = [+0.00, +0.00]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                          
-            # boundary between Subarkose and Quartz arenite 
-            x_overlay = [+1.60, +1.68]
-            y_overlay = [-1.00, +0.00]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
-            # boundary between Sublitharenite and Quartz arenite 
-            x_overlay = [+1.68, +1.70]
-            y_overlay = [+0.00, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                
-            # boundary between Fe-sand and Quartz arenite 
-            x_overlay = [+1.80, +1.70]
-            y_overlay = [+1.50, +0.60]            
-            fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
-            
-            # text annotation
-            size = 16
-            color = 'Black'
-            opacity = 0.8
-            if st.sidebar.checkbox('Text attributes'):
-                size = st.sidebar.expander('Size of text', False)                 
-                size = size.number_input('Select the Size of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=20, step=1)
-                size = int(size) 
-                color = st.sidebar.expander('Color of text', False)  
-                color = color.selectbox('Select the Color of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3)', text_col)                
-                opacity = st.sidebar.expander('Opacity of text', False)                  
-                opacity = opacity.number_input('Set the Opacity of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
-            
-            # text overlay
-            fig.add_annotation(x=0.35, y=1,text="Fe-shale",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
-            fig.add_annotation(x=0.35, y=0,text="Shale",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)            
-            fig.add_annotation(x=1.2, y=1,text="Fe-sand",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
-            fig.add_annotation(x=1.4, y=0.25,text="Sublitharenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
-            fig.add_annotation(x=1.4, y=-0.5,text="Subarkose",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
-            fig.add_annotation(x=0.97, y=0.3,text="Litharenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
-            fig.add_annotation(x=0.9, y=-0.5,text="Arkose",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
-            fig.add_annotation(x=0.7, y=0.16,text="Wacke",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity, xref="x", yref="y", textangle=-35)            
-            fig.add_annotation(x=1.9, y=0.5,text="Quartz arenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)            
+                fig.update_layout({
+                    'ternary':
+                        {
+                        'sum':100,
+                        'aaxis':{'title': 'SiO<sub>2</sub>/20'},
+                        'baxis':{'title': 'K<sub>2</sub>O + Na<sub>2</sub>O'},
+                        'caxis':{'title': 'TiO<sub>2</sub> + MgO + Fe<sub>2</sub>O<sub>3</sub>'}
+                        }
+                })                 
 
-            fig.update_layout(yaxis_title="log(Fe<sub>2</sub>O<sub>3</sub>/K<sub>2</sub>O)", xaxis_title="log(SiO<sub>2</sub>/Al<sub>2</sub>O<sub>3</sub>)", showlegend=False)
+            if class_type == 'log(Fe2O3/K2O) - log(SiO2/Al2O3)':
+                marker_color = color = width = None
+                size = 12
+                symbol = 0
+
+                if st.sidebar.checkbox('Marker attributes'):
+                    marker = st.sidebar.expander('Symbol', False)
+                    symbol = marker.number_input('Set the Symbol of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0, max_value=24, value=0, step=1)
+                    symbol = int(symbol)                
+                    if st.sidebar.checkbox('Symbol variant'):
+                        variant = st.sidebar.expander('Symbol variant', False)
+                        variant = variant.radio('Select a variant:',['open', 'dot', 'open-dot'])
+                        if variant=='open':
+                            symbol = symbol+100
+                        if variant=='dot':
+                            symbol = symbol+200
+                        if variant=='open-dot':
+                            symbol = symbol+300                
+                    marker_color = st.sidebar.expander('Color of marker', False)
+                    marker_color = marker_color.selectbox('Select the Color of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
+                    size = st.sidebar.expander('Size of marker', False)
+                    size = size.number_input('Set the Size of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=12, step=1)
+                    size = int(size)                
+                    color = st.sidebar.expander('Line color of marker', False)
+                    color = color.selectbox('Select the Line color of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
+                    width = st.sidebar.expander('Line width of marker', False)                
+                    width = width.number_input('Set the Line width of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=2, step=1)
+                    width = int(width)
+                    opacity = st.sidebar.expander('Opacity of marker', False)                  
+                    opacity = opacity.number_input('Set the Opacity of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
+
+                x = np.log(data_class['SiO2']/data_class['Al2O3'])
+                y = np.log(data_class['Fe2O3']/data_class['K2O'])                
+
+                fig = go.Figure()
+
+                fig.add_trace(go.Scatter(x=x, y=y, opacity=opacity, marker_symbol=symbol, mode='markers', marker=dict(color=marker_color, size=size, opacity=opacity, line=dict(color=color,width=width))))
+
+                color = width = None
+                if st.sidebar.checkbox('Overlay attributes'):
+                    color = st.sidebar.expander('Color of overlay', False)                  
+                    color = color.selectbox('Select the Color of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
+                    width = st.sidebar.expander('Width of overlay', False)                  
+                    width = width.number_input('Select the Width of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=2, step=1)
+                    width = int(width)                 
+                    opacity = st.sidebar.expander('Opacity of overlay', False)                 
+                    opacity = opacity.number_input('Set the Opacity of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
+
+                # boundaries overlay            
+                # boundary between Shale and Fe-shale
+                x_overlay = [+0.00, +0.71]
+                y_overlay = [+0.60, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
+                # boundary between Fe-shale and Fe-sand
+                x_overlay = [+0.71, +0.71]
+                y_overlay = [+0.60, +1.50]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                        
+                # boundary between Wacke and Shale
+                x_overlay = [+0.55, +0.71]
+                y_overlay = [-0.10, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
+                # boundary between Wacke and Fe-sand
+                x_overlay = [+0.71, +0.87]
+                y_overlay = [+0.60, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
+                # boundary between Litharenite and Fe-sand
+                x_overlay = [+0.87, +1.14]
+                y_overlay = [+0.60, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
+                # boundary between Sublitharenite and Fe-sand
+                x_overlay = [+1.14, +1.70]
+                y_overlay = [+0.60, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+                # boundary between Arkose and Wacke
+                x_overlay = [+0.64, +0.76]
+                y_overlay = [-0.50, +0.00]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
+                # boundary between Litharenite and Wacke
+                x_overlay = [+0.76, +0.87]
+                y_overlay = [+0.00, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))  
+                # boundary between Arkose, Litharenite and Subarkose, Sublitharenite
+                x_overlay = [+1.00, +1.14]
+                y_overlay = [-1.00, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width))) 
+                # boundary between Arkose, Subarkose and Litharenite, Sublitharenite
+                x_overlay = [+0.76, +1.68]
+                y_overlay = [+0.00, +0.00]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                          
+                # boundary between Subarkose and Quartz arenite 
+                x_overlay = [+1.60, +1.68]
+                y_overlay = [-1.00, +0.00]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))            
+                # boundary between Sublitharenite and Quartz arenite 
+                x_overlay = [+1.68, +1.70]
+                y_overlay = [+0.00, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))                
+                # boundary between Fe-sand and Quartz arenite 
+                x_overlay = [+1.80, +1.70]
+                y_overlay = [+1.50, +0.60]            
+                fig.add_trace(go.Scatter(x=x_overlay, y=y_overlay, opacity=opacity, mode='lines', line=dict(color=color, width=width)))
+
+                # text annotation
+                size = 16
+                color = 'Black'
+                opacity = 0.8
+                if st.sidebar.checkbox('Text attributes'):
+                    size = st.sidebar.expander('Size of text', False)                 
+                    size = size.number_input('Select the Size of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=20, step=1)
+                    size = int(size) 
+                    color = st.sidebar.expander('Color of text', False)  
+                    color = color.selectbox('Select the Color of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3)', text_col)                
+                    opacity = st.sidebar.expander('Opacity of text', False)                  
+                    opacity = opacity.number_input('Set the Opacity of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
+
+                # text overlay
+                fig.add_annotation(x=0.35, y=1,text="Fe-shale",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+                fig.add_annotation(x=0.35, y=0,text="Shale",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)            
+                fig.add_annotation(x=1.2, y=1,text="Fe-sand",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+                fig.add_annotation(x=1.4, y=0.25,text="Sublitharenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+                fig.add_annotation(x=1.4, y=-0.5,text="Subarkose",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+                fig.add_annotation(x=0.97, y=0.3,text="Litharenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+                fig.add_annotation(x=0.9, y=-0.5,text="Arkose",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
+                fig.add_annotation(x=0.7, y=0.16,text="Wacke",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity, xref="x", yref="y", textangle=-35)            
+                fig.add_annotation(x=1.9, y=0.5,text="Quartz arenite",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)            
+
+                fig.update_layout(yaxis_title="log(Fe<sub>2</sub>O<sub>3</sub>/K<sub>2</sub>O)", xaxis_title="log(SiO<sub>2</sub>/Al<sub>2</sub>O<sub>3</sub>)", showlegend=False)
+
+            st.plotly_chart(fig, use_container_width=True)
+
+            # exporting the plot to the local machine
+            with st.expander("Click to export Classification diagram"):
+                plot_html(fig)
+
+#         # Discrimination diagram
+#         if st.sidebar.checkbox('Discrimination diagram'):
+#             st.header('Discrimination diagram')            
+            
+#             # line segment intersection using vectors
+#             # see Computer Graphics by Hill (2008)
+#             def perp (a):
+#                 b = empty_like(a)
+#                 b[0] = -a[1]
+#                 b[1] = a[0]
+#                 return b
+
+#             # line segment a given by endpoints a1, a2
+#             # line segment b given by endpoints b1, b2
+#             # return 
+#             def seg_intersect (a1,a2, b1,b2):
+#                 da = a2-a1
+#                 db = b2-b1
+#                 dp = a1-b1
+#                 dap = perp (da)
+#                 denom = dot (dap, db)
+#                 num = dot (dap, dp )
+#                 return (num / denom)*db + b1
+            
+#             p1 = array( [-6.0, +6.0] )
+#             p2 = array( [-3.0, -4.8] )
+
+#             p3 = array( [+4.0, -5.0] )
+#             p4 = array( [+4.0, +2.0] )
+
+#             st.write(seg_intersect(p1,p2,p3,p4))
         
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # exporting the plot to the local machine
-        with st.expander("Click to export Classification diagram"):
-            plot_html(fig)
+#             # selection of discrimination diagram
+#             dis_type = st.sidebar.radio('Discrimination diagram:',['SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', 'log(Fe2O3/K2O) - log(SiO2/Al2O3)'])
 
 	    # Harker diagram
     if st.sidebar.checkbox('Harker diagram'):
@@ -881,7 +919,7 @@ def data_analysis():
         fig.update_layout(xaxis_title='SiO<sub>2</sub> (%)', yaxis_title='Oxide (%)', showlegend=True)   
         
         st.plotly_chart(fig, use_container_width=True)
-        
+
     # boxplot
     def box(x,y,color):
         box = px.box(data, x=x, y=y, color=color)
