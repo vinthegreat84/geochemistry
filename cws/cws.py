@@ -87,7 +87,7 @@ def data_analysis():
     data = st.sidebar.selectbox('Select Dataset',('Example data', 'User data'))
 
     st.write(data)
-
+    
     def get_data(name):
         data = None
         if name == 'Example data':
@@ -636,19 +636,33 @@ def data_analysis():
                     opacity = st.sidebar.expander('Opacity of marker', False)                
                     opacity = opacity.number_input('Set the Opacity of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
 
-                fig = px.scatter_ternary(data_class, a=data_class['SiO2']/20, b=data_class['K2O'] + data_class['Na2O'], c=data_class['TiO2'] + data_class['MgO'] + data_class['Fe2O3'], opacity=opacity, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
+                fig = px.scatter_ternary(data_class, a=data_class['SiO2']/20, b=data_class['TiO2'] + data_class['MgO'] + data_class['Fe2O3'], c=data_class['K2O'] + data_class['Na2O'], opacity=opacity, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
 
+                line_color = 'gray'
+                line_width = 10
+                opacity = 0.5
+                if st.sidebar.checkbox('Overlay attributes'):
+                    line_color = st.sidebar.expander('Line color of overlay', False) 
+                    line_color = line_color.selectbox('Select the Line color of overlay of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', col)            
+                    line_width = st.sidebar.expander('Line width of overlay', False)                 
+                    line_width = line_width.number_input('Set the Line width of overlay of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=1, step=1)                   
+                    opacity = st.sidebar.expander('Opacity of overlay', False)                
+                    opacity = opacity.number_input('Set the Opacity of overlay of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)  
+                fig.add_scatterternary(a=[10], b=[80], mode='text', text='immature', opacity=opacity, showlegend=False)
+                fig.add_scatterternary(a=[80], b=[14], mode='text', text='mature', opacity=opacity, showlegend=False)                
+                fig.add_scatterternary(a=[89,37,26,19,13,8,7,5], b=[4,23,29,34,40,48,55,80], mode='lines', marker=dict(color=line_color),line=dict(width=line_width), opacity=opacity, showlegend=False)
+            
                 fig.update_layout({'ternary': {'sum': 100}})
                 fig.update_ternaries(bgcolor='yellow')
-                fig.update_traces(marker=dict(size=marker_size, line=dict(width=marker_line_width, color=marker_line_col)), selector=dict(mode='markers'))
+                fig.update_traces(marker=dict(size=marker_size, line=dict(width=marker_line_width, color=marker_line_col)), selector=dict(mode='markers'))                
 
                 fig.update_layout({
                     'ternary':
                         {
                         'sum':100,
                         'aaxis':{'title': 'SiO<sub>2</sub>/20'},
-                        'baxis':{'title': 'K<sub>2</sub>O + Na<sub>2</sub>O'},
-                        'caxis':{'title': 'TiO<sub>2</sub> + MgO + Fe<sub>2</sub>O<sub>3</sub>'}
+                        'baxis':{'title': 'TiO<sub>2</sub> + MgO + Fe<sub>2</sub>O<sub>3</sub>'},             
+                        'caxis':{'title': 'K<sub>2</sub>O + Na<sub>2</sub>O'}
                         }
                 })                 
 
