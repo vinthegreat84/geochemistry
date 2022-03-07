@@ -613,7 +613,7 @@ def data_analysis():
             marker_size = 12
             marker_line_col = marker_line_width = None
             category = st.sidebar.expander('Categorization', False)
-            category = category.radio('Categorization of Compositional space diagram',['Category','Subcategory'])
+            category = category.radio('Categorization of the sample',['Category','Subcategory'])
             if category=='Category':
                 color=data_class['category']
                 symbol=None
