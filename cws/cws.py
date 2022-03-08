@@ -929,6 +929,11 @@ def data_analysis():
         fig.update_layout(xaxis_title='SiO<sub>2</sub> (%)', yaxis_title='Oxide (%)', showlegend=True)   
         
         st.plotly_chart(fig, use_container_width=True)
+        
+        # exporting the plot to the local machine
+        with st.expander("Click to export Harker diagram"):
+            if st.button("Harker diagram as HTML"):
+                plot_html(fig)
 
     # boxplot
     def box(x,y,color):
