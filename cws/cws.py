@@ -60,8 +60,8 @@ def home():
     st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering proxy with variable-based marker size, linear/non-linear trendline & axes, and marginal distribution.')
     st.write('**Trivariate plot:** Trivariate plot between oxide and/or weathering proxy with variable-based marker size and linear/non-linear trendline & axes.')
     st.write('**Ternary plot:** Ternary plot between oxide and/or weathering proxy.')    
-    st.write('**Compositional space diagram:** Compositional space diagrams including A - CN - K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A - CNK - FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M - F - W compositional space diagram after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
-    st.write('**Chemical classification** Chemical classification including ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after [**Kroonenberg, 1990**](https://doi.org/10.1016/0009-2541(90)90172-4) and binary plot of log(Fe2O3/K2O) - log(SiO2/Al2O3) after [**Herron, 1988**](https://doi.org/10.1306/212F8E77-2B24-11D7-8648000102C1865D).')
+    st.write('**Compositional space diagram:** Compositional space diagrams including A — C — N compositional space diagram after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); A — CN — K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A-K — C — N compositional space diagram after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); A — N — K compositional space diagram after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); A — CNK — FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M — F — W compositional space diagram after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
+    st.write('**Chemical classification** Chemical classification including ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after [**Kroonenberg, 1990**](https://doi.org/10.1016/0009-2541(90)90172-4) and binary plot of log(Fe2O3/K2O) — log(SiO2/Al2O3) after [**Herron, 1988**](https://doi.org/10.1306/212F8E77-2B24-11D7-8648000102C1865D).')
     st.write('**Harker diagram** Harker variation diagram of oxides against SiO2.')    
     st.write('**Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.')        
 ##############################################################################################################
@@ -533,15 +533,37 @@ def data_analysis():
             color=data_csd['subcategory']
             symbol=data_csd['subsubcategory']        
         csd_type = st.sidebar.expander('Compositional space diagram', False)         
-        csd_type = csd_type.radio('Compositional space diagram:',['A - CN - K', 'A - CNK - FM', 'M - F - W'])
-        a=data_csd['molar_Al2O3']
-        if csd_type == 'A - CN - K':
+        csd_type = csd_type.radio('Compositional space diagram:',['A — C — N', 'A — CN — K', 'A-K — C — N', 'A — N — K', 'A — CNK — FM', 'M — F — W'])
+        if csd_type == 'A — C — N':
+            a=data_csd['molar_Al2O3']            
+            b=data_csd['molar_CaO*']            
+            c=data_csd['molar_Na2O']
+            title_a = 'Al<sub>2</sub>O<sub>3</sub>'
+            title_b = 'CaO*'
+            title_c = 'Na<sub>2</sub>O'      
+        elif csd_type == 'A — CN — K':
+            a=data_csd['molar_Al2O3']            
             b=data_csd['molar_CaO*'] + data_csd['molar_Na2O']            
             c=data_csd['molar_K2O']
             title_a = 'Al<sub>2</sub>O<sub>3</sub>'
-            title_b = 'CaO*+Na<sub>2</sub>O'
+            title_b = 'CaO*+Na<sub>2</sub>O+Na<sub>2</sub>O'
             title_c = 'K<sub>2</sub>O'
-        elif csd_type == 'A - CNK - FM':
+        elif csd_type == 'A-K — C — N':
+            a=data_csd['molar_Al2O3'] - data_csd['molar_K2O']            
+            b=data_csd['molar_CaO*']            
+            c=data_csd['molar_Na2O']
+            title_a = 'Al<sub>2</sub>O<sub>3</sub>-K<sub>2</sub>O'
+            title_b = 'CaO*'
+            title_c = 'Na<sub>2</sub>O' 
+        elif csd_type == 'A — N — K':
+            a=data_csd['molar_Al2O3']            
+            b=data_csd['molar_Na2O']            
+            c=data_csd['molar_K2O']
+            title_a = 'Al<sub>2</sub>O<sub>3</sub>'
+            title_b = 'Na<sub>2</sub>O'
+            title_c = 'K<sub>2</sub>O'            
+        elif csd_type == 'A — CNK — FM':
+            a=data_csd['molar_Al2O3']            
             b=data_csd['molar_CaO*'] + data_csd['molar_Na2O'] + data_csd['molar_K2O']           
             c=data_csd['molar_Fe2O3'] + data_csd['molar_MgO']
             title_a = 'Al<sub>2</sub>O<sub>3</sub>'
@@ -607,9 +629,9 @@ def data_analysis():
         opacity = 1 # default
         
         # selection of classification diagram
-        class_type = st.sidebar.radio('Classification diagram:',['SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', 'log(Fe2O3/K2O) - log(SiO2/Al2O3)'])
+        class_type = st.sidebar.radio('Classification diagram:',['SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3', 'log(Fe2O3/K2O) — log(SiO2/Al2O3)'])
 
-        if class_type == 'SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3':
+        if class_type == 'SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3':
             marker_size = 12
             marker_line_col = marker_line_width = None
             category = st.sidebar.expander('Categorization', False)
@@ -623,14 +645,14 @@ def data_analysis():
 
             if st.sidebar.checkbox('Marker attributes'):
                 marker_size = st.sidebar.expander('Size of marker', False)                
-                marker_size = marker_size.number_input('Set the Size of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=12, step=1)
+                marker_size = marker_size.number_input('Set the Size of marker of SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3:', min_value=1, value=12, step=1)
                 marker_size = int(marker_size)                
                 marker_line_col = st.sidebar.expander('Line color of marker', False) 
-                marker_line_col = marker_line_col.selectbox('Select the Line color of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', col)
+                marker_line_col = marker_line_col.selectbox('Select the Line color of marker of SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3', col)
                 marker_line_width = st.sidebar.expander('Line width of marker', False)                 
-                marker_line_width = marker_line_width.number_input('Set the Line width of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=1, step=1)
+                marker_line_width = marker_line_width.number_input('Set the Line width of marker of SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3:', min_value=1, value=1, step=1)
                 opacity = st.sidebar.expander('Opacity of marker', False)                
-                opacity = opacity.number_input('Set the Opacity of marker of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
+                opacity = opacity.number_input('Set the Opacity of marker of SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
 
             fig = px.scatter_ternary(data_class, a=data_class['SiO2']/20, b=data_class['TiO2'] + data_class['MgO'] + data_class['Fe2O3'], c=data_class['K2O'] + data_class['Na2O'], opacity=opacity, color=color, symbol=symbol, hover_name=hover_name, color_discrete_sequence=px.colors.qualitative.Antique)
 
@@ -639,11 +661,11 @@ def data_analysis():
             opacity = 0.5
             if st.sidebar.checkbox('Overlay attributes'):
                 line_color = st.sidebar.expander('Line color of overlay', False) 
-                line_color = line_color.selectbox('Select the Line color of overlay of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3', col)            
+                line_color = line_color.selectbox('Select the Line color of overlay of SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3', col)            
                 line_width = st.sidebar.expander('Line width of overlay', False)                 
-                line_width = line_width.number_input('Set the Line width of overlay of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=1, value=1, step=1)                   
+                line_width = line_width.number_input('Set the Line width of overlay of SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3:', min_value=1, value=1, step=1)                   
                 opacity = st.sidebar.expander('Opacity of overlay', False)                
-                opacity = opacity.number_input('Set the Opacity of overlay of SiO2/20 - K2O+Na2O - TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)  
+                opacity = opacity.number_input('Set the Opacity of overlay of SiO2/20 — K2O+Na2O — TiO2+MgO+Fe2O3:', min_value=0.1, max_value=1.0, value=0.5, step=0.1)  
             fig.add_scatterternary(a=[10], b=[80], mode='text', text='immature', opacity=opacity, showlegend=False)
             fig.add_scatterternary(a=[80], b=[14], mode='text', text='mature', opacity=opacity, showlegend=False)                
             fig.add_scatterternary(a=[89,37,26,19,13,8,7,5], b=[4,23,29,34,40,48,55,80], mode='lines', marker=dict(color=line_color),line=dict(width=line_width), opacity=opacity, showlegend=False)
@@ -662,14 +684,14 @@ def data_analysis():
                     }
             })                 
 
-        if class_type == 'log(Fe2O3/K2O) - log(SiO2/Al2O3)':
+        if class_type == 'log(Fe2O3/K2O) — log(SiO2/Al2O3)':
             marker_color = color = width = None
             size = 12
             symbol = 0
 
             if st.sidebar.checkbox('Marker attributes'):
                 marker = st.sidebar.expander('Symbol', False)
-                symbol = marker.number_input('Set the Symbol of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0, max_value=24, value=0, step=1)
+                symbol = marker.number_input('Set the Symbol of marker of log(Fe2O3/K2O) — log(SiO2/Al2O3):', min_value=0, max_value=24, value=0, step=1)
                 symbol = int(symbol)                
                 if st.sidebar.checkbox('Symbol variant'):
                     variant = st.sidebar.expander('Symbol variant', False)
@@ -683,15 +705,15 @@ def data_analysis():
                 marker_color = st.sidebar.expander('Color of marker', False)
                 marker_color = marker_color.selectbox('Select the Color of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
                 size = st.sidebar.expander('Size of marker', False)
-                size = size.number_input('Set the Size of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=12, step=1)
+                size = size.number_input('Set the Size of marker of log(Fe2O3/K2O) — log(SiO2/Al2O3):', min_value=1, value=12, step=1)
                 size = int(size)                
                 color = st.sidebar.expander('Line color of marker', False)
-                color = color.selectbox('Select the Line color of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
+                color = color.selectbox('Select the Line color of marker of log(Fe2O3/K2O) — log(SiO2/Al2O3)', col)
                 width = st.sidebar.expander('Line width of marker', False)                
-                width = width.number_input('Set the Line width of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=2, step=1)
+                width = width.number_input('Set the Line width of marker of log(Fe2O3/K2O) — log(SiO2/Al2O3):', min_value=1, value=2, step=1)
                 width = int(width)
                 opacity = st.sidebar.expander('Opacity of marker', False)                  
-                opacity = opacity.number_input('Set the Opacity of marker of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
+                opacity = opacity.number_input('Set the Opacity of marker of log(Fe2O3/K2O) — log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1)                 
 
             x = np.log(data_class['SiO2']/data_class['Al2O3'])
             y = np.log(data_class['Fe2O3']/data_class['K2O'])                
@@ -703,12 +725,12 @@ def data_analysis():
             color = width = None
             if st.sidebar.checkbox('Overlay attributes'):
                 color = st.sidebar.expander('Color of overlay', False)                  
-                color = color.selectbox('Select the Color of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3)', col)
+                color = color.selectbox('Select the Color of overlay of log(Fe2O3/K2O) — log(SiO2/Al2O3)', col)
                 width = st.sidebar.expander('Width of overlay', False)                  
-                width = width.number_input('Select the Width of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=2, step=1)
+                width = width.number_input('Select the Width of overlay of log(Fe2O3/K2O) — log(SiO2/Al2O3):', min_value=1, value=2, step=1)
                 width = int(width)                 
                 opacity = st.sidebar.expander('Opacity of overlay', False)                 
-                opacity = opacity.number_input('Set the Opacity of overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
+                opacity = opacity.number_input('Set the Opacity of overlay of log(Fe2O3/K2O) — log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
 
             # boundaries overlay            
             # boundary between Shale and Fe-shale
@@ -770,12 +792,12 @@ def data_analysis():
             opacity = 0.8
             if st.sidebar.checkbox('Text attributes'):
                 size = st.sidebar.expander('Size of text', False)                 
-                size = size.number_input('Select the Size of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=1, value=20, step=1)
+                size = size.number_input('Select the Size of text overlay of log(Fe2O3/K2O) — log(SiO2/Al2O3):', min_value=1, value=20, step=1)
                 size = int(size) 
                 color = st.sidebar.expander('Color of text', False)  
-                color = color.selectbox('Select the Color of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3)', text_col)                
+                color = color.selectbox('Select the Color of text overlay of log(Fe2O3/K2O) — log(SiO2/Al2O3)', text_col)                
                 opacity = st.sidebar.expander('Opacity of text', False)                  
-                opacity = opacity.number_input('Set the Opacity of text overlay of log(Fe2O3/K2O) - log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
+                opacity = opacity.number_input('Set the Opacity of text overlay of log(Fe2O3/K2O) — log(SiO2/Al2O3):', min_value=0.1, max_value=1.0, value=0.5, step=0.1) 
 
             # text overlay
             fig.add_annotation(x=0.35, y=1,text="Fe-shale",showarrow=False,font=dict(family="Times New Roman",size=size,color=color),opacity=opacity)
