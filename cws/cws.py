@@ -56,7 +56,7 @@ def home():
     st.write('**Data panel:** Selection of the major elemental geochemical dataset.')
     st.write('**Data filter:** Data filter based on sample/category/subcategory/subsubcategory.')
     st.write('**Major Oxides variation**: Variation of major oxides against samples.')
-    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Index of Weathering without CaO (CIW*) after [**Cullers, 2000**](https://doi.org/10.1016/S0024-4937(99)00063-8); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and chemical proxies like SiO2/Al2O3, K2O/Al2O3, K2O/Na2O, Al2O3/TiO2.')
+    st.write('**Weathering proxy:** Data table of chemical weathering indices including Chemical Index of Weathering (CIW) after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); Chemical Index of Weathering without CaO (CIW*) after [**Cullers, 2000**](https://doi.org/10.1016/S0024-4937(99)00063-8); Chemical Proxy of Alteration (CPA) after [**Buggle et al., 2011**](https://doi.org/10.1016/j.quaint.2010.07.019); Chemical Index of Alteration (CIA) after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); Plagioclase Index of Alteration (PIA) after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); Modified Chemical Index of Alteration (CIX) after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); Index of Compositional Variability (ICV) after [**Cox et al., 1995**](https://doi.org/10.1016/0016-7037(95)00185-9); Vogt Residual Index (V) after [**Vogt, 1927**] (https://amazon.com/NORGES-GEOLOGISKE-UNDERSOKELSE-NR-SULITELMAFELTETS/dp/B00866EGEG); Silica‐Titania Index (STI) after [**de Jayawardena and Izawa, 1994**](https://doi.org/10.1016/0013-7952(94)90011-6); Soil-forming Factor (SF) after [**Jenny, 1941**](https://doi.org/10.2134/agronj1941.00021962003300090016x); Ruxton Ratio (R) after [**Ruxton, 1968**](https://doi.org/10.1086/627357); Weathering Index of Parker (WIP) after [**Parker, 1970**](https://doi.org/10.1017/S0016756800058581) and chemical proxies like SiO2/Al2O3, K2O/Al2O3, K2O/Na2O, Al2O3/TiO2.')
     st.write('**Bivariate plot:** Bivariate plot between oxide and/or weathering proxy with variable-based marker size, linear/non-linear trendline & axes, and marginal distribution.')
     st.write('**Trivariate plot:** Trivariate plot between oxide and/or weathering proxy with variable-based marker size and linear/non-linear trendline & axes.')
     st.write('**Ternary plot:** Ternary plot between oxide and/or weathering proxy.')    
@@ -270,9 +270,21 @@ def data_analysis():
 
     # Index of Compositional Variability (ICV) after Cox et al., 1995
     data['(ICV)'] = (data['Fe2O3'] + data['K2O'] + data['Na2O'] + data['CaO'] + data['MgO'] + data['MnO'] + data['TiO2']) / data['Al2O3']
+    
+    # Vogt's Residual Index (V) after Vogt, 1927
+    data['(V)'] = (data['molar_Al2O3'] + data['molar_K2O']) / (data['molar_MgO'] + data['molar_CaO*'] + data['molar_Na2O'])
+
+    # Silica‐Titania Index (STI) after de Jayawardena and Izawa, 1994
+    data['(STI)'] = 100 * (data['molar_SiO2']/data['molar_TiO2'] / (data['molar_SiO2']/data['molar_TiO2'] + data['molar_SiO2']/data['molar_Al2O3'] + data['molar_Al2O3']/data['molar_TiO2']))    
+    
+    # Soil-forming Factor (SF) after Jenny, 1941
+    data['(SF)'] = data['molar_SiO2']/data['molar_Fe2O3']
+    
+    # Ruxton Ratio (R) after Ruxton, 1968
+    data['(R)'] = data['molar_SiO2']/data['molar_Al2O3']    
 
     # Weathering Index of Parker (WIP) after Parker, 1970
-    data['(WIP)'] = 100 * (2*data['molar_Na2O']/0.35 + data['molar_MgO']/0.9 + 2*data['molar_K2O']/0.25 + data['molar_CaO*']/0.7)
+    data['(WIP)'] = 100 * (2*data['molar_Na2O']/0.35 + data['molar_MgO']/0.9 + 2*data['molar_K2O']/0.25 + data['molar_CaO*']/0.7)    
     
     # ratios
     data['SiO2/Al2O3'] = data['SiO2'] / data['Al2O3']
@@ -282,7 +294,7 @@ def data_analysis():
         
     if st.sidebar.checkbox('Weathering proxy'):
         st.header('Weathering proxy')
-        proxy =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CIW*)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","K2O/Na2O","Al2O3/TiO2"]
+        proxy =['sample','category','subcategory','subsubcategory','reference','(CIW)','(CIW*)','(CPA)','(CIA)','(PIA)','(CIX)','(ICV)','(V)','(STI)','(SF)','(R)','(WIP)','SiO2/Al2O3','K2O/Al2O3','K2O/Na2O','Al2O3/TiO2']
         proxy=data[proxy]
         st.write(proxy)
         
@@ -297,7 +309,7 @@ def data_analysis():
         if st.sidebar.checkbox('Weathering proxy variation'):
             st.header('Weathering proxy variation')
 
-            var_proxy = px.line(proxy, x='sample', y=['(CIW)','(CIW*)','(CPA)','(CIA)','(PIA)','(CIX)','(ICV)','(WIP)','SiO2/Al2O3','K2O/Al2O3','K2O/Na2O','Al2O3/TiO2'])
+            var_proxy = px.line(proxy, x='sample', y=['(CIW)','(CIW*)','(CPA)','(CIA)','(PIA)','(CIX)','(ICV)','(V)','(STI)','(SF)','(R)','(WIP)','SiO2/Al2O3','K2O/Al2O3','K2O/Na2O','Al2O3/TiO2'])
             var_proxy.update_layout(yaxis_title="Weathering proxy",
                               legend_title="Weathering proxy")
             st.plotly_chart(var_proxy, use_container_width=True)
@@ -1055,7 +1067,7 @@ def data_analysis():
         # scatter matrix of weathering indices
         if st.sidebar.checkbox('Scatter matrix of weathering proxy'):
             st.subheader('Scatter matrix of weathering proxy')
-            scatter_pr = px.scatter_matrix(data_ox_pr, dimensions=["(CIW)", "(CIW*)", "(CPA)", "(CIA)", "(PIA)", "(CIX)", "(ICV)", "(WIP)","SiO2/Al2O3","K2O/Al2O3","K2O/Na2O","Al2O3/TiO2"], hover_name="sample")
+            scatter_pr = px.scatter_matrix(data_ox_pr, dimensions=['(CIW)', '(CIW*)', '(CPA)', '(CIA)', '(PIA)', '(CIX)', '(ICV)', '(V)', '(STI)', '(SF)', '(R)', '(WIP)', 'SiO2/Al2O3', 'K2O/Al2O3', 'K2O/Na2O', 'Al2O3/TiO2'], hover_name="sample")
             st.plotly_chart(scatter_pr, use_container_width=True)
             
             # exporting the plot to the local machine
@@ -1073,10 +1085,10 @@ def data_analysis():
                 filter = st.sidebar.expander('filter', False)                
                 filter = filter.radio('Choose the filter of Oxides/Weathering proxy', ['Oxides','Weathering proxy'])
                 if filter=='Oxides':                
-                    ox =["sample","category","subcategory","subsubcategory","reference","SiO2","TiO2","Al2O3","Fe2O3","MgO","CaO","Na2O","K2O"]
+                    ox =['sample','category','subcategory','subsubcategory','reference','SiO2','TiO2','Al2O3','Fe2O3','MgO','CaO','Na2O','K2O']
                     data_corr=data[ox]
                 if filter=='Weathering proxy':                
-                    pr =["sample","category","subcategory","subsubcategory","reference","(CIW)","(CIW*)","(CPA)","(CIA)","(PIA)","(CIX)","(ICV)","(WIP)","SiO2/Al2O3","K2O/Al2O3","K2O/Na2O","Al2O3/TiO2"]
+                    pr =['sample', 'category', 'subcategory', 'subsubcategory', 'reference', '(CIW)', '(CIW*)', '(CPA)', '(CIA)', '(PIA)', '(CIX)', '(ICV)', '(V)', '(STI)', '(SF)', '(R)', '(WIP)', 'SiO2/Al2O3', 'K2O/Al2O3', 'K2O/Na2O', 'Al2O3/TiO2']
                     data_corr=data[pr]                     
             
             # Method of correlation
