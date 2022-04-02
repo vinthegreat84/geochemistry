@@ -63,7 +63,7 @@ def home():
     st.write('**Compositional space diagram:** Compositional space diagrams including A — C — N compositional space diagram after [**Harnois, 1988**](https://doi.org/10.1016/0037-0738(88)90137-6); A — CN — K compositional space diagram after [**Nesbitt and Young, 1982**](https://doi.org/10.1038/299715a0); A-K — C — N compositional space diagram after [**Fedo et al., 1995**](https://doi.org/10.1130/0091-7613(1995)023<0921:UTEOPM>2.3.CO;2); A — N — K compositional space diagram after [**Garzanti et al., 2014**](https://doi.org/10.1016/j.chemgeo.2013.12.016); A — CNK — FM compositional space diagram after [**Nesbitt and Young, 1989**](https://doi.org/10.1086/629290) and M — F — W compositional space diagram after [**Ohta and Arai, 2007**](https://doi.org/10.1016/j.chemgeo.2007.02.017).')
     st.write('**Chemical classification** Chemical classification including ternary plot of SiO2/20, K2O + Na2O, and TiO2 + MgO + Fe2O3 after [**Kroonenberg, 1990**](https://doi.org/10.1016/0009-2541(90)90172-4) and binary plot of log(Fe2O3/K2O) — log(SiO2/Al2O3) after [**Herron, 1988**](https://doi.org/10.1306/212F8E77-2B24-11D7-8648000102C1865D).')
     st.write('**Harker diagram** Harker variation diagram of oxides against SiO2.')    
-    st.write('**Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.')        
+    st.write('**Statistical details, Hierarchical charts, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap:** Statistical details, Hierarchical charts including Sunburst, Icicle and Treemap chart, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap of chemical weathering indices and weathering proxies.') 
 ##############################################################################################################
 
 ##############################################################################################################
@@ -980,7 +980,7 @@ def data_analysis():
             if st.button("boxplot as HTML"):
                 plot_html(box)
             
-    if st.sidebar.checkbox('Sunburst plot, Statistical details, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
+    if st.sidebar.checkbox('Statistical details, Hierarchical charts, Histogram, Boxplot, Scatter matrix, Correlation matrix and Heatmap'):
         data_ox_pr = data.drop(["molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
 
         if st.sidebar.checkbox('Statistical details'):
@@ -995,8 +995,7 @@ def data_analysis():
             st.download_button("Press to download",stats,"stats.csv","csv",key='download-stats-csv')
 
         # Subburst plot
-        if st.sidebar.checkbox('Sunburst plot'):
-            st.header('Sunburst plot')            
+        if st.sidebar.checkbox('Hierarchical charts'):               
             
             # selection of 'values'
             values = st.sidebar.expander('Values', False)            
@@ -1004,15 +1003,39 @@ def data_analysis():
             
             # selection of 'color'
             color = st.sidebar.expander('Color', False)            
-            color = color.selectbox("Select the Oxide and/or Weathering proxy for color:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)            
+            color = color.selectbox("Select the Oxide and/or Weathering proxy for color:", data_ox_pr.drop(["sample","category","subcategory","subsubcategory","reference"], axis=1).columns)
             
-            sun = px.sunburst(data_ox_pr, path=['category','subcategory','subsubcategory','sample'], values=values, color=color)
+            path=['category','subcategory','subsubcategory','sample']
+            
+            st.header('Sunburst chart')            
+            # Sunburst Chart
+            sun = px.sunburst(data_ox_pr, path=path, values=values, color=color)
             sun.update_traces(sort=False)
             st.plotly_chart(sun, use_container_width=True)
+
+            # exporting the plot to the local machine
+            with st.expander("Click to export Sunburst chart"):
+                plot_html(sun)            
+
+            st.header('Icicle Chart')            
+            # Icicle Chart
+            icicle = px.icicle(data_ox_pr, path=path, values=values, color=color)
+            icicle.update_traces(sort=False)
+            st.plotly_chart(icicle, use_container_width=True)
+
+            # exporting the plot to the local machine
+            with st.expander("Click to export Icicle Chart"):
+                plot_html(icicle)            
+
+            st.header('Treemap Chart')            
+            # Treemap Chart
+            tree = px.treemap(data_ox_pr, path=path, values=values, color=color)
+            tree.update_traces(sort=False)
+            st.plotly_chart(tree, use_container_width=True)            
             
             # exporting the plot to the local machine
-            with st.expander("Click to export Sunburst plot"):
-                plot_html(sun)            
+            with st.expander("Click to export Treemap chart"):
+                plot_html(tree)            
                   
         if st.sidebar.checkbox('Histogram'):
             st.subheader('Histogram')
