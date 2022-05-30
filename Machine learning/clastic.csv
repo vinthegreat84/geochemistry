@@ -1,0 +1,19 @@
+sample,type,ref,Sc,Ti,Cr,Co,Ni,Rb,Zr,Ba,La,Hf,Th,Reservoir
+UCC-1,UCC,"McLennan, 2001",13.6,4100,83,17,44,112,190,550,30,5.8,10.7,UCC
+UCC-2,UCC,"Taylor and McLennan, 1985, 1995",11,3000,35,10,20,112,190,550,30,5.8,10.7,UCC
+UCC-3,UCC,"Rudnick and Gao, 2003",14,3840,92,17.3,47,84,193,624,31,5.3,10.5,UCC
+UCC-3,UCC,"McLennan, 2001",13.6,4100,83,17,44,112,190,550,30,5.8,10.7,UCC
+River Suspended,shale_composite,"Martin and Meybeck, 1979; Gaillardet et al., 1999",18.3,5520,129,18.9,62,113,191,635,43.3,5.77,14.7,Shale
+Loess,shale_composite,"McLennan, 2001",7.8,3720,56,10.6,20,73,302,458,27.9,8.9,8.6,Shale
+NASC,shale_composite,"Gromet et al., 1984",15,4200,127,26,58,125,200,636,32,6.3,12.3,Shale
+PAAS,shale_composite,"Nance and Taylor, 1976; McLennan, 1981, 1989; Taylor and McLennan, 1985; Barth et al., 2000",16,6000,100,20,60,160,210,650,38.2,5,14.6,Shale
+Russian Shale,shale_composite,"Ronov et al., 1988",19.5,5100,105,21.5,57.5,144,213,677,33.5,6.6,12.8,Shale
+Condie,shale_composite,"Condie, 1993",16,4920,104,20,54,163,201,551,38.8,4.6,13.5,Shale
+GLOSS,shale_composite,"Condie, 1993",13.1,3720,78.9,21.9,70.5,57.2,130,776,28.8,4.06,6.91,Shale
+PM Mud,shale_composite,"McLennan et al., 1990; Bhatia, 1981, 1985a, 1985b",15.1,4100,99,15.5,54,235,168,823,33,5.45,15,Shale
+AM Mud,shale_composite,"McLennan et al., 1990; Bhatia, 1981, 1985a, 1985b",17.2,3860,57,14.5,25,141,155,646,26.1,4.96,13.8,Shale
+Tillite,sand_composite,"Panahi and Young, 1997; Yan et al., 2000",10.7,2880,82,10.7,36,80,167,476,25.7,4.37,8.4,Sand
+Condie Sandstone,sand_composite,"Condie, 1993",2,1500,30,2.5,8,25,105,150,10.3,3.1,4.2,Sand
+Condie Greywacke,sand_composite,"Condie, 1993",14,4320,75,18,38,90,147,625,28,3.8,8.8,Sand
+PM Sand,sand_composite,"McLennan et al., 1990; Bhatia, 1981, 1985b; Bhatia and Crook, 1986",5.85,2360,41,6.5,19,61,285,403,27.2,9.68,11,Sand
+AM Sand,sand_composite,"McLennan et al., 1993; Bhatia, 1981, 1985b; Bhatia and Crook, 1986",14.4,3800,43,13.5,16,67,155,441,20.7,4.73,9.2,Sand
