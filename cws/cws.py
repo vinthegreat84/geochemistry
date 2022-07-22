@@ -318,6 +318,30 @@ def data_analysis():
             with st.expander("Click to export Weathering proxy variation diagram"):
                 plot_html(var_proxy) 
     
+    # Relative mobility of elements
+    if st.sidebar.checkbox('Relative mobility of elements'):
+        st.header('Relative mobility of elements')
+        data_rm = data.drop(["CO2","molar_SiO2","molar_TiO2","molar_Al2O3","molar_Fe2O3","molar_MnO","molar_MgO","molar_CaO","molar_Na2O","molar_K2O","molar_P2O5","molar_CO2","diff","molar_CaO*"], axis=1)
+        
+        # extraction of parent in the data 'data_rm'
+        p = st.sidebar.selectbox("Select the 'parent':", data_rm['sample'].unique())
+        parent = data_rm[data_rm['sample'].isin([p])].loc[:,'SiO2':]
+        
+        # calculation of relative mobility
+        rm = (data_rm.div(parent.iloc[0], axis='columns')-1)*100
+        
+        # plotting of relative mobility
+        x = st.sidebar.selectbox('Select the x-axis of relative mobility plot',list(rm))
+        rm_sorted = rm.sort_values(by=x)
+        
+        rm = px.line(rm_sorted, x=x, y=['Al2O3','CaO','Fe2O3','FeO','K2O','MgO','MnO','Na2O','P2O5','SiO2','TiO2'], markers=True, title="Relative mobility of elements against % change in selected variable on x-axis") .update_layout(yaxis={"title": "relative mobility"})
+        st.plotly_chart(rm, use_container_width=True)        
+
+        # exporting the plot to the local machine
+        with st.expander("Click to export relative mobility plot"):
+            if st.button("relative mobility plot as HTML"):
+                plot_html(rm)            
+        
     # bivariate plot
     if st.sidebar.checkbox('Bivariate plot'):
         st.header('Bivariate plot')
@@ -969,6 +993,26 @@ def data_analysis():
             if st.button("Harker diagram as HTML"):
                 plot_html(fig)
 
+        # subplot     
+        if st.sidebar.checkbox('Subplot'):
+            st.subheader('Harker diagram subplot')            
+            fig = make_subplots(rows=3, cols=3, shared_xaxes=True)
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['TiO2'],name="TiO<sub>2</sub> (%)",mode='markers'),row=1, col=1)           
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['Al2O3'],name="Al<sub>2</sub>O<sub>3</sub> (%)",mode='markers'),row=1, col=2)
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['Fe2O3'],name="Fe<sub>2</sub>O<sub>3</sub> (%)",mode='markers'),row=1, col=3)                  
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['FeO'],name="FeO (%)",mode='markers'),row=2, col=1)
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['MnO'],name="MnO (%)",mode='markers'),row=2, col=2)
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['MgO'],name="MgO (%)",mode='markers'),row=2, col=3)                      
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['CaO'],name="CaO (%)",mode='markers'),row=3, col=1)           
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['Na2O'],name="Na<sub>2</sub>O (%)",mode='markers'),row=3, col=2)         
+            fig.add_trace(go.Scatter(x=data_harker['SiO2'], y=data_harker['K2O'],name="K<sub>2</sub>O (%)",mode='markers'),row=3, col=3)            
+
+            st.plotly_chart(fig, use_container_width=True)
+            # exporting the plot to the local machine
+            with st.expander("Click to export Harker diagram subplot"):
+                if st.button("Harker diagram subplot as HTML"):
+                    plot_html(fig)            
+                
     # boxplot
     def box(x,y,color):
         box = px.box(data, x=x, y=y, color=color)
