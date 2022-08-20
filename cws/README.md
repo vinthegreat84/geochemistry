@@ -17,4 +17,4 @@ A running version of the app can be accessed at https://tinyurl.com/sedweather. 
 
 ## Notes on Usage
 The app can be cloned and run locally using streamlit: streamlit run cws.py. When doing this, ensure you have the required modules listed in the requirements file.
-Scales on interactive plots can be changed by double clicking on the lower/upper limit values.
+Scales on interactive plots can be changed by double clicking on the lower/upper limit values. Also, kindly cite the article [**Babu, 2022**](https://doi.org/10.1016/j.matpr.2022.08.002) 
