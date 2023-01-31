@@ -46,8 +46,8 @@ IAS,composite,shale_composite,Indian Archean Shale,"Ray and Paul, 2021",62.3,0.7
 IPAS,composite,shale_composite,Indian post-Archean Shale,"Ray and Paul, 2021",61.6,0.78,17,0.8,5.8,0.04,1.76,1.13,0.51,3.6,0.08,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 River Suspended,composite,shale_composite,,"Martin and Meybeck, 1979; Gaillardet et al., 1999",,,,,,,,,,,,,5520,147,129,18.9,62,113,191,17.1,8.84,635,5.77,1.39,73,14.7,43.3,,,,,,,,,,,,,,18.3,
 Loess,composite,shale_composite,,"McLennan, 2001",,,,,,,,,,,,,3720,77,56,10.6,20,73,302,12.7,3.8,458,8.9,0.92,14.1,8.6,27.9,,,,,,,,,,,,,,7.8,
-NASC,composite,shale_composite,,"Gromet et al., 1984",,,,,,,,,,,,,4200,,127,26,58,125,200,,5.2,636,6.3,1.12,,12.3,32,,,,,,,,,,,,,,15,
-PAAS,composite,shale_composite,,"Nance and Taylor, 1976; McLennan, 1981, 1989; Taylor and McLennan, 1985; Barth et al., 2000",,,,,,,,,,,,,6000,140,100,20,60,160,210,18,6,650,5,1.28,20,14.6,38.2,,,,,,,,,,,,,,16,
+NASC,composite,shale_composite,,"Gromet et al., 1984;  Taylor and McLennan, 2009",,,,,,,,,,,,,4200,,127,26,58,125,200,,5.2,636,6.3,1.12,,12.3,32,73,7.9,33,5.7,1.24,5.2,0.85,5.8,1.04,3.4,0.5,3.1,0.48,14.9,27
+PAAS,composite,shale_composite,,"Nance and Taylor, 1976; McLennan, 1981, 1989; Taylor and McLennan, 1985, 2009; Barth et al., 2000",,,,,,,,,,,,,6000,140,100,20,60,160,210,18,6,650,5,1.28,20,14.6,38.2,79.6,8.83,33.9,5.55,1.08,4.66,0.774,4.68,0.991,2.85,0.405,2.82,0.433,16,27
 Russian Shale,composite,shale_composite,,"Ronov et al., 1988",,,,,,,,,,,,,5100,132,105,21.5,57.5,144,213,14,,677,6.6,,18.5,12.8,33.5,,,,,,,,,,,,,,19.5,
 Condie,composite,shale_composite,,"Condie, 1993",,,,,,,,,,,,,4920,117,104,20,54,163,201,15.4,,551,4.6,1.4,22,13.5,38.8,,,,,,,,,,,,,,16,
 GLOSS,composite,shale_composite,,"Condie, 1993",,,,,,,,,,,,,3720,110,78.9,21.9,70.5,57.2,130,8.94,3.48,776,4.06,0.63,19.9,6.91,28.8,,,,,,,,,,,,,,13.1,
