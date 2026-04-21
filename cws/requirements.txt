@@ -1,7 +1,7 @@
-streamlit==1.56.0
-#~treamlit==1.8.1
-pandas==3.0.2
-plotly==6.7.0
-plotly-express==6.0.0
-numpy==2.4.4
-scikit-learn==1.8.0
+streamlit
+#~treamlit
+pandas
+plotly
+plotly-express
+numpy
+scikit-learn
